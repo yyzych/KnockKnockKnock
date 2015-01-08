@@ -1,0 +1,163 @@
+<!doctype>
+<html>
+	<head>
+		<title>happy circle egg</title>
+		<style>
+			body,canvas{
+				margin:0;
+				padding:0;
+			}
+		</style>
+		<script src="Vector.js"></script>
+	</head>
+	<body>
+		<script>
+			var textSize = 6;//原点的大小
+	        var text0 = "Bye,2014";
+	        var text1 = "Hi, 2015";
+
+	        var width = 550;
+	        var height = 400;
+	        var fps = 50;
+
+	        var canvas = document.createElement("canvas");
+	        canvas.style.background = "black";
+	        var ctx = canvas.getContext("2d");
+	        canvas.width = width;
+	        canvas.height = height;
+
+	        var mouse = new Vector();
+	        var textPoints = [];
+	        var particles = [];
+	        var halfTextSize = textSize * 0.4;//为什么是乘以0.4呢？
+
+
+
+	        window.onload = function(){
+	            document.body.appendChild(canvas);
+	            initTextPoints(textSize);
+	            initParticles();
+	            setInterval(update, 1000/fps);
+	        }
+
+	        function update(){
+	            ctx.save();
+	            ctx.globalAlpha = 0.2;//这个导致了尾巴的效果。并没有清除而是在原来的基础上又画上去一个rect，一层层画上去，最开始画的点被遮住，并且alpha也已经接近0，看不到了。这样子就产生了尾巴效果。
+	            ctx.fillStyle = "#000";
+	            ctx.fillRect(0, 0, width, height);
+	            // ctx.clearRect(0,0,width,height);
+	            ctx.restore();
+	            for(var i = 0, l = particles.length;i < l;i ++)//particles数组刚开始只有几个，然后逐步push新的元素，原来已经pushed了的还在的。
+	            {
+	                particles[i].draw();//canvas绘制动画都是重新画一遍，连起来看就好像是动画
+	                particles[i].update();
+	            }
+	        }
+
+	        //左移相当于*2，只是要注意边界问题。如char a = 65； a<<1 按照*2来算为130;但有符号char的取值范围-128~127，已经越界，多超出了3个数值，所以从-128算起的第三个数值-126才是a<<1的正确结果。
+			// 而右移相当于除以2，只是要注意移位比较多的时候结果会趋近去一个非常小的数，如上面结果中的-1，0。
+	        function initTextPoints(n){
+	            var n = n||4;//n到底是干嘛用的？
+	            ctx.font = "bold 8px serif"
+	            ctx.textAlign = "left";
+	            ctx.fillStyle="#fff";
+	            ctx.textBaseline = "top";
+	            ctx.fillText(text0, 0, 0, width);
+	            ctx.fillText(text1, 0, 20, width);
+	            var w = Math.max(ctx.measureText(text0).width, ctx.measureText(text0).width);
+	            
+	            var offsetX = (width-w*n)>>1;//有符号右移，就相当于：Math.floor((width-w*n)/2);偶数右移折半，奇数折半取小.x>>1相当于x/=2,并且效率更高，记住。还有，x>>n相当于除以2的n次方
+	            var offsetY = (height-28*n)>>1;//为什么是28呢？
+	            
+	            textPoints = [];
+	            var data = ctx.getImageData(0, 0, width, height).data;
+	            for (var i = 0, wl = width * 4; i < data.length; i += 4){
+	                if (data[i + 3] > 0) {
+	                    x = (i % wl) / 4;//行，计算x的坐标，除以4是因为一个点占4个数组元素
+	                    y = parseInt(i / wl)//列
+	                    textPoints.push([x*n + offsetX, y*n + offsetY]);
+	                }
+	          	}
+	        }
+
+
+	        var Particle = function(x, y){
+	            this.pos = new Vector(x, y);
+	            this.target = new Vector(x, y);
+	            this.color = "#f96";
+	            this.angle = 0;
+	            this.angleV = 0;
+	            this.v = new Vector();
+	            this.a = new Vector();
+	            this.move = false;
+	        };
+
+	        Particle.prototype = {
+	            draw:function(){
+	                ctx.save();
+	                ctx.fillStyle = this.color;
+	                ctx.translate(this.pos.x, this.pos.y);//改变坐标原点为当前粒子的x,y
+	                ctx.rotate(this.angle);
+	                ctx.fillRect(-halfTextSize, -halfTextSize, halfTextSize*2, halfTextSize*2);
+	                ctx.restore();
+	            },
+	            update:function(){
+	                this.angle += this.angleV;//给他一个角度，是使他能转起来的效果。角度每次都在改变，所以用于都在旋转
+	                this.a = this.target.minusNew(this.pos);
+	                this.a.scale(0.05);//每次都缩小为原来的0.05
+	                
+	                var ma = mouse.minusNew(this.pos);
+	                if(ma.getLength() < 50)
+	                {
+	                    ma.scale(0.1);
+	                    ma.rotate(0.1);
+	                    this.pos.minus(ma);
+	                    return;
+	                }
+	                
+	                this.move = true;
+	                this.v.plus(this.a);
+	                this.pos.plus(this.a);//画向量图就知道了。向量的运算
+	            },
+	            init:function(){
+	                this.pos.x = Math.random()*width;
+	                this.pos.y = Math.random()*height;
+	                this.angleV = -.5+Math.random();//-0.5~0.5
+	                this.color = '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6);//这里左移0位有什么用处？slice()：如果为负数，则用数据项数加上改负数后得到的值为起始位置。这里加上"00000"可以保证最后的值一定是6位数的
+	            }
+	        };
+
+
+	        function initParticles(){
+	            var p;
+	            textPoints.forEach(function(arr, i){
+	                setTimeout(function(){
+	                    p = new Particle(arr[0], arr[1]);//x,y的值
+	                    p.init();
+	                    particles.push(p);
+	                }, i *10);//如果不弄个时间差的话，所有点几乎都是同时间开始动画，效果没那么好，可改为0查看效果
+	            });
+	        }
+
+	        canvas.onmousemove = function(e){
+	            mouse.x = e.clientX;
+	            mouse.y = e.clientY;
+	        };
+
+	        canvas.ontouchmove = function(e){
+	            e.preventDefault();
+	            mouse.x = e.touches[0].clientX;
+	            mouse.y = e.touches[0].clientY;
+	        };
+
+	        canvas.onmouseout = function(){
+	            mouse.reset(1000, 1000);
+	        }
+	            
+	        canvas.ontouchend = function(){
+	            e.preventDefault();
+	            mouse.reset(1000, 1000);
+	        }
+		</script>
+	</body>
+</html>

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<title>html5 canvas</title>
+	<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			position: relative;
+		}
+		canvas{
+			position: fixed;
+			height: 100%;
+			width: 100%;
+			top: 0;
+			left: 0;
+			background-color: transparent;
+			opacity:1;
+			-webkit-transition:opacity 0.8s;
+			-moz-transition:opacity 0.8s;
+			-o-transition:opacity 0.8s;
+			-ms-transition:opacity 0.8s;
+			transition:opacity 0.8s;
+		}
+		.noOp{
+			opacity: 0;
+			z-index: -1;
+		}
+	</style>
+</head>
+<body>
+	<canvas ></canvas>
+	<div class="">
+		<h1>你好啊</h1>
+		<a href="http://www.baidu.com">百度</a>
+	</div>
+	<img id="lamp" src="cover.jpg" style="display:none">
+	<script>
+		(function () {
+			var canvas=document.getElementsByTagName('canvas')[0];
+
+			window.onload=function () {
+				if(canvas.getContext){
+					var ctx=canvas.getContext("2d");
+					// var height=canvas.height,width=canvas.width;
+					var height=canvas.clientHeight,width=canvas.clientWidth;
+					canvas.height=height;
+					canvas.width=width;
+					var radius=20;
+
+					function layer (ctx) {
+						var imgsrc=document.getElementById('lamp');
+						// var pat=ctx.createPattern(imgsrc,"repeat-y");
+						// ctx.fillStyle=pat;
+						// ctx.fillRect(0,0,height,width);
+						ctx.drawImage(imgsrc,0,0);
+					}
+
+					ctx.clearRect(0,0,height,width);
+					layer(ctx);
+
+					tapClip(ctx,radius);
+				}
+			}
+			//通过修改globalCompositeOperation来达到擦除的效果
+			function tapClip (ctx,radius) {
+				var EventUtil={
+					addHandler:function (element,type,handler) {
+						if(element.addEventListener){
+							element.addEventListener(type,handler,false);
+						}else if(element.attachEvent){
+							element.attachEvent("on"+type,handler);
+						}else{
+							element["on"+type]=handler;
+						}
+					},
+					removeHandler:function (element,type,handler) {
+						if(element.removeEventListener){
+							element.removeEventListener(type,handler,false);
+						}else if(element.detachEvent){
+							element.detachEvent("on"+type,handler);
+						}else{
+							element["on"+type]=none;
+						}
+					}
+				}
+				
+				EventUtil.addHandler(canvas,"mousedown",function (e) {
+					if(typeof timer!="undefined"){
+						clearTimeout(timer);
+					}
+					e.preventDefault();
+					x1=e.clientX-canvas.offsetLeft;
+					y1=e.clientY-canvas.offsetTop;
+
+					ctx.lineCap="round";
+					ctx.lineJoin="round";
+					ctx.lineWidth=radius*2;
+					ctx.globalCompositeOperation = "destination-out";
+
+					ctx.save();
+					ctx.beginPath();
+					ctx.arc(x1,y1,1,0,2*Math.PI);
+					ctx.fill();
+					ctx.restore();
+
+					EventUtil.addHandler(canvas,"mouseup",function () {
+						EventUtil.removeHandler(canvas,"mousemove",tapmoveHandler);
+
+						timer=setTimeout(function () {
+							var imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
+
+							var data=imgData.data;
+							var aphla,sum=0;
+							for (var i = 0,len=imgData.width*imgData.height/30; i < len; i++) {
+								aphla=data[120*i-1];
+								if(aphla>0){
+									sum++;
+								}
+							};
+							if(sum/(imgData.width*imgData.height/30)<0.2){
+								canvas.className="noOp";
+							}
+						},100);
+					});
+
+					EventUtil.addHandler(canvas,"mousemove",tapmoveHandler);
+
+					function tapmoveHandler (e) {
+						e.preventDefault();
+						x2=e.clientX-canvas.offsetLeft;
+						y2=e.clientY-canvas.offsetTop;
+
+						ctx.moveTo(x1,y1);
+						ctx.lineTo(x2,y2);
+						ctx.stroke();
+
+						x1=x2;
+						y1=y2;
+					}
+				})
+
+				EventUtil.addHandler(canvas,"touchstart",function (e) {
+					if(typeof timer!="undefined"){
+						clearTimeout(timer);
+					}
+					e.preventDefault();
+					x1=e.targetTouches[0].pageX-canvas.offsetLeft;
+					y1=e.targetTouches[0].pageY-canvas.offsetTop;
+
+					ctx.lineCap="round";
+					ctx.lineJoin="round";
+					ctx.lineWidth=radius*2;
+					ctx.globalCompositeOperation = "destination-out";
+
+					ctx.save();
+					ctx.beginPath();
+					ctx.arc(x1,y1,1,0,2*Math.PI);
+					ctx.fill();
+					ctx.restore();
+
+					EventUtil.addHandler(canvas,"touchend",function () {
+						EventUtil.removeHandler(canvas,"mousemove",tapmoveHandler);
+
+						timer=setTimeout(function () {
+							var imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
+
+							var data=imgData.data;
+							var aphla,sum=0;
+							for (var i = 0,len=imgData.width*imgData.height/30; i < len; i++) {
+								aphla=data[120*i-1];
+								if(aphla>0){
+									sum++;
+								}
+							};
+							if(sum/(imgData.width*imgData.height/30)<0.2){
+								canvas.className="noOp";
+							}
+						},100);
+					});
+
+					EventUtil.addHandler(canvas,"touchmove",tapmoveHandler);
+
+					function tapmoveHandler (e) {
+						e.preventDefault();
+						x2=e.targetTouches[0].pageX-canvas.offsetLeft;
+						y2=e.targetTouches[0].pageY-canvas.offsetTop;
+
+						ctx.moveTo(x1,y1);
+						ctx.lineTo(x2,y2);
+						ctx.stroke();
+
+						x1=x2;
+						y1=y2;
+					}
+				})
+			}
+		})();
+	</script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		html{
+			/*overflow-y:hidden;*/
+		}
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.container{
+			position: relative;
+			height: 1500px;
+			background-color: #EAEAEA;
+		}
+		.item{
+			display: block;
+		}
+		#toTop{
+			position: fixed;
+			bottom: 50px;
+			right: 50px;
+		}
+		.btn-toTop{
+			position: fixed;
+			bottom: 50px;
+			right: 100px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<ul>
+			<li class="item">item1</li>
+			<li class="item">item2</li>
+			<li class="item">item3</li>
+		</ul>
+		<input type="button" value="置顶1" id="toTop">
+	</div>
+	<script>
+		(function () {
+			var EventUtil={
+				addHandler:function (elem,type,handler) {
+					if(elem.addEventListener){
+						elem.addEventListener(type,handler,false);//false:冒泡阶段
+					}else if(elem.attachEvent){
+						elem.addEventListener("on"+type,handler)//ie:只支持冒泡
+					}else{
+						elem["on"+type]=handler;
+					}
+				},
+				removeHandler:function (elem,type) {
+					if(elem.removeEventListener){
+						elem.removeEventListener(type,handler,false);//false:冒泡阶段
+					}else if(elem.detachEvent){
+						elem.detachEvent("on"+type,handler)//ie:只支持冒泡
+					}else{
+						elem["on"+type]=none;
+					}
+				}
+			}
+			function scrollTop (valueX,par) {
+				// alert(document.body.scrollTop+" "+document.documentElement.scrollTop);
+				if(!par){
+					//如果一开始都是0怎么办
+					if(Math.max(document.documentElement.scrollTop,document.body.scrollTop)==valueX)//ie,ff:documentElement  chorme:body
+						return;
+					par=document.documentElement.scrollTop>document.body.scrollTop?document.documentElement:document.body;
+				}
+				var cur=par.scrollTop;
+				if(cur==valueX){
+					return;
+				}
+				if(cur>valueX){
+					var dist=Math.floor((cur-valueX)/10);
+					cur-=dist;
+				}else if(cur<valueX){
+					var dist=Math.floor((valueX-cur)/10);
+					cur+=dist;
+				}
+				par.scrollTop=cur;
+				setTimeout(function () {
+					scrollTop(valueX,par);
+				},10);
+			}
+			function handler (event) {
+				scrollTop(0);
+			}
+			EventUtil.addHandler(toTop,"click",handler);//匿名函数无法删除的
+
+			var limite=350;
+			EventUtil.addHandler(window,"scroll",function (event) {//滚动事件。
+				if(document.documentElement.scrollTop==document.body.scrollTop)
+					return;
+				var par=document.documentElement.scrollTop>document.body.scrollTop?document.documentElement:document.body;
+				if(par.scrollTop<=limite){
+					var toTop2=document.getElementById('toTop2');
+					if(!toTop2){
+						return;
+					}else{
+						EventUtil.removeHandler(toTop2,"click",handler);
+						toTop2.parentNode.removeChild(toTop2);
+					}
+				}else{
+					if(document.getElementById('toTop2')){
+						return;
+					}
+					var toTop2=document.createElement("input");
+					toTop2.type="button";
+					toTop2.id="toTop2";
+					toTop2.value="置顶2";
+					toTop2.className="btn-toTop";
+					EventUtil.addHandler(toTop2,"click",handler);
+					// EventUtil.addHandler(toTop2,"click",function (event) {
+					// 	scrollTop(0);
+					// 	// EventUtil.removeHandler(toTop2,"click");//滚动一点点就会发生。不能直接这么写。
+					// 	// toTop2.parentNode.removeChild(toTop2);
+					// })
+					document.body.appendChild(toTop2);
+				}
+			})
+		})();
+	</script>
+</body>
+</html>

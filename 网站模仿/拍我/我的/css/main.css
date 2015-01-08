@@ -1,0 +1,298 @@
+/*
+* main.css
+* font-family: "Hiragino Sans GB","Microsoft YaHei","微软雅黑",tahoma,arial,simsun,"宋体";
+* color:#333;
+* margin:15px;
+*/
+
+/*默认样式*/
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	height: 100%;
+}
+body,textarea,input,select,button{
+	font-family: "Hiragino Sans GB","Microsoft YaHei","微软雅黑",tahoma,arial,simsun,"宋体";
+	color: #333;
+	line-height: normal;
+	outline: none;
+}
+body{
+	background-color: #eeeeee;
+	font-size: 12px;
+}
+h1,h2,h3,h4,h5{
+	margin: 0 0 15px;
+	font-family: "Hiragino Sans GB","Microsoft YaHei","微软雅黑",tahoma,arial,simsun,"宋体";
+}
+a,a:hover,a:link,a:visited{
+	color: #333;
+	text-decoration: none;
+	cursor: pointer;
+}
+a:hover{
+	color: #53A9FF;
+}
+
+.container{
+	margin-left: 100px;
+	height: 100%;
+}
+.banner_box img{
+	max-width: 100%;
+	margin-top: 15px;
+}
+.tab_box{
+	position: relative;
+	height: 40px;
+	background-color: #fafafa;
+	box-shadow: 1px 3px 3px 0 rgba(150,150,150,0.2);
+	line-height: 40px;
+}
+.tab_inner{
+	width: 92%;
+	margin: 0 auto;
+	position: relative;
+}
+.list-inline{
+	list-style: none;
+}
+.list-inline li{
+	display: inline-block;
+}
+.tab_inner>ul>li{
+	text-align: center;
+	border-right: 1px solid #eeeeee;
+	width: 10%;
+	font-size: 1.3em;
+}
+.tab_inner>ul>li:first-child{
+	border-left: 1px solid #eeeeee;
+}
+.tab_inner>ul>li>a{
+	color: #666666;
+	display: block;
+	border-bottom: 3px solid #fafafa;
+	height: 37px;
+}
+.tab_inner>ul>li>a:hover{
+	border-bottom-color:#333333; 
+}
+.tab_inner a.tab_active{
+	color: #333;
+	border-bottom-color:#333333; 
+}
+.tab_inner .search_box, .tab_inner .input_text_box{
+	float: right;
+	width: auto;
+	border: none;
+}
+.search_box select, .input_text_box input[type=text]{
+	border: none;
+	background-color: #fafafa;
+}
+.input_text_box input[type=text]{
+	margin-left: 30px;
+	background-color: #eeeeee;
+	height: 25px;
+	border-radius: 5px;
+	width: 180px;
+	padding: 2px 25px 2px 5px;
+}
+.input_text_box a.append{
+	position: absolute;
+	right: 2px;
+	top: 2px;
+	height: 20px;
+	width: 20px;
+	background-image: url(../img/icon.png);
+	background-position: -30px -100px;
+	display: inline-block;
+}
+.photos{
+	width: 96%;
+	margin: 20px auto 0 auto;
+	text-align: center;
+}
+.photos:after{
+	display: block;
+	clear: both;
+	content: "";
+	height: 0;
+}
+.photos .item{
+	position: relative;
+	display: inline-block;/*如果是float的话text-aglin就不能居中*/
+	width: 280px;
+	height: 280px;
+	overflow: hidden;
+	margin: 0 8px 15px 8px;
+	box-shadow: 0px 0px 5px 1px #dbdbdb;
+}
+.photos .item>a img{
+	width: 280px;
+	height: 280px;
+}
+.photos .item .fix_box{
+	margin:auto;
+	position: absolute;
+	bottom: 0;
+	height: 50px;
+	line-height: 50px;
+	background-color: rgba(0,0,0,0.2);
+	/*如果使用的是background-image话，background-color的值有影响的。所以直接background的*/
+	background: -webkit-linear-gradient(bottom,rgba(0,0,0,0.5),rgba(0,0,0,0));
+	background: -o-linear-gradient(bottom,rgba(0,0,0,0.5),rgba(0,0,0,0));
+	background: -moz-linear-gradient(bottom,rgba(0,0,0,0.5),rgba(0,0,0,0));
+	background: -ms-linear-gradient(bottom,rgba(0,0,0,0.5),rgba(0,0,0,0));
+	width: 100%;
+	padding: 0 15px;
+	box-sizing: border-box;
+}
+.icon{
+	background-image: url(../img/icon.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+}
+.photos .fix_box .icon{
+	height: 20px;
+	width: 22px;
+}
+.photos .collect{
+	background-position: -120px -150px;
+	float: right;
+	margin: 15px 0 0 15px;
+}
+.photos .like{
+	background-position: -150px -149px;
+	float: right;
+	margin: 15px 0 0 15px;
+}
+.fix_box a{
+	color:#E6E6E6;
+	float: left;
+	opacity: 0.7;
+	font-size: 14px;
+}
+.fix_box a:hover{
+	color:#fff;
+	opacity: 1;
+}
+.photos .hover_box{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	display: none;
+}
+.hover_box .share_box{
+	display: inline-block;
+}
+.hover_box .share_box a{
+	display: none;
+}
+.hover_box .share_box a.share{
+	display: inline-block;
+}
+.hover_box a{
+	display: inline-block;
+	position: relative;
+	margin-left: 7px;
+	height: 28px;
+	line-height: 28px;
+	width: 28px;
+	border-radius: 2px;
+	background-color: rgba(0,0,0,0.15);
+}
+.hover_box a:hover{
+	background-color: rgba(0,0,0,0.35);
+}
+.hover_box .douban:hover{
+	background-color: #009F00;
+}
+.hover_box .renren:hover{
+	background-color: #00C1C1;
+}
+.hover_box .qzone:hover{
+	background-color: #F4E206;
+}
+.hover_box .weibo:hover{
+	background-color: #FF5959;
+}
+.hover_box i{
+	height: 16px;
+	width: 16px;
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+.hover_box img{
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+.hover_box .share i{
+	background-position: -120px -101px;
+}
+.hover_box .comment i{
+	background-position: -91px -100px;
+}
+.page_turn{
+	text-align: center;
+	padding: 5px 0 10px 0;
+}
+.page_turn a{
+	display: inline-block;
+	opacity: 0.8;
+}
+.page_turn a:hover{
+	opacity: 1;
+}
+#prevPage i,#nextPage i{
+	display: inline-block;
+	height: 40px;
+	width: 40px;
+	background-image: url(../img/icon.png);
+	background-repeat: no-repeat;
+}
+#prevPage i{
+	background-position: -260px -100px;
+}
+#nextPage i{
+	background-position: -260px -50px;
+	margin-left: 15px;
+}
+.footer{
+	border-top: 1px solid #DADADA;
+	padding: 20px 0;
+	margin-top: 10px;
+	font-size: 14px;
+	width: 90%;
+	margin: auto;
+}
+.footer .joinUs{
+	float: right;
+}
+.footer .joinUs:hover{
+	text-decoration: underline;
+}
+
+
+.content{
+	width: 450px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+
+.input{
+	position: relative;
+}

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		//跨浏览器取得XHR对象
+		function createXHR () {
+			if(typeof XMLHttpRequest!="undefined"){
+				return new XMLHttpRequest();
+			}else if(typeof ActiveXObject!="undefined"){//for ie8 一下
+				if(typeof arguments.callee.activeXString!="undefined"){
+					var vers=["MSXML2.XMLHttp.6.0","MSXML2.XMLHttp.3.0","MSXML2.XMLHttp"],
+						i,len;
+					for(i=0,len=vers.length,i<len;i++){
+						try{
+							new ActiveXObject(vers[i]);
+							arguments.callee.activeXString=vers[i];
+							break;
+						}catch(err){
+							//do nothing
+						}
+					}
+				}
+				return new ActiveXObject(arguments.callee.activeXString);
+			}else{
+				throw new Error("no XHR object can use");
+			}
+		}
+	</script>
+</body>
+</html>

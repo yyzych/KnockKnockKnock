@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RunJS</title>
+    <script class="jquery library" src="jquery-2.1.0.min.js" type="text/javascript"></script>
+    <style>
+            html, body, div, h1, h2, h3, h4, h5, p, a, ul, ol, li, span {
+            margin:0;
+            padding:0;
+            vertical-align: baseline;
+            text-decoration:none;
+            }
+            .clearfix:after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibly: hidden;
+            }
+            #wrapper {
+            position: relative;
+            width: 500px;
+            margin: 0px auto;
+            font-family: Tahoma;
+            background: rgba(255,255,255,.3);
+            border-radius: 20px;
+            padding: 50px 0;
+            }
+            h1,h2,h3 {
+            color: rgba(119,115,107,1);
+            text-shadow: 1px 1px 1px rgba(59,55,47,.8);
+            }
+            h1 {
+            text-align: center;
+            }
+            h2 {
+            display: block;
+            float: left;
+            clear: left;
+            padding: 0 0 0 10px;
+            border-left: 20px solid transparent;
+            margin: 0 0 10px 0;
+            line-height: 20px;
+            -webkit-transition: border-color .6s linear;
+            -moz-transition: border .6s linear;
+            -o-transition: border .6s linear;
+            }
+            #field {
+            height: 20px;
+            width: 320px;
+            padding: 10px;
+            margin: 20px 0 0 76px;
+            text-align: center;
+            font-size:120%;
+            border: 2px solid rgba(119,115,107,1);
+            border-radius: 10px;
+            box-shadow: 1px 1px 4px 0px rgba(0,0,0,.5) inset;
+            -webkit-transition: background .6s linear;
+            -moz-transition: background .6s linear;
+            -o-transition: background .6s linear;
+            }
+            #activate {
+            display: block;
+            width: 100px;
+            margin: 20px auto 0;
+            text-align:center;
+            text-transform: uppercase;
+            }
+            #keyboard {
+            display: none;
+            position: relative;
+            width: 297px;
+            margin: 30px auto 0;
+            padding: 10px;
+            border: 2px solid #555;
+            border-radius: 15px;
+            background: rgba(119,115,107,.2);
+            box-shadow: 0px 0px 5px 0px rgba(0,0,0,.5);
+            }
+            #keyboard>div {
+            float: left;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            font-size:90%;
+            margin:0 5px 5px 0;
+            border: 1px solid #555;
+            background: rgba(119,115,107,.6);
+            cursor: pointer;
+            border-radius:3px;
+            }
+            #keyboard #q,
+            #keyboard #a,
+            #keyboard #z,
+            #keyboard #shift {
+            clear: left;
+            }
+            #keyboard #shift {
+            width: 65px; 
+            }
+            #keyboard #space {
+            width: 70px; 
+            }
+            #keyboard #bspace {
+            width: 70px; 
+            }
+            #keyboard #clear {
+            width: 64px; 
+            }
+            #keyboard #q {
+            margin-left: 13px;
+            }
+            #keyboard #a {
+            margin-left: 27px; 
+            }
+            #keyboard #z {
+            margin-left: 54px;
+            }
+            #keyboard>div:hover {
+            background: gray;
+            }
+            #keyboard #close {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 16px;
+            height:16px;
+            border-radius:8px;
+            line-height:14px;
+            }
+        </style>
+</head>
+<body>
+    <div id="wrapper" class="clearfix">
+        <h1 id="title">jQuery keyboard</h1>
+        <input id="field" type="text" value="click">
+        <div id="keyboard" class="clearfix">
+            <div class="number" id="1">1</div>
+            <div class="number" id="2">2</div>
+            <div class="number" id="3">3</div>
+            <div class="number" id="4">4</div>
+            <div class="number" id="5">5</div>
+            <div class="number" id="6">6</div>
+            <div class="number" id="7">7</div>
+            <div class="number" id="8">8</div>
+            <div class="number" id="9">9</div>
+            <div class="number" id="0">0</div>
+            <div class="number" id="-">-</div>
+            <div class="char" id="q">q</div>
+            <div class="char" id="w">w</div>
+            <div class="char" id="e">e</div>
+            <div class="char" id="r">r</div>
+            <div class="char" id="t">t</div>
+            <div class="char" id="y">y</div>
+            <div class="char" id="u">u</div>
+            <div class="char" id="i">i</div>
+            <div class="char" id="o">o</div>
+            <div class="char" id="p">p</div>
+            <div class="char" id="a">a</div>
+            <div class="char" id="s">s</div>
+            <div class="char" id="d">d</div>
+            <div class="char" id="f">f</div>
+            <div class="char" id="g">g</div>
+            <div class="char" id="h">h</div>
+            <div class="char" id="j">j</div>
+            <div class="char" id="k">k</div>
+            <div class="char" id="l">l</div>
+            <div class="char" id="z">z</div>
+            <div class="char" id="x">x</div>
+            <div class="char" id="c">c</div>
+            <div class="char" id="v">v</div>
+            <div class="char" id="b">b</div>
+            <div class="char" id="n">n</div>
+            <div class="char" id="m">m</div>
+            <div id="shift">Shift</div>
+            <div id="space">Space</div>
+            <div id="bspace">BSpace</div>
+            <div id="clear">Clear</div>
+            <div id="close">x</div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    // Variables
+    var string = "",
+        isActive = 0,
+        isShift = 0,
+        field = $('#field'),
+        keyboard = $('#keyboard'),
+        clear = $('#clear'),
+        space = $('#space'),
+        bspace = $('#bspace'),
+        shift = $('#shift');
+    // Keyboard activation
+    field.click(function() {
+        if (isActive) {
+            keyboard.fadeOut('slow');
+        field.css('background','#FFF');
+            isActive=0;
+        } else {
+            keyboard.fadeIn('slow');
+        field.attr('value',""); field.css('background','rgba(170,255,86,.3)');
+            isActive=1;
+        }
+    });
+    $('#close').click(function () {
+      if (isActive) {
+            keyboard.fadeOut('slow');
+        field.css('background','#FFF');
+            isActive=0;
+        }
+    });
+    // Numbers to Symbols
+    function numbersToSymbols() {
+        $('#1').html("!");
+        $('#2').html("@");
+        $('#3').html("#");
+        $('#4').html("$");
+        $('#5').html("%");
+        $('#6').html("^");
+        $('#7').html("&");
+        $('#8').html("*");
+        $('#9').html("(");
+        $('#0').html(")");
+        $('#-').html("_");
+    }
+    // Symbols to Numbers 
+    function symbolsToNumbers() {
+        $('#1').html("1");
+        $('#2').html("2");
+        $('#3').html("3");
+        $('#4').html("4");
+        $('#5').html("5");
+        $('#6').html("6");
+        $('#7').html("7");
+        $('#8').html("8");
+        $('#9').html("9");
+        $('#0').html("0");
+        $('#-').html("-");
+    }
+    // Shift and Clear 
+    shift.click(function() {
+        if (isShift) {
+            $('.char,.number').css("text-transform","none");
+            symbolsToNumbers();
+            isShift=0;
+        } else {
+            $('.char,.number').css("text-transform","uppercase");
+            numbersToSymbols();
+            isShift=1;
+        }
+    });
+    clear.click(function() {
+      string = "";
+        field.attr("value",string);
+    });
+    // Space and BackSpace
+    space.click(function() {
+        string += " ";
+        field.attr("value",string);
+      field.focus();
+    });
+    bspace.click(function() {
+        string = string.substring(0, string.length-1);
+      field.attr("value",string);
+      field.focus();
+    });
+    // Char Buttons
+    $('.char,.number').click( function() {
+        var symbol = $(this).text();
+        if (isShift) {
+                $('.char,.number').css("text-transform","none");
+                isShift = 0;
+                string += symbol.toUpperCase();
+                symbolsToNumbers();
+        }  else {
+            string += symbol;
+        }
+      field.attr("value",string);
+      field.focus();
+    });
+    </script>
+</body>
+</html>

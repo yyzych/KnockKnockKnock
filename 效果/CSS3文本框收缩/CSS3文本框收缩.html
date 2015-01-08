@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		input{
+			outline: none;
+		}
+		input[type=search]{
+			-webkit-box-sizing:content-box;
+			box-sizing: content-box;
+			font-size: 100%;
+		}
+		input[type=search]{
+			padding: 9px 10px 9px 32px;
+			width: 55px;
+			border-radius: 10em;
+			border: solid 1px #ccc;
+			background: #ededed;
+
+			transition:width 0.5s;
+			-webkit-transition:width 0.5s;
+			-moz-transition:width 0.5s;
+		}
+		input[type=search]:focus{/*:focus 选择器用于选取获得焦点的元素。接收键盘事件或其他用户输入的元素都允许 :focus 选择器。所有主流浏览器都支持 :focus 选择器。*/
+			width: 130px;
+			background-color: #fff;
+			border-color: #6dcff6;
+			box-shadow: 0 0 5px #C3C3C3;
+		}
+	</style>
+</head>
+<body>
+	<form action="">
+		<input type="search" name="" placeholder="搜索" id="">
+	</form>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<META http-equiv=Content-Type content="text/html; charset=UTF-8"/>
+	</head>
+	<style>
+		body{
+			margin:0px;
+			text-align:center;
+		}
+		.centerdiv{
+			border:0px;
+			margin-left:200px;
+			width:400px;
+			height:540px;
+			background-color:#000000;
+			float:left;
+		}
+		.rightDiv{
+			width:200px;
+			float:left;
+		}
+		.speedDiv{
+			width:200px;
+			float:left;
+		}
+		/*打开状态，即黄色的*/
+		.squareson{
+			float:left;
+			width:38px;
+			border:1px solid #000000;
+			height:38px;
+			background-color:#ffff00;
+		}
+		/*关闭状态，即黑色的*/
+		.squaresoff{
+			float:left;
+			width:40px;
+			border:0px;
+			height:40px;
+			background-color:#000000;
+		}
+	</style>
+<body>
+	<input type="button" value="开始" onclick="_start()">
+	<input type="button" value="重新开始" id="begin" onclick="_start()">
+</body>
+<script type="text/javascript">
+		function Square (speed) {
+			this.objs={};//"node_"+i+"_"+j
+			this.squareStatus=[];
+			this.lineNum=15;
+			for (var i = 0; i < this.lineNum; i++) {
+				this.squareStatus[i]=[];
+				for (var j = 0; j < 10; j++) {
+					this.squareStatus[i][j]=0;//0表示这个格子还没被填上
+				};
+			};
+			this.curObjData={arr:null,type:0,height:0,width:0,x:3,y:0};//x,y是矩形左上角格子的坐标
+			this.speed=speed||400;
+			this.lockspeed=this.speed;
+			this.score=0;
+			this.container=null;
+			this.infoDiv=null;
+			this.timeDo=null;
+		}
+		Square.prototype.extend=function (oldData,newData) {
+			var res={};
+			for(var propItem in oldData){
+				if(newData.hasOwnProperty(propItem)){
+					res[propItem]=newData[propItem];
+				}else{
+					res[propItem]=oldData[propItem];
+				}
+			}
+			return res;
+		}
+		Square.prototype.createNode=function (option) {
+			var data=this.extend({tagName:"div",className:"",parent:document.body},option);
+			var elem=document.createElement(data.tagName);
+			elem.className=data.className;
+			data.parent.appendChild(elem);
+			return elem;
+		}
+		//创建所有的div
+		Square.prototype.createAllDiv=function () {
+			var container=this.createNode({className:"centerdiv"});
+			var square=this.squareStatus;
+			for (var i = 0; i < square.length; i++) {
+				var squareX=square[i];
+				for (var j = 0; j < squareX.length; j++) {
+					var node=this.createNode({className:"squaresoff",parent:container});
+					this.objs["node_"+j+"_"+i]=node;
+				};
+			};
+			this.container=container;
+		}
+		// Square.prototype.scroll=function (data) {
+		// 	//得到旋转中心
+		// 	if(data.type==1){
+		// 		return;
+		// 	}
+		// 	var newData=new Array(data.width);
+		// 	for (var i = 0; i < newData.length; i++) {
+		// 		newData[i]=new Array(data.height);
+		// 	};
+
+		// 	var x0=Math.floor(data.x+data.width/2),
+		// 		y0=Math.floor(data.y+data.height/2);
+
+		// 	for (var i = 0; i < data.height; i++) {
+		// 		for (var j = 0; j < data.width; j++) {
+		// 			var x=data.x+j
+		// 		};
+		// 	};
+		// }
+		//旋转   round this data
+		Square.prototype.scroll=function(data){
+			if(data.type==1){
+				return data;
+			}
+			var newarr=new Array(data.width);
+			for(var j=0;j<newarr.length;j++){
+				newarr[j]=new Array(data.height);
+			}
+			for(var i=0;i<data.height;i++){
+				for(var j=0;j<data.width;j++){
+						var nar=newarr[j];//列数变为行数，第j行
+						nar[i]=data.arr[i][j];//吧原来的第1行赋值给现在的第1列，原来的第2行赋值个现在的第2列，类推
+				}
+			}
+			//没懂
+			var x0=data.x+data.width/2.0;//x0,y0中心点
+			var y0=data.y+data.height/2.0;
+			var x=Math.round(x0-y0+data.y*1.0);
+			var y=Math.round(-(x-data.x)+data.y);
+			for(var i=0;i<data.width;i++){
+				newarr[i]=newarr[i].reverse();//颠倒数组的数据
+			}
+			if(newarr[0].length>2){
+				x=x-1;
+			}
+			if(newarr.length<=2){
+				y=y+1;
+			}
+			return this.extend(data,{arr:newarr,x:x,y:y,width:newarr[0].length,height:newarr.length});
+		}
+		Square.prototype.createEvent=function () {
+			var self=this;
+			document.onkeydown=function (event) {//keydown是个路由事件----
+				event=event||window.event;
+				var keycode=event.keyCode;//键码。37：左 	38：上 	  39：右 		下：40
+				if(keycode==37){
+					var oldData=self.extend(self.curObjData,{});
+					self.curObjData.x-=1;
+					if(self.curObjData.x<0||!self.ifCanMove()){
+						self.curObjData=oldData
+					}else{
+						self.clearAndShow(oldData,self.curObjData);
+					}
+				}else if(keycode==38){
+					var oldData=self.extend(self.curObjData,{});
+					self.curObjData=self.scroll(oldData);//旋转
+					if(self.curObjData.x<0||!self.ifCanMove()){
+						self.curObjData=oldData
+					}else{
+						self.clearAndShow(oldData,self.curObjData);
+					}
+				}else if(keycode==39){
+					var oldData=self.extend(self.curObjData,{});
+					self.curObjData.x+=1;
+					if(!self.ifCanMove()){
+						self.curObjData=oldData
+					}else{
+						self.clearAndShow(oldData,self.curObjData);
+					}
+				}else if(keycode==40){
+					self.speed=20;//改变速度
+				}
+
+			}
+			document.onkeyup=function (event) {
+				event=event||window.event;
+				if(event.keyCode==40){
+					self.speed=self.lockspeed;
+				}
+			}
+		}
+		Square.prototype.init=function () {
+			this.createAllDiv();
+			this.createEvent();
+			this.infoDiv=this.createNode({className:"rightDiv"});
+			this.infoDiv.innerHTML="分数："+this.score;
+		}
+		Square.prototype.getRandomSquare=function (){
+			var num=Math.floor(Math.random()*9+1);
+			var arr=null;
+			switch(num){
+				case 1:arr=[[1,1],[1,1]];
+					break;
+				case 2:arr=[[1,1,1,1]];
+					break;
+				case 3:arr=[[1],[1],[1],[1]];
+					break;
+				case 4:arr=[[1,1,0],[0,1,1]];
+					break;
+				case 5:arr=[[0,1,1],[1,1,0]];
+					break;
+				case 6:arr=[[1,0],[1,1],[1,0]];
+					break;
+				case 7:arr=[[0,1],[1,1],[0,1]];
+					break;
+				case 8:arr=[[1,1],[1,0],[1,0]];
+					break;
+				case 9:arr=[[1,1],[0,1],[0,1]];
+					break;
+				default :arr=[[1,1,1,1]];
+			}
+			var squ={arr:arr,type:num,height:arr.length,width:arr[0].length,x:3,y:0};
+			return squ;
+		}
+		Square.prototype.ifCanMove=function () {
+			var data=this.curObjData;
+			if(data.x<0||data.x+data.width>this.squareStatus[0].length){
+				return false;
+			}
+			if(data.y<0||data.y+data.height>this.squareStatus.length){
+				return false;
+			}
+			for (var i = 0; i < data.height; i++) {
+				var y=data.y+i;
+				var row=this.squareStatus[y];
+				for (var j = 0; j < data.width; j++) {
+					var x=data.x+j;
+					if(data.arr[i][j]==1){
+						if(row[x]==1){
+							return false;
+						}
+					}
+				};
+			};
+			return true;
+		}
+		//当前方块的颜色，把之前的off,把现在的on
+		Square.prototype.clearAndShow=function (oldData,newData) {
+			if(oldData==null){
+				for (var i = 0; i < newData.height; i++) {
+					var y=newData.y+i;
+					// var row=this.squareStatus[y];
+					for (var j = 0; j < newData.width; j++) {
+						var x=newData.x+j;
+						if(newData.arr[i][j]==1){
+							this.objs["node_"+x+"_"+y].className="squareson";	
+						}
+					};
+				};
+			}else{
+				for (var i = 0; i < oldData.height; i++) {
+					var y=oldData.y+i;
+					// var row=this.squareStatus[y];
+					for (var j = 0; j < oldData.width; j++) {
+						var x=oldData.x+j;
+						if(oldData.arr[i][j]==1){
+							this.objs["node_"+x+"_"+y].className="squaresoff";	
+						}
+					};
+				};
+				for (var i = 0; i < newData.height; i++) {
+					var y=newData.y+i;
+					// var row=this.squareStatus[y];
+					for (var j = 0; j < newData.width; j++) {
+						var x=newData.x+j;
+						if(newData.arr[i][j]==1){
+							this.objs["node_"+x+"_"+y].className="squareson";	
+						}
+					};
+				};
+			}
+		}
+		Square.prototype.showAll=function () {
+			for (var i = 0; i < this.squareStatus.length; i++) {//i:行,即y
+				for (var j = 0; j < this.squareStatus[0].length; j++) {
+					if(this.squareStatus[i][j]==0){
+						this.objs["node_"+j+"_"+i].className="squaresoff"
+					}else{
+						this.objs["node_"+j+"_"+i].className="squareson";
+					}
+					
+				};
+			};
+		}
+		Square.prototype.inData=function () {//当前方块所在的格子在squareStatus肯定是为0的，不能移动后在合并到squareStatus中
+			var square=this.squareStatus;
+			var data=this.curObjData;
+			for (var i = 0; i < data.height; i++) {
+				var y=data.y+i;
+				var row=square[y];
+				for (var j = 0; j < data.width; j++) {
+					var x=data.x+j;
+					if(data.arr[i][j]){
+						row[x]=data.arr[i][j];	
+					}
+				};
+			};
+		}
+		//消除并计算分数
+		Square.prototype.harvest=function () {
+			var line=0;
+			for (var i = 0; i < this.squareStatus.length; i++) {
+				var row=this.squareStatus[i];
+				var flag=true;
+				for (var j = 0; j < row.length; j++) {
+					if(row[j]==0){
+						flag=false;
+						break;
+					}
+				};
+				if(flag){
+					//这里消除填满的一行。。即用0填充
+					this.squareStatus.splice(i,1);//删除这一项
+					this.squareStatus.unshift([0,0,0,0,0,0,0,0,0,0]);//在数组前端插入一项
+					line++;
+				}
+			};
+			switch(line){
+				case 1:
+					this.score+=10;
+					break;
+				case 2:
+					this.score+=15;
+					break;
+				case 3:
+					this.score+=20;
+					break;
+				case 4:
+					this.score+=25;
+					break;
+			}
+			return line;
+		}
+		Square.prototype.cycling=function () {
+			// var oldData=this.curObjData;//注意这样是引用，指的是同一个对象
+			var oldData=this.extend(this.curObjData,{});
+			this.curObjData.y+=1;
+			var self=this;
+			if(this.ifCanMove()){
+				if(this.timeDo){
+					window.clearTimeout(this.timeDo);
+					this.timeDo=null;
+				}
+				this.clearAndShow(oldData,this.curObjData);
+				this.timeDo=setTimeout(function () {
+					self.cycling();
+				},self.speed);
+			}else{
+				//结束了或者重新获得一个方块
+				this.curObjData=oldData;
+
+				if(this.timeDo){
+					window.clearTimeout(this.timeDo);
+					this.timeDo=null;
+				}
+				this.inData();//这里是为了下一步消除合适的组合做准备
+				var line=this.harvest();//合并
+				if(line>0){
+					this.infoDiv.innerHTML="score:"+this.score;
+					this.showAll();//消除之后重新显示
+				}
+				this.run();//消除之后
+			}
+		}
+		Square.prototype.run=function () {
+			this.curObjData=this.getRandomSquare();
+			if(this.ifCanMove()){
+				this.clearAndShow(null,this.curObjData);//显示.还能移动说明向那些移动的格子是off的
+				var self=this;
+				this.speed=this.lockspeed;
+				self.timeDo=setTimeout(function () {
+					self.cycling();
+				},self.speed);
+			}else{
+				var btn=document.getElementById('begin');
+				var self=this;
+				btn.onclick=function () {
+					self.container.parentNode.removeChild(self.container);
+					self.infoDiv.parentNode.removeChild(self.infoDiv);
+
+					var square=new Square(500);
+					square.init();
+					square.run();
+				}
+			}
+		}
+
+
+		var square=new Square(500);
+		square.init();
+
+		function _start () {
+			square.run();
+		}
+</script>
+</html>

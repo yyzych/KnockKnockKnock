@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>
+      RunJS
+    </title>
+    <style>
+      *{
+        margin:0;
+        padding:0;
+       font-family:'微软雅黑';
+      }
+      body{
+        min-height:1000px;
+      }
+      #fulBox{
+        position:absolute;
+        top:25px;
+        left:25px;
+        width:24px;
+        height:24px;
+        background:#ffffff;
+        padding:10px;
+        border-radius:5px;
+        -webkit-box-shadow:2px 2px 4px rgba(0,0,0,0.2);
+        border:1px solid #dddddd;
+        color:#9cb154;
+      }
+      .alpha{
+        opacity:0.5;
+        filter:alpha(opacity=50);
+        background:#000000;
+        position:absolute;
+        top:0px;
+        left:0px;
+        height:100%;
+        width:100%;
+      }
+      #closeBtn{
+        cursor:pointer;
+        background:url(http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/backabt.png);
+        display:inline-block;
+        height:30px;
+        width:30px;
+        position:absolute;
+        right:-16px;
+        top:-16px;
+        
+      }
+    </style>
+    <script class="jquery library" src="jquery-2.1.1.js" type="text/javascript"></script>
+  </head>
+  <body id="ss">
+    <a href="http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/8.jpg" title="这是一只老虎哦">
+      <img src="http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/8(1).jpg">
+    </a>
+    <a href="http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/8.jpg" title="这是一只老虎哦">
+      <img src="http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/8(1).jpg">
+    </a>
+    <script>
+        //alert($("body").scrollTop());
+        $(function(){
+           function fullBox(y){
+             $this=this;
+             $this.Id="fulBox";
+             $this.contentDoms=$(y)
+             $this.init=function()
+             {
+                 var imgs=new Image();
+                 imgs.src=$this.contentDoms.attr('href');
+                 var lefts=$(document).width()/2-12;
+                 var heights=$(document).height()/2-12;
+                 var str="<div id='fullBoxBg' class='alpha' style='width:"+$(document).width()+"px;height:"+$(window).height()+"px;top:"+$(document).scrollTop()+"px;'></div><div style='left:"+lefts+"px;top:"+heights+"px' id="+$this.Id+"><p id=closeBtn></p><p><img src='http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/loader.gif'/></p></div>";
+                  $("body").append(str);
+                  imgs.onload=function()
+                  {
+                    var lefts2=$(document).width()/2-imgs.width/2-10;
+                    var heights2=$(document).scrollTop()+$(window).height()/2-imgs.height/2-10;
+                    $("#"+$this.Id+" p").css("display","none");   
+                    $("#"+$this.Id+" p img").attr("src",imgs.src);
+                    $("#"+$this.Id).animate({"left":lefts2,"top":heights2,"width":imgs.width,"height":(imgs.height)},400);
+                    setTimeout(function(){$("#"+$this.Id+" p").fadeIn(1000);},400);        
+                  }
+                  $this.binds();
+                  delete imgs;
+               }
+               $this.binds=function()
+               {
+                  $("#fullBoxBg").bind("click",function(){
+                      $("#"+$this.Id).fadeOut(1000);
+                      $(this).fadeOut(1000);
+                      setTimeout(function(){$("#"+$this.Id).remove();$("#fullBoxBg").remove()},500)
+                  })
+                  $("#closeBtn").bind("click",function(){$("#fullBoxBg").click()}) 
+               }
+           }    
+            $("#ss a").bind("click",function(){
+            ok=new fullBox(this)
+                ok.init();
+                // alert($(document).scrollTop())
+                return false;
+            })
+        }
+       
+       )
+    </script>
+  </body>
+</html>

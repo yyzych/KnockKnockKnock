@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+		}
+		.container{
+			font-size: 12px;
+			margin: auto 50px;
+			/*width: 1024px;
+			margin: 0 auto;*/
+		}
+		#warp{
+			position: relative;
+			margin-top: 20px;
+		}
+		#warp:before,#warp:after{
+			content: "";
+			display: block;
+			height: 0px;
+			clear: both;
+		}
+		#warp .item{
+			width: 240px;
+			float: left;
+			box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.1) inset;
+			border:1px solid #ccc;
+			background:#eee;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div id="warp">
+			<div class="item" style="height:90px;">1</div>
+			<div class="item" style="height:80px;">2</div>
+			<div class="item" style="height:85px;">3</div>
+			<div class="item" style="height:105px;">4</div>
+			<div class="item" style="height:95px;">5</div>
+			<div class="item" style="height:75px;">6</div>
+			<div class="item" style="height:65px;">7</div>
+			<div class="item" style="height:85px;">8</div>
+			<div class="item" style="height:120px;">9</div>
+			<div class="item" style="height:95px;">10</div>
+			<div class="item" style="height:105px;">11</div>
+			<div class="item" style="height:115px;">12</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		(function () {
+			function Waterfull (elem,marBot) {
+				this.elem=elem;
+				this.marBot=marBot;
+			}
+			Waterfull.prototype={
+				constructor:Waterfull,
+				sort:function () {
+					var items=this.elem.getElementsByClassName('item');
+					var warpWid=this.elem.clientWidth,
+						itemWid=items[0].offsetWidth,
+						colHei=[];
+					var num=Math.floor(warpWid/itemWid)|0;
+					for (var i = 0; i < num; i++) {
+						colHei[colHei.length]=0;
+					};
+					var allSpace=warpWid-(num*itemWid);
+					var space=Math.floor(allSpace/(num-1));
+					for (var i = 0,j=0; i < items.length; i++) {//j表示第几列
+						items[i].style.position="absolute";
+						items[i].style.top=colHei[j]+"px";
+						items[i].style.left=(j*itemWid+j*space)+"px";
+						colHei[j]+=items[i].offsetHeight+this.marBot;
+						j++;
+						if(j==num)
+							j=0;
+					}
+					var warpHei=Math.max.apply(Math,colHei);//max,min不能直接传入数组，同时要设置他的this为Math
+					this.elem.style.height=warpHei+"px";
+				}
+			};
+
+			window.onload=window.onresize=function () {
+				var elem=document.getElementById('warp');
+				var waterfullApi=new Waterfull(elem,20);
+				waterfullApi.sort();
+			}
+		})();
+	</script>
+</body>
+</html>

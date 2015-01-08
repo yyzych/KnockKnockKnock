@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- saved from url=(0075)http://www.alloyteam.com/wp-content/uploads/2014/02/v_demo1_mousewheel.html -->
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<title>视差滚动-mousewheel</title>
+	<style>
+		.circleSection{
+			width: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 100%;
+			overflow: hidden; /*重要*//*因为出现滚动条后，滚动鼠标，是mousewheel事件和scroll事件都触发的，但是如果拖动滚动条，那就只会触发scroll事件而不触发mousewheel了。*/
+		}
+		.circle{
+			width: 50px;
+			height: 50px;
+			background-color: rgba(0,0,0,.5);
+			border-radius: 25px;
+			position: relative;
+		}
+		.circle:nth-child(1){
+			background-color: rgba(255,0,0,.5);
+			width: 60px;
+			height: 60px;
+			border-radius: 30px;
+			left: 600px;
+			top: 200px;
+		} 
+		.circle:nth-child(2){
+			width: 100px;
+			height: 100px;
+			background-color: rgba(0,255,0,.5);
+			border-radius: 100px;
+			left: 20px;
+			top: 310px;
+		} 
+		.circle:nth-child(3){
+			background-color: rgba(0,0,255,.5);
+			width: 200px;
+			height: 200px;
+			border-radius: 100px;
+			left: 400px;
+			top: 400px;
+		} 
+	</style>
+</head>
+<body>
+	<div class="circleSection">
+		<div class="circle"></div>
+		<div class="circle"></div>
+		<div class="circle"></div>
+	</div>
+	<script>
+		var circles = document.getElementsByClassName('circle');
+		window.addEventListener('mousewheel',mouseWheelHandler);
+		window.addEventListener("DOMMouseScroll", mouseWheelHandler); //for firefox
+
+		function mouseWheelHandler(e){
+			var e = e || window.event;
+			//使用wheelDelta的正负来判断鼠标是向上滚动还是向下滚动
+			//wheelDelta是120的倍数(鼠标下滚是为负)，detail是firefox的，3的倍数(鼠标上滚为正)。
+			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+
+			circles[0].style.top = getOldTop(circles[0])+delta*10+'px';
+		 	circles[1].style.top = getOldTop(circles[1])+delta*20+'px';
+		 	circles[2].style.top = getOldTop(circles[2])+delta*50+'px';	
+
+		}
+
+		function getOldTop(dom){
+			var value = dom.style.top ? dom.style.top : getCss(dom,'top');
+			return value.replace('px','')*1;
+		}
+
+		function getCss(dom,cssName,selectorText){
+			// getComputedStyle是一个可以获取当前元素所有最终使用的CSS属性值。返回的是一个CSS样式声明对象([object CSSStyleDeclaration])，只读。
+			// chrome 下有个window.getMatchedCSSRules 方法，可用于获取元素的样式规则（内部样式<style>以及外部样式<link>中的，但不包括内联的样式elem.style）
+			var cssRuleList = getMatchedCSSRules(dom); //CSSRuleList 类
+			var value = '';
+			for(var i = 0; i<cssRuleList.length; i++){
+				var csslist = cssRuleList[i];
+				if(selectorText){
+					if( selectorText == csslist.selectorText){
+						return csslist.style[cssName];
+					}
+				}else{
+					value = csslist.style[cssName];
+
+					if(value) return value;
+				}
+			}
+		}
+
+
+	</script>
+</body>
+</html>

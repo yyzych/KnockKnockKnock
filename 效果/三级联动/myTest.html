@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>MyTest</title>
+	<style>
+		body{
+			text-align: center;
+			background:#EEEEEE;
+			margin:0; 
+			padding:0; 
+			font-family: "微软雅黑",Arial, Helvetica, sans-serif;
+		}
+		.top{
+			margin-top: 30px;
+			color: #D71C0D;
+		}
+		.info select{
+			border:1px #993300 solid;
+			background:#FFFFFF;
+		}
+		h3{
+			color: #0064C8;
+		}
+	</style>
+</head>
+<body>
+	<div class="top">
+		<h1>省市县三级联动</h1>
+	</div>
+	<div class="info">
+		<select name="province" id="province"></select>
+		<select name="city" id="city"></select>
+		<select name="county" id="county"></select>
+		<div id="show"></div>
+	</div>
+	<script type="text/javascript" src="myArea.js"></script>
+	<script>
+		(function () {
+			init();
+			function showResult () {
+				var val="省："+province.value+" - 市："+city.value+" - 县："+county.value;
+				document.getElementById("show").innerHTML="<h3>"+val+"</h3>"
+			}
+
+			var province=document.getElementById('province'),
+				city=document.getElementById("city"),
+				county=document.getElementById("county");
+			county.onchange=showResult;
+		})();
+	</script>
+</body>
+</html>

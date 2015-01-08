@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+	ul{
+		margin:0;
+		padding:0;	
+	}
+	li{
+		display:inline;
+	}
+	ul li a{
+		display:block;
+		float:left;
+		margin-right:20px;
+	}
+	#condiv img{
+		height:10px;
+		width:35px;	
+		position:absolute;
+	}
+	#container{
+		position:relative;
+	}
+</style>
+<script>
+	function prepNaviAnitimae(){
+		//对象检测
+		var container=document.createElement("div");
+		container.id="container";
+		var img=document.createElement("img");
+		img.src="psb[1].jpg";
+		img.id="preview";
+		img.style.top="0px";
+		img.style.left="0px";
+		container.appendChild(img);
+		document.getElementById("condiv").appendChild(container);
+		
+		var links=document.getElementById("nav").getElementsByTagName("a");
+		/*for(var i=0;i<links.length;i++){
+			links[i].onmouseover=function(){
+				var xpos=parseInt(this.style.left); 
+				moveElement("preview",xpos,0,10);	
+			}
+		}*/
+		links[0].onmouseover=function(){
+			moveElement("preview",0,0,10);	
+		}
+		links[1].onmouseover=function(){
+			moveElement("preview",50,0,10);	
+		}
+		links[2].onmouseover=function(){
+			moveElement("preview",100,0,10);	
+		}
+		links[3].onmouseover=function(){
+			moveElement("preview",150,0,10);	
+		}
+	}
+	function moveElement(elementID,final_x,final_y,internal){
+		var elem=document.getElementById(elementID);
+		if(!elem)return;
+		if(elem.movement){
+			clearTimeout(elem.movement);	
+		}
+		//如果没有设置内嵌的style.left/top的情况
+		if(!elem.style.left){
+			elem.style.left="0px";
+		}
+		if(!elem.style.top){
+			elem.style.top="0px";
+		}
+		var xpos=parseInt(elem.style.left);
+		var ypos=parseInt(elem.style.top);
+		if(xpos==final_x&&ypos==final_y){
+			return;	
+		}
+		if(xpos<final_x){
+			var dist=Math.ceil((final_x-xpos)/10);
+			xpos+=dist;	
+		}
+		if(xpos>final_x){
+			var dist=Math.ceil((xpos-final_x)/10);
+			xpos-=dist;
+		}
+		elem.style.left=xpos+"px";
+		var repeate="moveElement('"+elementID+"',"+final_x+","+final_y+","+internal+")";
+		elem.movement=setTimeout(repeate,internal);
+	}
+	window.onload=function(){
+		prepNaviAnitimae();
+	}
+</script>
+</head>
+
+<body>
+	<div id="condiv">
+        <ul id="nav">
+            <li><a>首页</a></li>
+            <li><a>关于</a></li>
+            <li><a>照片</a></li>
+            <li><a>文章</a></li>
+            <div style="clear:both;"></div>
+        </ul>
+        
+    </div>
+	
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>RunJS</title>
+	<style>
+		body {
+		    font-family: sans-serif;
+		    padding: 0;
+		    margin: 0;
+		    background: #f9f9f2;
+		}
+
+		canvas {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		}
+	</style>
+	<script src="jquery-2.1.1.js"></script>
+	</head>
+	<body>
+		<canvas id='c'></canvas>
+		<script>
+			/**
+			 * Rope
+			 */
+			var Rope = (function() {
+
+			    /**
+			     * @constructor
+			     */
+			    function Rope(texture, pointBetween) {
+			        this.texture = texture;
+			        this.pointBetween = pointBetween;
+			        this.points = [];
+			    }
+
+			    Rope.prototype = {
+			        points: null,
+			        pointBetween: 1,
+			        _rootIndex: 0,
+
+			        // 更新の基点となるポイントのインデックスを設定, 取得する
+			        setRootIndex: function(index) { this._rootIndex = index; },
+			        getRootIndex: function() { return this._rootIndex; },
+
+			        // 更新の基点となるポイントを参照する
+			        rootPoint: function() { return this.points[this._rootIndex]; },
+
+			        addPoint: function(x, y) {
+			            this.points.push(new Point(this, x, y, this.points[this.points.length - 1]));
+			        },
+
+			        removePoint: function() {
+			            if (!this.points.length) return;
+			            this.points.splice(this.points.length - 1, 1);
+			        },
+
+			        render: function(ctx) {
+			            var points = this.points,
+			                texture = this.texture,
+			                pointBetween = this.pointBetween,
+			                p0, p1,
+			                h, r, w, s, sx, angle,
+			                i, len;
+
+			            this.rootPoint().updateBoth();
+
+			            if (texture.width === 0) return;
+
+			            h = texture.height;
+			            r = h * 0.5;
+			            w = pointBetween + r * 2;
+			            sw = texture.width - w; // テクスチャの取得位置の範囲----纹理采集位置范围
+			            sx = 0; // テクスチャの取得位置の範囲
+
+			            for (i = 0, len = points.length - 1; i < len; i++) {
+			                p0 = points[i];
+			                p1 = points[i + 1];
+			                angle = Math.atan2(p1.y - p0.y, p1.x - p0.x);
+			                ctx.save();
+			                ctx.translate(p0.x, p0.y);
+			                ctx.rotate(angle);
+			                ctx.beginPath();
+			                // 端を丸くしてクリップ
+			                ctx.arc(0, 0, r, 0, Math.PI * 2, false);//圈圈旋转是没有变化的
+			                ctx.rect(0, -r, pointBetween, h);//点之间的距离用长方形表示，，注意坐标位置，前面有个旋转的变换了
+			                ctx.arc(pointBetween, 0, r, 0, Math.PI * 2, false);//画下一个点,经过rotate变换后这个点应该是和p1点的位置一样
+			                ctx.closePath();
+			                // ctx.fillStyle="red";
+			                // ctx.fill();
+			                ctx.clip();
+			                ctx.drawImage(texture, sx % sw, 0, w, h, -r, -r, w, h);//看不懂？？
+			                ctx.restore();
+			                sx += pointBetween;
+			            }
+			        }
+			    };
+
+			    /**
+			     * Point
+			     * @private
+			     */
+			    function Point(rope, x, y, prev) {
+			        this.rope = rope;
+			        this.x = x || 0;
+			        this.y = y || 0;
+			        this.prev = prev || null;
+
+			        if (this.prev) this.prev.next = this;//就像是指针一样
+			    }
+
+			    Point.prototype = {
+			        rope: null,
+			        x: 0,
+			        y: 0,
+			        prev: null,
+			        next: null,
+
+			        updateBoth: function() {
+			            this.updateNext();
+			            this.updatePrev();
+			        },
+
+			        updatePrev: function() {
+			            if (this.prev) {
+			                this._update(this.prev);
+			                this.prev.updatePrev();
+			            }
+			        },
+
+			        updateNext: function() {
+			            if (this.next) {
+			                this._update(this.next);
+			                this.next.updateNext();
+			            }
+			        },
+
+			        _update: function(neighbor) {
+			            var angle = Math.atan2(neighbor.y - this.y, neighbor.x - this.x);
+			            neighbor.x = this.x + Math.cos(angle) * this.rope.pointBetween;
+			            neighbor.y = this.y + Math.sin(angle) * this.rope.pointBetween;
+			        }
+			    };
+
+			    return Rope;
+			})();
+
+			(function() {
+			    // Configs
+			    var TEXTURE_IMG_URL = 'http://jsrun.it/assets/f/e/Q/3/feQ3C.png',
+			        POINT_NUM = 200;
+			    // Vars
+			    var canvas, context,
+			        rope,
+			        isDrag = false;
+
+			    // Init
+			    window.addEventListener('load', function() {
+			        var i, px, py;
+
+			        canvas  = document.getElementById('c');
+			        context = canvas.getContext('2d');
+			        resize(null);
+
+			        rope = new Rope(new Image(), 3);
+
+			        for (i = 0; i < POINT_NUM; i++) {
+			            if (i === 0)
+			                rope.addPoint(300, 300);
+			            else{
+			            	//开始位置随机，然后会通过与前一个点的角度距离进行更新的
+			            	var x=canvas.width*0.5*Math.random(),
+			            		y=canvas.height*0.5*Math.random();
+			            	rope.addPoint(x,y);
+			            }
+			        }
+
+			        rope.texture.addEventListener('load', function() {
+			            window.addEventListener('resize', resize, false);
+			            document.addEventListener('mousemove', mouseMove, false);
+			            document.addEventListener('mousedown', mouseDown, false);
+			            document.addEventListener('mouseup', mouseUp, false);
+			            rope.render(context);
+			        }, false);
+			        rope.texture.src = TEXTURE_IMG_URL;
+			    }, false);
+
+			    // Event Listeners
+			    function resize(e) {
+			        canvas.width = window.innerWidth;
+			        canvas.height = window.innerHeight;
+			    }
+			    function mouseMove(e) {
+			        if (isDrag) {
+			            var drag = rope.rootPoint();
+
+			            drag.x = e.clientX;
+			            drag.y = e.clientY;
+
+			            context.clearRect(0, 0, canvas.width, canvas.height);
+			            rope.render(context);
+			        }
+			    }
+			    function mouseDown(e) {
+			        var points = rope.points,
+			            p,
+			            hit = false,
+			            hitIndex = rope.getRootIndex(),
+			            hitNear = 100,
+			            mx = e.clientX,
+			            my = e.clientY,
+			            dx, dy, distSq,
+			            i, len;
+
+			        for (i = 0, len = points.length; i < len; i++) {
+			            p = points[i];
+			            dx = mx - p.x;
+			            dy = my - p.y;
+			            distSq = dx * dx + dy * dy;
+			            if (distSq < 100 && distSq < hitNear) {//相差10个像素内就行了
+			                hit = true;
+			                hitIndex = i;
+			            }
+			        }
+
+			        rope.setRootIndex(hitIndex);
+			        isDrag = hit;
+			    }
+			    function mouseUp(e) {
+			        isDrag = false;
+			    }
+			})();
+		</script>
+	</body>
+</html>

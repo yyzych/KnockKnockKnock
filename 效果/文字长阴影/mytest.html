@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		span{
+			display: block;
+			font-size: 14em;
+			position: absolute;
+			top: 0.5em;/*em单位问题，看我csdn的关于这个问题的文章*/
+			left: 0.5em;
+			width: 2.1em;
+			height: 2.1em;
+			color: #fff;
+			font-family: 'Lucida Grande';
+			overflow: hidden;
+			text-align: center;
+			background-color: #738ffe;
+		}
+	</style>
+</head>
+<body>
+	<!-- <blockquote>关键是使用textShadow设置文本阴影，然后使用overflow吧超出的部分截掉</blockquote> -->
+	<span>R</span>
+	<script>
+		(function (globel) {
+			function getTxtShadow (num,color) {
+				var value="";
+				for (var i = 1; i < num; i++) {
+					value+=i+"px "+i+"px 0px "+color;
+					if(i!=num-1){
+						value+=", ";
+					}
+				}
+				return value;
+			}
+
+			//textShadow:css3
+			document.querySelector('span').style.textShadow=getTxtShadow(220,"#455ede");
+		})(window);
+	</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			font-family:微软雅黑 Arial;
+			/*font-family: "Hiragino Sans GB","Microsoft YaHei","微软雅黑",tahoma,arial,simsun,"宋体";*/
+			font-size: 14px;
+		}
+		.container:after{
+			display: block;
+			content: "";
+			height: 0;
+			clear: both;
+		}
+		.datePicker{
+			float: left;
+		}
+		.datePicker table{
+			width: 200px;
+			background-color: rgb(99, 194, 248);
+		}
+		.datePicker table tbody td,.datePicker table tbody th{
+			border: 0;
+		}
+		.datePicker table tbody td{
+			background-color: #8A8AFF;
+			cursor: pointer;
+		}
+		.datePicker table tbody td:hover{
+			background-color: #00009F;
+		}
+		.today{
+			background-color: #EEEEEE!important;
+		}
+	</style>
+	<script class="jquery library" src="jquery-2.1.1.js" type="text/javascript"></script>
+</head>
+<body>
+	<input type="text" name="" id="inputDate">
+	<div class="container">
+		<div class="datePicker">
+			<table border="1" id="datePicker" cellpadding="3" cellspacing="3">
+				<thead>
+					<th colspan="7">
+						<div>
+							<select name="" id="selectYear">
+							</select>
+							<select name="" id="selectMonth">
+							</select>
+						</div>
+					</th>
+				</thead>
+				<tbody>
+					<tr>
+						<th>日</th>
+						<th>一</th>
+						<th>二</th>
+						<th>三</th>
+						<th>四</th>
+						<th>五</th>
+						<th>六</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<script>
+		(function ($) {
+			//可以在这里定义变量，函数
+
+			//使用$或jQuery都可以，jQuery是全局的。也可以引用------如何做到的？？
+			$.fn.picker=function (options) {
+				//也可以在这里定义默认参数。各有好坏，自己斟酌
+				options=$.extend($.fn.picker.defaultOpts, options);
+				var datePicker=document.getElementById(options.datePickerId);//就是this啊！！
+				var selectYear=datePicker.getElementsByTagName('select')[0];//getElementById();没有定义？？
+				var selectMonth=datePicker.getElementsByTagName('select')[1];
+
+				function initSelect (beginYear,endYear,elem) {
+					// var selectYear=elem.getElementsByTagName('select')[0];//getElementById();没有定义？？
+					// var selectMonth=elem.getElementsByTagName('select')[1];
+					var curYear=(new Date()).getFullYear();
+					var curMon=(new Date()).getMonth()+1;
+					with(selectYear){
+						length=0;
+						for (var i = endYear,j=0; i >=beginYear; i--,j++) {
+							options[j]=new Option(i,i);
+							if(i==curYear){
+								options[j].selected=true;
+							}
+						};
+					};
+					with(selectMonth){
+						length=0;
+						for (var i = 1; i <= 12; i++) {
+							options[i-1]=new Option(i,i);
+							if(i==curMon){
+								options[i-1].selected=true;
+							}
+						};
+					}
+
+					selectYear.onchange=function (event) {
+						var year=selectYear.options[selectYear.selectedIndex].value;
+						var month=selectMonth.options[selectMonth.selectedIndex].value;
+						initAMonthDay(year,month,elem);
+					};
+					selectMonth.onchange=function (event) {
+						var year=selectYear.options[selectYear.selectedIndex].value;
+						var month=selectMonth.options[selectMonth.selectedIndex].value;
+						initAMonthDay(year,month,elem);
+					};
+
+					initAMonthDay(curYear,curMon,elem);
+				}
+
+				function initAMonthDay (year,month,elem) {//month是从1开始的
+					var tbody=elem.getElementsByTagName("tbody")[0];
+					tbody.innerHTML="<tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr>"
+					var theMon=new Date(year,month-1);
+					var days=(new Date(year,month,0)).getDate();//总共几天
+					var firDay=theMon.getDay();//从0开始,0是星期日，1是星期一
+					var num=1,
+						flag=false,
+						curYear=(new Date()).getFullYear(),
+						curMon=(new Date()).getMonth()+1;
+					for (var i = 1; i <= 6; i++) {
+						tbody.insertRow(i);
+						for (var j = 0; j < 7; j++) {
+							tbody.rows[i].insertCell(j);
+							if(i==1&&j<firDay){
+								continue;
+							}
+							tbody.rows[i].cells[j].appendChild(document.createTextNode(num));
+							if(year==curYear&&month==curMon){
+								var day=(new Date()).getDate();//从1开始
+								if(day==num){
+									tbody.rows[i].cells[j].className="today";
+								}
+							}
+							num++;
+							if(num>days){
+								flag=true;
+								j++;
+								while(j<7){
+									tbody.rows[i].insertCell(j);
+									j++;
+								}
+								break;
+							}
+						};
+						if(flag==true)break;
+					};
+				}
+				
+				initSelect(options.beginYear,options.endYear,datePicker);
+
+				datePicker.children[1].onclick=function (event) {
+					var target=event.target;
+					var year=selectYear.options[selectYear.selectedIndex].value;
+					var month=selectMonth.options[selectMonth.selectedIndex].value;
+					var day=$(target).text();
+					
+					$("#inputDate").val(year+options.splitChar+month+options.splitChar+day);
+				}
+
+			};
+			$.fn.picker.defaultOpts={
+				left:0,
+				top:0,
+				splitChar:'-',
+				beginYear:1994,
+				endYear:new Date().getFullYear(),
+				datePickerId:""
+			}
+		})(jQuery);
+
+		$("#datePicker").picker({
+			beginYear:1994,
+			endYear:(new Date()).getFullYear(),
+			datePickerId:"datePicker"
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>通知栏滚动</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.container{
+			height: 20px;
+			overflow: hidden;
+			margin-top: 30px;
+		}
+		ul#list{
+			width: 500px;
+			margin: 0px auto;
+		}
+		#list li{
+			line-height: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<ul id="list">
+			<li class="item">1你妹啊1</li>
+			<li class="item">2妹啊2</li>
+			<li class="item">3妹饭店附近啊3</li>
+			<li class="item">4你fdfj妹啊4</li>
+			<li class="item">5你妹发士大夫啊5</li>
+		</ul>
+	</div>
+	<script>
+		var Slide=(function () {
+			function _Slide (container,list,cssName,time) {
+				this.lis=list.querySelectorAll("."+cssName)||list.children();
+				this.time=time||1000;
+				this.timer=null;
+				this.itemHeight=this.lis[0].offsetHeight||20;
+				this.list=list;
+
+				this.init();
+			}
+			_Slide.prototype={
+				start:function () {
+					if(!this.timer){
+						var self=this;
+						self.timer=setInterval(function () {
+							self.curIndex++;
+							if(self.curIndex>=self.lis.length){
+								self.curIndex=0;
+							}
+							var item=self.lis[self.curIndex];
+							// self.list.style.marginTop=item.offMarDist+"px";
+							self.animate(item.offMarDist);
+						},self.time);
+					}
+				},
+				init:function () {
+					for (var i = 0; i < this.lis.length; i++) {
+						// this.lis[i].index=i;
+						this.lis[i].offMarDist=-(i*this.itemHeight);
+					};
+					this.curIndex=0;
+					var self=this;
+					self.list.addEventListener("mouseover",function () {
+						if(self.timer){
+							clearInterval(self.timer);
+							self.timer=null;
+						}
+					},false);
+					self.list.addEventListener("mouseout",function () {
+						if(!self.timer){
+							self.start();
+						}
+					},false);
+				},
+				animate:function (val) {
+					var self=this;
+					var list=this.list;
+					if(!list.style.marginTop){
+						list.style.marginTop=0+"px";
+					}
+					//注意是负值
+					var dist=0,
+						curVal=parseInt(list.style.marginTop);
+					if(curVal==val){
+						return;
+					}
+					if(curVal<val){
+						var t=val-curVal>30?2:1;
+						dist=curVal+t;
+					}
+					else if(curVal>val){
+						var t=curVal-val>30?2:1;
+						dist=curVal-t;
+					}
+					list.style.marginTop=dist+"px";
+					setTimeout(function () {
+						self.animate(val);
+					},10);
+				}
+			}
+
+			return _Slide;
+		})();
+
+		function init () {
+			var container=document.getElementsByTagName('div')[0],
+				list=document.getElementById('list'),
+				cssName="item";
+			var slide=new Slide(container,list,cssName,1600);
+			slide.start();
+		}
+		init();
+	</script>
+</body>
+</html>

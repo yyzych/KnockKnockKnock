@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>拼图游戏</title>
+    <meta name="keywords" content="拼图游戏"/>
+    <meta name="description" content="拼图游戏"/>
+    <script src="EventUtil.js"></script>
+    <script src="EventTarget.js"></script>
+    <style type="text/css">
+          #gameCanvas {
+              position: relative;
+              padding: 0;
+              margin: 0 auto;
+          }
+
+          #wrap {
+              margin: 0 auto;
+              overflow: hidden;
+              position: relative;
+          }
+
+          #mask {
+              position: absolute;
+              z-index: 999;
+              background: #fff;
+              left: 0;
+              top: 0;
+          }
+
+           div.draggable{
+              position: absolute;
+           }
+          div.draggable:hover{
+            z-index: 9;
+            cursor: move;
+          }
+          .btn{
+            width: 133px;
+             height: 133px; 
+            background-image: url('http://sandbox.runjs.cn/uploads/rs/213/mnpxtazc/play.png');
+            position: absolute;
+            z-index: 1000;
+            margin-left: -66px;
+            left: 50%;
+            margin-top: -66px;
+            top: 50%;
+          }
+          .nearElemCss{
+            opacity: 0.4;
+          }
+    </style>
+</head>
+<body>
+    <div id="vvg">
+        <p id="desTip">
+            第二关后可以自定义图片  现在是第
+            <span id="step">1</span>
+            关
+        </p>
+        <!-- <p id="imgDiy">
+            自定义图片，请输入图片地址：
+            <input type="text" id="imgUrl">
+            <input id="startDiy" type="button" value="开始"></p> -->
+        <div id="wrap">
+            
+        </div>
+    </div>
+    <script>
+        /*
+         * 拖动对象
+         * 依赖于EventUtil和EventTarget两个模块
+         */
+        var DragDrop = function() {
+            var dragdrop = new EventTarget(),
+                dragging = null,
+                diffX = 0,
+                diffY = 0;
+            var boundry = null,
+                itemSize = null;
+
+            function handleEvent(event) {
+                event = EventUtil.getEvent(event);
+                var target = EventUtil.getTarget(event);
+
+                switch (event.type) {
+                    case "mousedown":
+                        if (target.className.indexOf('draggable') > -1) {
+                            dragging = target;
+                            diffY = event.clientY - target.offsetTop;
+                            diffX = event.clientX - target.offsetLeft;
+                            //触发自定义事件
+                            dragdrop.fire({
+                                type: "dragstart",
+                                target: dragging,
+                                x: event.clientX,
+                                y: event.clientY
+                            });
+                        }
+                        break;
+                    case "mousemove":
+                        event.preventDefault();
+                        if (dragging != null) {
+                            var tx = event.clientX - diffX,
+                                ty = event.clientY - diffY;
+
+                            // if(tx<boundry.left){
+                            //     tx=boundry.left;
+                            // }else if(tx+itemSize.width>boundry.right){
+                            //     tx=boundry.right-itemSize.width;
+                            // }
+                            //或者
+                            tx = Math.max(boundry.left, Math.min(tx, boundry.right - itemSize.width));
+                            ty = Math.max(boundry.top, Math.min(ty, boundry.bottom - itemSize.height));
+
+                            dragging.style.left = tx + "px";
+                            dragging.style.top = ty + "px";
+                            //触发自定义事件
+                            dragdrop.fire({
+                                type: "drag",
+                                target: dragging,
+                                x: event.clientX, //注意这里传的都是clientX，相对浏览器的
+                                y: event.clientY
+                            });
+                        }
+                        break;
+                    case "mouseup":
+                        if (dragging != null) {
+                            dragdrop.fire({
+                                type: "dragend",
+                                target: dragging,
+                                x: event.clientX,
+                                y: event.clientY
+                            });
+                            dragging = null;
+                        }
+                        break;
+                }
+            }
+
+            //公共接口
+            dragdrop.enable = function() {
+                EventUtil.addHandler(document, "mousedown", handleEvent);
+                EventUtil.addHandler(document, "mousemove", handleEvent);
+                EventUtil.addHandler(document, "mouseup", handleEvent);
+            };
+            dragdrop.disable = function() {
+                EventUtil.removeHandler(document, "mousedown", handleEvent);
+                EventUtil.removeHandler(document, "mousemove", handleEvent);
+                EventUtil.removeHandler(document, "mouseup", handleEvent);
+            };
+
+            dragdrop.init = function(opt) {
+                dragdrop.clearAll();//清除所有数据，我自己加的
+
+                itemSize = opt.itemSize;
+                boundry = opt.boundry;
+
+                dragdrop.addHandler("dragstart", opt.dragstart || function(event) {});
+                dragdrop.addHandler("drag", opt.drag || function(event) {});
+                dragdrop.addHandler("dragend", opt.dragend || function(event) {});
+
+                dragdrop.enable();
+            }
+
+            return dragdrop;
+        }();
+
+        /*
+         * 工具单实例对象
+         */
+        var Tool = {
+            $: function(id) {
+                return typeof id === "string" ? document.getElementById(id) : null;
+            },
+            extend: function(curOpt, oldOpt) {
+                var res = {};
+                for (name in oldOpt) {
+                    if (curOpt.hasOwnProperty(name)) {
+                        res[name] = curOpt[name];
+                    } else {
+                        res[name] = oldOpt[name];
+                    }
+                };
+                return res;
+            },
+            hasClass: function(elem, className) {
+                if (!elem) return false;
+                return elem.className.indexOf(className) > -1 ? true : false;
+            },
+            addClass:function (elem,className) {
+                if(!this.hasClass(elem,className)&&typeof elem !="undefined"){
+                    var t=elem.className;
+                    elem.className=t+" "+className;
+                }
+            },
+            removeClass:function (elem,className) {
+                if(this.hasClass(elem,className)){
+                    var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+                    elem.className = elem.className.replace(reg, ' ');
+                }  
+            },
+            createElement: function(opt) {
+                var o = this.extend(opt, {
+                    tagName: "div",
+                    text: "",
+                    className: ""
+                });
+                var elem = document.createElement(o.tagName);
+                elem.innerHTML = o.text;
+                o.className !== "" ? elem.className = o.className : false;
+                return elem;
+            },
+            setOpacity: function(node, level) {
+                if (document.all) {
+                    node.style.filter = "alpha(opacity=" + level + ")";
+                } else {
+                    node.style.opacity = level / 100;
+                }
+            },
+            random: function(from, to) {
+                return Math.floor(Math.random() * (to - from) + from);
+            }
+        };
+
+        /*
+         * 游戏场景类
+         * 通过判断每张图片的位置是否与原来一样来判断是否拼图完成
+         * 依赖于Tool和DragDrop模块
+         */
+        var PlaySecen = function() {
+            var $ = Tool.$;
+            var canvas = null,
+                stepElem=null,
+                step = 0,//当前关卡
+                corretImgPosi = [],//存储元素及正确的位置
+                imgArray = [],//存储元素---用于随机布局时用
+                posArray = [],//存储元素位置---用于随机布局时用
+                nearElemCss="";
+
+            function init (opt) {
+                canvas=$(opt.wrap);
+                stepElem=$(opt.step);
+                nearElemCss=opt.nearElemCss;
+            }
+            //图像初始化
+            function renderImg(url) {
+                //更新、清除数据
+                step++;
+                corretImgPosi = [],//存储元素及正确的位置
+                imgArray = [],//存储元素---用于随机布局时用
+                posArray = [];//存储元素位置---用于随机布局时用
+
+                var img = new Image();
+                var near=null,
+                    draggingPosi={},
+                    mouseHasMove=false;
+
+                img.onload = function() {
+                    var boxImgHei = Math.floor(img.height / 4),
+                        boxImgWid = Math.floor(img.width / 4);
+                    canvas.style.width = img.width + "px";
+                    canvas.style.height = img.height + "px";
+                    canvas.innerHTML = "";
+
+                    var fragment = document.createDocumentFragment();
+                    for (var i = 0; i < 4; i++) {
+                        for (var j = 0; j < 4; j++) {
+                            var e = Tool.createElement({
+                                tagName: "div",
+                                className: "draggable",
+                                text: ""
+                            });
+                            var bImgLeft = -(j * boxImgWid),
+                                bImgTop = -(i * boxImgHei);
+                            with(e.style) {
+                                width = boxImgWid + "px";
+                                height = boxImgHei + "px";
+                                backgroundImage = "url(" + url + ")";
+                                backgroundPosition = bImgLeft + "px " + bImgTop + "px";
+                                left = -bImgLeft + "px";
+                                top = -bImgTop + "px";
+                            }
+                            e.isMove = false; //表示对象是否在移动中
+                            imgArray.push({
+                                elem: e,
+                                x: -bImgLeft,
+                                y: -bImgTop
+                            });
+                            posArray.push({
+                                x: -bImgLeft,
+                                y: -bImgTop
+                            });
+                            
+                            fragment.appendChild(e);
+                        }
+                    }
+
+                    //绑定事件
+                    DragDrop.init({
+                        boundry:{left:0,right:img.width,top:0,bottom:img.height},
+                        itemSize:{height:boxImgHei,width:boxImgWid},
+                        dragstart:function (event) {
+                            //skip
+                            var dragging=event.target;
+                            dragging.style.zIndex="9";
+                            draggingPosi={
+                                left:parseInt(dragging.style.left),
+                                top:parseInt(dragging.style.top)
+                            };
+                        },
+                        dragend:function (event) {
+                            var dragging=event.target;
+                            if(mouseHasMove){
+                                var nearElemPosi={
+                                    left:parseInt(near.style.left),
+                                    top:parseInt(near.style.top)
+                                };
+                                Tool.removeClass(near,nearElemCss);
+                                startMove(near,draggingPosi.left,draggingPosi.top,10);
+                                startMove(dragging,nearElemPosi.left,nearElemPosi.top,10);
+                                // dragging.style.zIndex="1";
+                            }
+                            mouseHasMove=false;
+                        },
+                        drag:function (event) {
+                            var dragging=event.target;
+                            // Tool.setOpacity(dragging,80);
+                            near=checkMeet(dragging);//获取离拖动元素最近的元素
+                            for (var i = 0; i < corretImgPosi.length; i++) {
+                                Tool.removeClass(corretImgPosi[i].elem,nearElemCss);
+                            };
+                            Tool.addClass(near,nearElemCss);
+                            mouseHasMove=true;
+                        }
+                    });
+
+                    canvas.appendChild(fragment);
+                    corretImgPosi = imgArray.concat(); //保存正确的位置
+
+                    prepareMask();
+                };
+                img.src = url;
+                stepElem.innerHTML=step;
+            }
+
+            function prepareMask() {
+                var mask = document.createElement("div");
+                mask.id = "mask";
+                mask.style.width = "100%";
+                mask.style.height = "100%";
+                mask.backgroundColor = "#000";
+                Tool.setOpacity(mask, 80);
+
+                var playBtn = Tool.createElement({
+                    className: "btn"
+                });
+                playBtn.onclick = function(event) {
+                    canvas.removeChild(mask);
+                    playBtn.onclick = null;
+                    canvas.removeChild(playBtn);
+                    //开始游戏
+                    start();
+                };
+                canvas.appendChild(mask);
+                canvas.appendChild(playBtn);
+            }
+
+            function start() {
+                var _imgArray=imgArray.concat();
+                var _posArray=posArray.concat();
+                while (_imgArray.length > 0) {
+                    var item = _imgArray.splice(Tool.random(0, _imgArray.length), 1);
+                    var css = _posArray.splice(Tool.random(0, _posArray.length), 1);
+                    startMove(item[0].elem, css[0].x, css[0].y, 10);
+                }
+            }
+
+            function startMove(obj, x, y, interval) {
+                obj.style.zIndex="9";
+                clearInterval(obj.timerId);
+                if (!obj.timerId) {
+                    obj.timerId = setInterval(function() {
+                        move(obj, x, y);
+                    }, interval);
+                }
+            }
+
+            function move(obj, finalX, finalY) {
+                obj.isMove = true; //什么用？
+
+                var curX = parseInt(obj.style.left),
+                    curY = parseInt(obj.style.top);
+                // 为了让它的值不能在-1~1之间
+                var distX = (curX < finalX ? Math.ceil : Math.floor)((finalX - curX) / 10),
+                    distY = (curY < finalY ? Math.ceil : Math.floor)((finalY - curY) / 10);
+                obj.style.left = (curX + distX) + "px";
+                obj.style.top = (curY + distY) + "px";
+                if ((curX == finalX) && (curY == finalY)) {
+                    clearInterval(obj.timerId);
+                    obj.isMove = false;
+                    obj.timerId = null;
+
+                    if (check()) {
+                        if(step>=2){
+                            //自定义图片
+                            alert("拼图成功，第三关可自定义图片");
+                            
+                        }else{
+                            sucessEffect();
+                        }
+                    }
+                    obj.style.zIndex="1";
+                }
+            }
+
+            function sucessEffect () {
+                alert("拼图成功");
+                var i=0,interval=900;
+                setTimeout(function () {
+                    start();
+                    i++;
+                    if(i<3){
+                        setTimeout(arguments.callee,interval);
+                    }else{
+                        setTimeout(function () {
+                            renderImg("http://sandbox.runjs.cn/uploads/rs/213/mnpxtazc/02.jpg");
+                        },interval);
+                    }
+                },10);
+            }
+
+            // 检验拼图是否完成
+            function check () {
+                for (var i = 0; i < corretImgPosi.length; i++) {
+                    var elem=corretImgPosi[i].elem;
+                    var curLeft=parseInt(elem.style.left);
+                    var curTop=parseInt(elem.style.top);
+                    if(curLeft!=corretImgPosi[i].x){
+                        return false;
+                    }
+                    if(curTop!=corretImgPosi[i].y){
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            // 检测与谁相交,判断对象的中心点的距离最近即相交
+            function checkMeet (dragging) {
+                var maxVal=1000000,index=-1;
+                for (var i = 0; i < corretImgPosi.length; i++) {
+                    var elem=corretImgPosi[i].elem;
+                    if(elem!=dragging){
+                        var dist=getDistance(dragging,elem);
+                        if(dist<maxVal){
+                            maxVal=dist;
+                            index=i;
+                        }
+                    }
+                }
+                return corretImgPosi[index].elem;
+            }
+
+            function getDistance (obj1,obj2) {
+                var a = (obj1.offsetLeft + obj1.offsetWidth / 2) - (obj2.offsetLeft + obj2.offsetWidth / 2);
+                var b = (obj1.offsetTop + obj1.offsetHeight / 2) - (obj2.offsetTop + obj2.offsetHeight / 2);
+                return Math.ceil(Math.sqrt(a * a + b * b));
+            }
+
+            return {
+                init:function (opt) {
+                    init(opt);
+                },
+                run:function (url) {
+                    renderImg(url);
+                }
+            }
+        }();
+
+        PlaySecen.init({
+            wrap:"wrap",
+            nearElemCss:"nearElemCss",
+            step:"step"
+        });
+        PlaySecen.run('http://img3.cache.netease.com/photo/0001/2011-01-24/900x600_6R5H25AN00AO0001.jpg');
+    </script>
+</body>
+</html>

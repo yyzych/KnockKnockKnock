@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h2>在 JavaScript 中创建 JSON 对象</h2>
+	<p>
+		Name: <span id="jname"></span><br />
+		Age: <span id="jage"></span><br />
+		Address: <span id="jstreet"></span><br />
+		Phone: <span id="jphone"></span><br />
+	</p>
+	<p>
+		First Name: <span id="fname"></span><br /> 
+		Last Name: <span id="lname"></span><br /> 
+	</p> 
+	<script>
+		//注意，这个不是JSON对象，是普通javascript对象（也可以用""的）---JSON 使用 JavaScript 语法.和javascript对象字面表示法很像，但不声明变量
+		var JSONObject={
+			"name":"ych",
+			"age":56,
+			"phone":"13777404213"
+		};
+		var $=function (id) {
+			return document.getElementById(id);
+		}
+		$("jname").innerHTML=JSONObject.name;
+		$("jage").innerHTML=JSONObject.age;
+		$("jphone").innerHTML=JSONObject.phone;
+
+		//JSON文本---JSON对象包含在引号里，就是javascript字符串
+		var txt = '{"employees":[{"firstName":"Bill","lastName":"Gates" },{"firstName":"George","lastName":"Bush" },{"firstName":"Thomas","lastName":"Carter" }]}';
+		// var obj = eval ("(" + txt + ")");
+		//或
+		var obj=JSON.parse(txt);
+		document.getElementById("fname").innerHTML=obj.employees[1].firstName 
+		document.getElementById("lname").innerHTML=obj.employees[1].lastName 
+	</script>
+</body>
+</html>

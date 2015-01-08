@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>首页</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- 告诉浏览器等设备，文件为html文件，且使用了utf8编码 -->
+	<!-- http-equiv 属性: HTTP协议的响应头报文 -->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="shortcut icon" type="text/x-icon" href="../img/favicon/favicon.png">
+	<!-- 苹果为iOS设备配备了apple-touch-icon私有属性，添加该属性，在iPhone,iPad,iTouch的safari浏览器上可以使用添加到主屏按钮将网站添加到主屏幕上，方便用户以后访问。 -->
+	<link rel="apple-touch-icon" sizes="72x72" href="https://d3qg9zffrnl4ph.cloudfront.net/static/img/touch-icon-ipad.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="https://d3qg9zffrnl4ph.cloudfront.net/static/img/touch-icon-iphone-retina.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="https://d3qg9zffrnl4ph.cloudfront.net/static/img/touch-icon-ipad-retina.png">
+	<link rel="apple-touch-icon" href="https://d3qg9zffrnl4ph.cloudfront.net/static/img/touch-icon-iphone.png">
+	<!--[if lt IE 9]>
+	  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->	
+	<!-- 注意我没有在页面中引入jquery文件。也是可以引入的 -->
+	<script src="../js/com/jquery-2.1.1.js"></script>
+	<link rel="stylesheet" href="../css/main.css">
+	
+	<script src="../js/com/sea.js"></script>
+</head>
+<body>
+	<!-- float之后为什么有时发现a等标签会充满，是因为line-height继承了 -->
+	<div class="container">
+		<!-- 导航 -->
+		<header class="header">
+			<div class="navbar">
+				<div class="logo-box pull-left">
+					<!-- 图片居中所以肯定是vertical-align: middle;但是这时设置nav-title的行高就会影响父级logo-box的行高。这时反过来图片是vertical-align: middle的所以又会影响图片的垂直居中，所以设置为float退出原本的布局流即可 -->
+					<a href="" class="nav-logo"><i class="pc-icon icon-logo"></i></a>
+					<span class="nav-title">让生活变得简单</span>
+				</div>
+				<a href="javascript:void(0);" data-toggle="collapse" id="nav-menu" class="btn nav-menu"><i class="icon-menu pc-icon"></i></a>
+				<div class="collapse nav-center">
+					<nav class="nav">
+						<li><a data-nav-scroll="#feature-link">功能</a></li>
+						<li><a data-nav-scroll="#comment-link">TA们说</a></li>
+						<li><a data-nav-scroll="#down-links">下载</a></li>
+						<li><a href="#">论坛</a></li>
+						<li class="visible-phone"><a href="" class="signup-entry">注册</a></li>
+						<li class="visible-phone"><a href="" class="signin-entry">登陆</a></li>
+					</nav>
+					<div class="navbar-buttons pull-right visible-desktop">
+						<a href="" class="btn signUp animate-button signup-entry">注册</a>
+						<a href="" class="btn signIn animate-button signin-entry">登录</a>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</header>
+		<!-- 导航 -->
+
+		<!-- 概览 -->
+		<div class="overview">
+			<div class="row-fluid">
+				<div class="overview-imgs">
+					<div class="ticktick-title">
+						<i class="pc-icon icon-ticktick"></i>
+					</div>
+					<p>一个帮您高效完成任务和规划时间的应用</p>
+					<div class="carousel">
+						<div class="item">
+							<i class="img-screenshot"></i>
+						</div>
+					</div>
+				</div>
+				<div class="social-shares">
+					<p>Tweet</p>
+				</div>
+				<div id="down-links" class="down-links">
+					<div class="down-center">
+						<h2>最新版快速通道</h2>
+						<ul class="visible-phone download-grid">
+							<li><a href=""><i class="pc-icon icon-android-blue"></i></a></li>
+							<li><a href=""><i class="pc-icon icon-iphone-orange"></i></a></li>
+						</ul>
+						<ul class="visible-desktop download-grid">
+							<li><a href=""><i class="pc-icon icon-iphone"></i></a></li>
+							<li><a href=""><i class="pc-icon icon-ipad"></i></a></li>
+							<li><a href=""><i class="pc-icon icon-android"></i></a></li>
+							<li><a href=""><i class="pc-icon icon-chrome"></i></a></li>
+							<li><a href=""><i class="pc-icon icon-chrome-app"></i></a></li>
+							<li>
+								<span class="social-link">
+									<a href=""><i class="pc-icon icon-facebook"></i></a>
+									<a href=""><i class="pc-icon icon-twitter"></i></a>
+									<a href=""><i class="pc-icon icon-googleplus"></i></a>
+								</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 概览 -->
+
+		<div class="mainbody">
+			<div class="row-fulid">
+				<!-- about -->
+				<div class="about block" id="intro-link">
+					<h1>认识TickTick</h1>
+					<p>TickTick 能帮您随时随地记录并同步工作、生活中的所有任务，能灵巧、清晰的管理您分派的每一个任务，让您在管理和规划未来的时间中事半功倍！</p>
+					<div class="about-images">
+						<i class="img-overview"></i>
+						<i class="img-tasklist visible-desktop"></i>
+						<i class="img-subtask visible-desktop"></i>
+					</div>
+				</div>
+
+				<!-- features -->
+				<div class="feature block" id="feature-link">
+					<h1>TickTick 有什么独特之处</h1>
+					<div class="row-fluid section">
+						<div class="span6 pull-left">
+							<div class="feature-inner">
+								<h3><i class="pc-icon icon-num num-one"></i>云同步</h3>
+								<p>Android、iOS、网页版完美同步保存，无缝切换</p>
+								<i class="img-sync"></i>
+							</div>
+						</div>
+						<div class="span6 pull-right">
+							<div class="feature-inner">
+								<h3><i class="pc-icon icon-num num-two"></i>周期提醒</h3>
+								<p>灵活强大的周期性任务设置，提前提醒，想忘记都难</p>
+								<i class="img-repeat"></i>
+							</div>
+						</div>
+					</div>
+					<div class="row-fluid section">
+						<div class="span6 pull-left">
+							<div class="feature-inner">
+								<h3><i class="pc-icon icon-num num-one"></i>云同步</h3>
+								<p>Android、iOS、网页版完美同步保存，无缝切换</p>
+								<i class="img-sync"></i>
+							</div>
+						</div>
+						<div class="span6 pull-right">
+							<div class="feature-inner">
+								<h3><i class="pc-icon icon-num num-two"></i>周期提醒</h3>
+								<p>灵活强大的周期性任务设置，提前提醒，想忘记都难</p>
+								<i class="img-repeat"></i>
+							</div>
+						</div>
+					</div>
+					<div class="row-fluid section">
+						<div class="span6 pull-left">
+							<div class="feature-inner">
+								<h3><i class="pc-icon icon-num num-one"></i>云同步</h3>
+								<p>Android、iOS、网页版完美同步保存，无缝切换</p>
+								<i class="img-sync"></i>
+							</div>
+						</div>
+						<div class="span6 pull-right">
+							<div class="feature-inner">
+								<h3><i class="pc-icon icon-num num-two"></i>周期提醒</h3>
+								<p>灵活强大的周期性任务设置，提前提醒，想忘记都难</p>
+								<i class="img-repeat"></i>
+							</div>
+						</div>
+					</div>
+					<div class="others">
+						<h2>其他功能</h2>
+						<ul class="list-inline">
+							<li><i class="pc-icon icon-print"></i><span>打印</span></li>
+							<li><i class="pc-icon icon-gmail"></i><span>Gmail</span></li>
+							<li><i class="pc-icon icon-backup"></i><span>网页备份</span></li>
+							<li><i class="pc-icon icon-email"></i><span>邮件创建</span></li>
+							<li><i class="pc-icon icon-notification"></i><span>农历</span></li>
+							<li><i class="pc-icon icon-location"></i><span>地点提醒</span></li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- comments -->
+				<div class="comment block" id="comment-link">
+					<h1>TA们说</h1>
+					<h2>用户说</h2>
+					<ul class="comment-list">
+						<li>
+							<div class="comment-item">
+								<i class="icon-avatar pc-icon"></i>
+								<p><span class="author">Walt Taylor：</span>这是我用过最好的任务提醒类管理软件，太赞了！我试过很多同类应用，包括当前比较出名的ToDoist, Any.Do, NoNonsense Notes, 和 Wunderlist，但 TickTick 秒杀了这些应用。开发者很强大，同时也期待你们不断更新。</p>
+							</div>
+						</li>
+						<div class="divider"></div>
+						<li>
+							<div class="comment-item">
+								<i class="icon-avatar pc-icon"></i>
+								<p><span class="author">Walt Taylor：</span>这是我用过最好的任务提醒类管理软件，太赞了！我试过很多同类应用，包括当前比较出名的ToDoist, Any.Do, NoNonsense Notes, 和 Wunderlist，但 TickTick 秒杀了这些应用。开发者很强大，同时也期待你们不断更新。</p>
+							</div>
+						</li>
+						<div class="divider"></div>
+						<li>
+							<div class="comment-item">
+								<i class="icon-avatar pc-icon"></i>
+								<p><span class="author">Walt Taylor：</span>这是我用过最好的任务提醒应用。Android版与在线版拥有同样的功能，让我能够更方便快捷的设置提醒，重复任务和分享任务列表。</p>
+							</div>
+						</li>
+						<div class="divider"></div>
+						<li>
+							<div class="comment-item">
+								<i class="icon-avatar pc-icon"></i>
+								<p><span class="author">Walt Taylor：</span>这是我用过最好的任务提醒类管理软件，太赞了！我试过很多同类应用，包括当前比较出名的ToDoist, Any.Do, NoNonsense Notes, 和 Wunderlist，但 TickTick 秒杀了这些应用。开发者很强大，同时也期待你们不断更新。</p>
+							</div>
+						</li>
+						<div class="divider"></div>
+						<li>
+							<div class="comment-item">
+								<i class="icon-avatar pc-icon"></i>
+								<p><span class="author">Walt Taylor：</span>这是我用过最好的任务提醒应用。Android版与在线版拥有同样的功能，让我能够更方便快捷的设置提醒，重复任务和分享任务列表。</p>
+							</div>
+						</li>
+					</ul>
+				</div>
+
+				<!-- professtion -->
+				<div class="profession block" id="profession-link">
+					<h2>专业评测</h2>
+					<ul class="comment-list">
+						<li>
+							<div class="comment-item">
+								<h3><a href="">【数字尾巴】消灭你的任务 — 清新好用的 TickTick</a></h3>
+								<i class="icon-avatar pc-icon"></i>
+								<p><span class="author">Walt Taylor：</span>这是我用过最好的任务提醒类管理软件，太赞了！我试过很多同类应用，包括当前比较出名的ToDoist, Any.Do, NoNonsense Notes, 和 Wunderlist，但 TickTick 秒杀了这些应用。开发者很强大，同时也期待你们不断更新。</p>
+							</div>
+						</li>
+						<div class="divider"></div>
+						<li>
+							<div class="comment-item">
+								<h3><a href="">【数字尾巴】消灭你的任务 — 清新好用的 TickTick</a></h3>
+								<i class="icon-avatar pc-icon"></i>
+								<p><span class="author">Walt Taylor：</span>这是我用过最好的任务提醒类管理软件，太赞了！我试过很多同类应用，包括当前比较出名的ToDoist, Any.Do, NoNonsense Notes, 和 Wunderlist，但 TickTick 秒杀了这些应用。开发者很强大，同时也期待你们不断更新。</p>
+							</div>
+						</li>
+						<div class="divider"></div>
+						<li>
+							<div class="comment-item">
+								<h3><a href="">【数字尾巴】消灭你的任务 — 清新好用的 TickTick</a></h3>
+								<i class="icon-avatar pc-icon"></i>
+								<p><span class="author">Walt Taylor：</span>这是我用过最好的任务提醒类管理软件，太赞了！我试过很多同类应用，包括当前比较出名的ToDoist, Any.Do, NoNonsense Notes, 和 Wunderlist，但 TickTick 秒杀了这些应用。开发者很强大，同时也期待你们不断更新。</p>
+							</div>
+						</li>
+						<div class="divider"></div>
+						<li>
+							<div class="comment-item">
+								<h3><a href="">【数字尾巴】消灭你的任务 — 清新好用的 TickTick</a></h3>
+								<i class="icon-avatar pc-icon"></i>
+								<p><span class="author">Walt Taylor：</span>这是我用过最好的任务提醒类管理软件，太赞了！我试过很多同类应用，包括当前比较出名的ToDoist, Any.Do, NoNonsense Notes, 和 Wunderlist，但 TickTick 秒杀了这些应用。开发者很强大，同时也期待你们不断更新。</p>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<footer>
+			<div class="footer-inner">
+				<ul class="footer-links list-inline">
+					<li><a href="">帮助</a></li>
+					<li><a href="">博客</a></li>
+					<li><a href="">升级到高级版</a></li>
+					<li><a href="">联系我们</a></li>
+					<li><a href="">隐私声明</a></li>
+					<li><a href="">使用条款</a></li>
+				</ul>
+				<p>
+					<span>@ 2014 叶二喽</span>
+				</p>
+			</div>
+		</footer>
+	</div>
+	<div class="popup-screen" id="popup">
+		<div class="login-box box" style="display:none" id="login-box">
+			<p class="popup-header">登录<span class="close">X</span></p>
+			<form id="login-form" action="">
+				<div class="line text-input-wrapper">
+					<i class="pc-icon icon-account"></i>
+					<input type="text" placeholder="邮箱" id="username" name="username" class="input-box">
+					<!-- <label for="username">邮箱</label> -->
+				</div>
+				<div class="error">
+					<p class="warn" id="email_invalid_warn">邮箱不符合规则</p>
+					<p class="warn" id="error_no_user_info">
+						对不起，您输入的用户名不存在。
+						<a href="" class="signup-entry" id="sign_up">注册</a>
+					</p>
+					<p class="warn" id="login_server_error">
+						服务器登录错误
+					</p>
+				</div>
+				<div class="line text-input-wrapper">
+					<i class="pc-icon icon-password"></i>
+					<input type="password" placeholder="密码" id="password" name="password" class="input-box">
+					<!-- <label for="password">密码</label> -->
+				</div>
+				<div class="error">
+					<p class="warn" id="login_length_warn">密码的长度至少为6</p>
+					<p class="warn" id="error_username_password">
+						密码或用户名错误
+					</p>
+				</div>
+				<div class="line submit-box">
+					<input type="submit" class="btn" value="登录">
+					<a href="" class="forget-password" id="forget-password">忘记密码</a>
+				</div>
+				<div class="line social-signin">
+					<span>使用第三方登录</span>
+					<a href=""><i class="pc-icon icon-google-login"></i>Google</a>
+					<a href=""><i class="pc-icon icon-facebook-login"></i>Facebook</a>
+				</div>
+			</form>
+		</div>
+		<div class="signup-box box" style="display:none" id="signup-box">
+			<p class="popup-header">注册<span class="close">X</span></p>
+			<form id="signup-form" action="">
+				<div class="line text-input-wrapper">
+					<i class="pc-icon icon-account"></i>
+					<input type="text" placeholder="邮箱" id="set-username" name="set-username" class="input-box">
+					<!-- <label for="set-username">邮箱</label> -->
+				</div>
+				<div class="error">
+					<p class="warn" id="email_invalid_warn">邮箱不符合规则</p>
+					<p class="warn" id="error_no_user_info">
+						对不起，您输入的用户名不存在。
+						<a href="" class="signup-entry" id="sign_up">注册</a>
+					</p>
+					<p class="warn" id="login_server_error">
+						服务器登录错误
+					</p>
+				</div>
+				<div class="line text-input-wrapper">
+					<i class="pc-icon icon-password"></i>
+					<input type="password" placeholder="密码" id="set-password" name="set-password" class="input-box">
+					<!-- <label for="set-password">密码</label> -->
+				</div>
+				<div class="error">
+					<p class="warn" id="login_length_warn">密码的长度至少为6</p>
+					<p class="warn" id="error_username_password">
+						密码或用户名错误
+					</p>
+				</div>
+				<div class="line text-input-wrapper">
+					<i class="pc-icon icon-password"></i>
+					<input type="password" placeholder="确认密码" id="confirm-password" name="confirm-password" class="input-box">
+					<!-- <label for="confirm-password">密码</label> -->
+				</div>
+				<div class="error">
+					<p class="warn" id="login_length_warn">两次密码不一样</p>
+				</div>
+				<div class="line submit-box">
+					<input type="submit" class="btn" value="登录">
+				</div>
+				<div class="line social-signin">
+					<span>使用第三方登录</span>
+					<a href=""><i class="pc-icon icon-google-login"></i>Google</a>
+					<a href=""><i class="pc-icon icon-facebook-login"></i>Facebook</a>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script>
+		seajs.config({
+			base:"file:///D:/叶陈辉/学习/专业/编程类/HTML和Javascript/敲敲敲/网站模仿/TickTick/我的/js/",
+			alias:{
+				'jquery':'browse/jquery/2.1.0/jquery'
+			}
+		});
+
+		seajs.use("../js/browse/main.js",function (main) {
+			console.log("main.js 加载成功");
+		})
+	</script>
+	<!--[if lte IE 6]>
+	<script type="text/javascript">
+	var ie6_warning_msg1 = "你知道你的 Internet Explorer 浏览器已经过时了吗？";;
+	var ie6_warning_msg2 = "建议你升级到较新的版本，或是改用其他的浏览器，以获得更好的使用体验。下面是一份目前广受欢迎的浏览器列表。";;
+	var ie6_warning_msg3 = "只要点选图标，就可以连到各自的下载页面。";;
+	</script>
+	<script src="https://ticktick.com/static/build/misc/ie6/warning.js"></script>
+	<script>window.onload=function(){e("/static/build/misc/ie6/")}</script>
+	<![endif]-->
+</body>
+</html>

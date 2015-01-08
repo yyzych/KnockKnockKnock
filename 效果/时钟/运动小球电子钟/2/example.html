@@ -1,0 +1,276 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		html,body {margin:0; padding:0; position:absolute; width:100%; height:100%; overflow: hidden}
+		#screen {width:80%; height:50%; background:#ddd; position: absolute; left:10%; top:10%; overflow:hidden}
+		span.blue, span.green, span.gray, span.red {
+		    position: absolute;
+		    font-size: 0;
+		    -webkit-border-radius: 5px;
+		    -moz-border-radius: 5px;
+		    -o-border-radius: 5px;
+		    border-radius: 5px;
+		}
+		.blue {background: #06c}
+		.green {background: #4eb84a}
+		.gray {background: #f3f3f3}
+		.red {background: #da4901}
+	</style>
+</head>
+<body>
+	<div id="screen"></div>
+	<script>
+		(function (D) {
+		    var _ = {
+		        extend: function (t, s, o) {
+		            if (o === undefined) o = true;
+		            for (var p in s) {
+		                if (!(p in t) || o) {
+		                    t[p] = s[p]
+		                }
+		            }
+		            return t;
+		        },
+		        addEvent: function (o, e, f) {
+		            o.addEventListener ? o.addEventListener(e, f, false) : o.attachEvent('on' + e, function () {f.call(o)})
+		        },
+		        $ : function (id) {
+		            return typeof id === 'string' ? D.getElementById(id) : id;
+		        },
+		        log : function (s) {
+		            !!window.console && console.log(s)
+		        }
+		    };
+		    
+		    //只能说太有才了了。。每个数字都对应4个字符，从左到右依次对应4个字符
+		    var NUM = [
+		        '####   ##########  #####################    ',
+		        '#  #   #   #   ##  ##   #      ##  ##  #    ',
+		        '#  #   #   #   ##  ##   #      ##  ##  #  # ',
+		        '#  #   #####################   #########    ',
+		        '#  #   ##      #   #   ##  #   ##  #   #  # ',
+		        '#  #   ##      #   #   ##  #   ##  #   #    ',
+		        '####   #########   #########   #########    '
+		    ]
+		    
+		    /*
+		    * scr:外层容器
+		    * W，H:外层容器的宽，高
+		    * TM：保存的是当前的时间，数组
+		    * tm:上一秒的时间
+		    * NT：保存着时间的模板
+		    * _NT：保存着上一秒的时间的模板
+		    * ow: 一个原点的宽
+		    * od: 每个原点之间的间隙
+		    * O：所有的点(span)对象
+		    * AO：有动画的点(span)对象
+		    */
+		    var TM, tm, MF = Math.floor, ow = 10, od = 8, NT = [], _NT = [], scr, W, H, iPos = {}, e = 0, O = [], AO = {}, grid, gw, gh;
+		    
+		    function getTime () {
+		        // reset AO
+		        AO = {};
+		        
+		        tm = TM;
+		        var T = new Date(),
+		            h = T.getHours(),
+		            m = T.getMinutes(),
+		            s = T.getSeconds();
+		        TM = [
+		            MF(h/10),//十位
+		            h%10,//个位
+		            MF(m/10),
+		            m%10,
+		            MF(s/10),
+		            s%10
+		        ];
+		        //_.log(tm+'\n'+TM)
+		        setTimeout(arguments.callee, 1000);
+		        // CNum();
+		    }
+		    //获得时间的模板
+		    function toNT(TM, NT) {
+		        for (var i = 0; i < 7; i ++) {//第几行
+		            var temp = [];
+		            for (var j = 0; j < TM.length; j ++) {//第几个数字
+		                temp.push(NUM[i].substr(TM[j]*4, 4));//4表示的是返回的字符个数
+		                if (j == 1 || j == 3) {
+		                    temp.push(NUM[i].substr(40, 4))//中间的两个冒号
+		                }
+		            }
+		            NT[i] = temp.join('');
+		        }
+		    }
+		    function CNum () {
+		        toNT(TM, NT);
+		        if (tm && tm.length) {
+		        	toNT(tm, _NT);
+		        }
+		        DrawNum();
+		        setTimeout(arguments.callee, 20)//这里为什么？？
+		    }
+		    function DrawNum () {
+		        //_.log(NT.length+'\n'+_NT.length)
+		        var ind = 0;
+		        for (var i = 0; i < NT.length; i ++) {
+		            for (var j = 0; j < NT[i].length; j ++) {
+		                var _char = '@', nchar = NT[i].charAt(j);
+		                var c = nchar === '#' ? 'blue' : 'gray';
+		                if (nchar === '#') {
+		                    if (MF(j/4) < 3) c = 'red';//前面两个数字和一个冒号
+		                    else if (MF(j/4) < 6) c = 'blue';
+		                    else if (MF(j/4) < 8) c = 'green';
+		                } else {
+		                    c = 'gray';
+		                }
+		                
+		                if (O.length >= 4*8*7) {//4*8*7表示全部的点有多少个。
+		                    O[ind].o.className = c;
+		                    // O[ind].o.style.left = j*(ow + od) + MF(j/4)*20 + iPos.x + 'px';//不会变的
+		                    // O[ind].o.style.top = i*(ow + od) + iPos.y + 'px';
+		                } else {
+		                    O.push(new Dot(c, {
+		                        l: j*(ow + od) + MF(j/4)*20 + iPos.x,//初始的位置+原点之间的间隙+数字之间的间隙
+		                        t: i*(ow + od) + iPos.y
+		                    }));
+		                }
+		                // dot anim
+		                if (_NT.length === 7) {
+		                    _char = _NT[i].charAt(j);
+		                    if (_char === '#' && nchar === ' ') {//本来是有点的现在没有，那就要去掉，设置动画
+		                        var k = 'k'+i+'_'+j, _c;
+		                        if (MF(j/4) < 3) _c = 'red';
+		                        else if (MF(j/4) < 6) _c = 'blue';
+		                        else if (MF(j/4) < 8) _c = 'green';
+		                        if (!AO[k]) {
+		                        	//添加到原来的位置然后触发动画
+		                            AO[k] = new Dot(_c, {
+		                                l: j*(ow + od) + MF(j/4)*20 + iPos.x,
+		                                t: i*(ow + od) + iPos.y
+		                            })
+		                            //_.log(k)
+		                            AO[k].anim()
+		                        }
+		                    }
+		                }
+		                
+		                ind ++;
+		            }
+		        }
+		    }
+		    
+		    // DOT constructor
+		    function Dot (color, pos) {
+		        var g = Math.random();
+		            
+		        this.o = D.createElement('span');
+		        this.vx = this.vy = this.dx = this.dy = 0;
+		        this.vy = -this.randNum(1, 5);
+		        this.dir = Math.random() > .5 ? this.randNum(1, 5) : -1*this.randNum(1, 5);//每一个小球的动画的时候是不变的
+		        this.g = g < .1 ? .1 : g;
+		        this.x = pos.l;
+		        this.y = pos.t;
+		        scr.appendChild(this.o);
+		        
+		        this.setStyle(color, pos);
+		    }
+		    _.extend(Dot.prototype, {
+		        setStyle: function (c, pos) {
+		            var sty = this.o.style;
+		            this.o.className = c;
+		            sty['width'] = ow + 'px';
+		            sty['height'] = ow + 'px';
+		            sty['position'] = 'absolute';
+		            sty['left'] = pos.l + 'px';
+		            sty['top'] = pos.t + 'px';
+		        },
+		        randNum: function (f, t) {
+		            return Math.round(Math.random()*(t-f)) + f;
+		        },
+		        move: function () {
+		            this.x += this.dx;
+		            this.y += this.dy;
+		            this.vx += this.dx;
+		            this.vy += this.dy;
+		            
+		            this.o.style['left'] = this.x + 'px';
+		            this.o.style['top'] = this.y + 'px';
+		        },
+		        boundary: function () {
+		            //gravity
+		            this.vy += this.g;
+		            this.x += this.dir;
+		            this.y += this.vy;
+		            
+		            if (this.x < 0  || this.x > W) {
+		                clearInterval(this.st);
+		                scr.removeChild(this.o);
+		            }
+		            
+		            if (this.y > H-10 && this.vy > 0) {//判断到底部了怎样
+		                this.vy *= -1;
+		            }
+		            
+		            //this.dotCollision();
+		        },
+		        dotCollision: function () {//什么意思？
+		            var gx = Math.round(this.x/10), 
+		                gy = Math.round(this.y/10);
+	                for (var ix = gx - 1; ix <= gx + 1; ix++) { 
+	                    for (var iy = gy - 1; iy <= gy + 1; iy++) {
+	                        var g = grid[iy * gw + ix] || [];
+	                        for (j = 0, l = g.length; j < l; j++) {
+	                            var that = g[j];
+	                            var dx = that.x - this.x;
+	                            var dy = that.y - this.y;
+	                            var d = Math.sqrt(dx * dx + dy * dy);
+	                            if (d < 10 && d > 0) {
+	                                dx = (dx / d) * (10 - d) * .0025;
+	                                dy = (dy / d) * (10 - d) * .0025;
+	                                this.dx -= dx;
+	                                this.dy -= dy;
+	                                that.dx += dx;
+	                                that.dy += dy;
+	                            }
+	                        }
+	                    }
+	                }
+		                
+		            if (!grid[gy * gw + gx]) grid[gy * gw + gx] = [this];
+		            else grid[gy * gw + gx].push(this);
+		        },
+		        anim: function () {
+		            var _this = this;
+		            this.st = setInterval(function () {//加入动画队列不是现在就执行，所以不一定就是等这个球执行完动画后在执行其他球的动画的
+		                _this.move();
+		                _this.boundary();
+		            }, 16)
+		        }
+		    })
+		    
+		    function resize () {
+		        W = scr.offsetWidth;
+		        H = scr.offsetHeight;
+		        iPos.x = (W-32*(ow+od)-20*7)/2;//最左边的球的位置.容器的宽减去时钟的宽（时钟的宽：原点+原点之间的间隙+数字之间的间隙）
+		        iPos.y = (H-7*(ow+od))/2;
+		    }
+		    
+		    // init
+		    _.addEvent(window, 'load', function () {
+		        scr = _.$('screen');
+		        resize();
+		        getTime();
+		        CNum();
+		        
+		        gw = Math.round(W/10); 
+		        gh = Math.round(H/10);
+		        grid = new Array(gw * gh);
+		    })
+		    _.addEvent(window, 'resize', resize)
+		})(document)
+	</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)http://www.alloyteam.com/wp-content/uploads/2014/01/demo3_scene.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>视差滚动原理三</title>
+<style>
+body{
+	overflow-x: hidden; 
+}
+.scene{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-attachment: fixed;
+	height: 3000px;
+	background-repeat: no-repeat;
+}
+#scene_back{
+	background-image: url(http://www.alloyteam.com/wp-content/uploads/2014/01/001.png);
+	background-size: 200px;
+	background-position: 10% 100px;
+}
+#scene_center{
+	background-image: url(http://www.alloyteam.com/wp-content/uploads/2014/01/002.png);
+	background-size: 350px;
+	background-position: 100% 300px;
+}
+#scene_front{
+	background-image: url(http://www.alloyteam.com/wp-content/uploads/2014/01/003.png);
+	background-position: 40% 600px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="scene_back" class="scene" >
+	
+</div>
+<div id="scene_center" class="scene">
+	
+</div>
+<div id="scene_front" class="scene">
+	
+</div>
+
+<script>
+	// 跳动的bug在于：浏览器渲染了两次（绘出了两次）：
+	// 第一次，就是默认浏览器行为，页面上滚。渲染位置一般偏上--------元素向上了
+	// 第二次，视察滚动逻辑，dom的top改变。渲染位置一般偏下---------元素的top改变在原来的基础上又向下了
+	var sceneBack = document.getElementById('scene_back'),
+		sceneCenter = document.getElementById('scene_center'),
+		sceneFront = document.getElementById('scene_front');
+	var old_top1 = 100,
+		old_top2 = 300,
+		old_top3 = 600;
+
+	addEvent(window,'scroll',onScroll);
+	onScroll();
+
+	function onScroll(e){
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		sceneBack.style.backgroundPositionY = old_top1-scrollTop*.05+'px';
+		sceneCenter.style.backgroundPositionY = old_top2-scrollTop*.15+'px';
+		sceneFront.style.backgroundPositionY = old_top3-scrollTop*.5+'px';
+	}
+
+   	function addEvent(eventTarget, eventType, eventHandler) {
+	    if (eventTarget.addEventListener) {
+	        eventTarget.addEventListener(eventType, eventHandler, false);
+	    } else {
+	        if (eventTarget.attachEvent) {
+	            eventType = "on" + eventType;
+	            eventTarget.attachEvent(eventType, eventHandler);
+	        } else {
+	            eventTarget["on" + eventType] = eventHandler;
+	        }
+	    }
+    }
+
+</script>
+
+
+</body></html>

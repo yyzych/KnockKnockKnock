@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0
+		}	
+		.layout__state{
+			position: absolute;
+			left: -5000px;
+		}
+		.header{
+			height: 56px;
+			background: #3f51b5;
+			color: #FFF;
+			font-size: 24px;
+			font-family: Arial;
+			line-height: 56px;
+			font-weight: 300;
+		}
+		.header__trigger{
+			position: relative;
+			float: left;
+			width: 56px;
+			height: 56px;
+			margin: 0 8px 0 0;
+			vertical-align: top;
+			cursor: pointer;
+		}
+		.header__trigger:hover{
+			background: rgba(#FFF, .1);
+		}
+		.header__bar{
+			position: absolute;
+			top: 50%;
+			left: 16px;
+			width: 24px;
+			height: 2px;
+			margin: -1px 0 0;
+			background: #FFF;
+			transform: rotate(0);
+			transition:.3s linear;
+		}
+		span.header__bar:before,
+		span.header__bar:after{
+			content: '';
+			position: absolute;
+			top: -7px;
+			right: 0;
+			width: 24px;
+			height: 2px;
+			background: #FFF;
+			transform: rotate(0);
+			transition: .3s linear;
+		}
+		span.header__bar:after{
+			top: 7px;
+		}
+		.layout__state:checked ~ .header .header__bar{
+			transform: rotate(180deg);
+			bacground: #FCC;
+		}
+		/*
+		* element1~element2:具有相同的父元素且位于 element1 元素之后的所有 element2 元素
+		*/
+		.layout__state:checked ~ .header .header__bar:before,
+		.layout__state:checked ~ .header .header__bar:after{
+			content: '';
+			top: -5px;
+			right: -3px;
+			width: 16px;
+			transform: rotate(45deg);
+		}
+		.layout__state:checked ~ .header .header__bar:after{
+			top: 5px;
+			transform: rotate(-45deg);
+		}
+	</style>
+</head>
+<body>
+	<input class="layout__state" type="checkbox" id="layoutState">
+	<header class="header" role="banner">
+		<!-- label的for="layoutState"，所以点击这个后会直接选择checkbox -->
+		<label class="header__trigger" for="layoutState">
+			<span class="header__bar"></span>
+		</label>
+		<span class="header__title">Title</span>
+	</header>
+</body>
+</html>

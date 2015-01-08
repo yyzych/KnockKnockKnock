@@ -1,0 +1,433 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0079)http://www.iweizhuli.com/index.php?g=Wap&m=Index&a=index&token=jeifef1395382046 -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<title>零食折扣分享111</title>
+	<meta name="keywords" content="微信站,零食折扣分享,微信营销">
+	<meta name="description" content="零食折扣分享系统由微助力提供技术支持。微助力营销系统，微信建站、微信商城、微信促销活动、微信公众号开发。">
+	<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<link href="./零食折扣分享111_files/cate11_0.css" rel="stylesheet" type="text/css">
+	<link href="./零食折扣分享111_files/iscroll.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="http://www.iweizhuli.com/tpl/Wap/default/common/css/flash/css/plugmenu.css">
+	<link rel="stylesheet" type="text/css" href="./零食折扣分享111_files/music-left.css" media="all">
+
+	<style type="text/css">    
+		a {
+		    color: #fff;
+		    text-decoration: none; 
+		}
+
+		#cate6 .mainmenu li.li0:nth-child(1) .menumesg{
+		    background:url('/image/1.jpg') no-repeat ;float:left;
+		}                                 
+		#cate6 .mainmenu li.li0:nth-child(1) .menuimg{
+		    float:right;
+		}
+
+		#cate6 .mainmenu li.li0:nth-child(2) .menumesg{
+		    background:url('/image/2.jpg') no-repeat ; float:right;
+		}
+		#cate6 .mainmenu li.li0:nth-child(2) .menuimg{
+		    float:left;
+		}        
+		#cate6 .mainmenu li.li0:nth-child(3) .menumesg{
+		      float:left;
+		}
+		#cate6 .mainmenu li.li0:nth-child(3) .menuimg{
+		    float:right; 
+		}
+		
+		/*改*/
+		#cate6{
+			overflow-y: hidden;
+			opacity: 0;
+		}
+		#cate6 .mainmenu li .menuimg{
+			overflow:visible;
+		}
+		.menuimg>span{
+			display: block;
+			position: absolute;
+			right: 0px;
+			bottom: -800px;
+			z-index: 1000;
+			transition:bottom 0.7s;
+			-webkit-transition:bottom 0.7s;
+			-moz-transition:bottom 0.7s;
+			-o-transition:bottom 0.7s;
+			-ms-transition:bottom 0.7s;
+		}
+		.menuimg>span img{
+			height: 70px;
+			width: 70px!important;
+		}
+		.menuimg>span#booket{
+			left: 0px;
+		}
+		.show1{
+			bottom: 0px!important;
+			animation:slideAnima1 0.3s ease 0.58s;
+			-moz-animation:slideAnima1 0.3s ease 0.58s;
+			-webkit-animation:slideAnima1 0.3s ease 0.58s;
+			-o-animation:slideAnima1 0.3s ease 0.58s;
+		}
+
+		#cate6 .mainmenu li.li0 .menutitle{
+			z-index: 999;
+			position: absolute;
+			top: 800px;
+			left: 5px;
+			padding: 0;
+			margin-left: 0;
+			transition:top 0.7s;
+			-webkit-transition:top 0.7s;
+			-moz-transition:top 0.7s;
+			-o-transition:top 0.7s;
+			-ms-transition:top 0.7s;
+		}
+		.show2{
+			top: 5px!important;
+			animation:slideAnima2 0.4s ease 0.58s;
+			-moz-animation:slideAnima2 0.4s ease 0.58s;
+			-webkit-animation:slideAnima2 0.4s ease 0.58s;
+			-o-animation:slideAnima2 0.4s ease 0.58s;
+		}
+
+		@keyframes slideAnima1{
+			0%   {bottom: 0px;}
+			50%  {bottom: 10px;}
+			100%  {bottom: 0px;}
+		}
+		@-webkit-keyframes slideAnima1{
+			0%   {bottom: 0px;}
+			50%  {bottom: 10px;}
+			100%  {bottom: 0px;}
+		}
+		@-moz-keyframes slideAnima1{
+			0%   {bottom: 0px;}
+			50%  {bottom: 10px;}
+			100%  {bottom: 0px;}
+		}
+
+		@keyframes slideAnima2{
+			0%   {top: 0px;}
+			50%  {top: -20px;}
+			100%  {top: 5px;}
+		}
+		@-webkit-keyframes slideAnima2{
+			0%   {top: 0px;}
+			50%  {top: -20px;}
+			100%  {top: 5px;}
+		}
+		@-moz-keyframes slideAnima2{
+			0%   {top: 0px;}
+			50%  {top: -20px;}
+			100%  {top: 5px;}
+		}
+
+		/*擦除部分*/
+		.wrap{
+			z-index: 9;
+			position: fixed;
+			height: 100%;
+			width:100%;
+			left: 0px;
+			top: 0px;
+			opacity: 1;
+			-webkit-transition:opacity 0.8s;
+			-moz-transition:opacity 0.8s;
+			-o-transition:opacity 0.8s;
+			-ms-transition:opacity 0.8s;
+			transition:opacity 0.8s;
+		}
+		.hiddleMask{
+			display: none!important;
+		}
+		.z-opacity{
+			opacity: 0;
+		}
+		/*改*/
+	</style>
+	<script src="./零食折扣分享111_files/iscroll.js" type="text/javascript"></script>
+	<script type="text/javascript">
+            var myScroll;
+
+            function loaded() {
+                myScroll = new iScroll('wrapper', {
+                    snap: true,
+                    momentum: false,
+                    hScrollbar: false,
+                    onScrollEnd: function () {
+                        document.querySelector('#indicator > li.active').className = '';
+                        document.querySelector('#indicator > li:nth-child(' + (this.currPageX+1) + ')').className = 'active';
+                    }
+                });
+ 
+            }
+
+            document.addEventListener('DOMContentLoaded', loaded, false);
+    </script>
+</head>
+
+<body id="cate6">
+	<div class="banner">
+		<div id="wrapper" style="overflow: hidden;">
+			<div id="scroller" style="width: 2646px; -webkit-transition: 0ms; transition: 0ms; -webkit-transform: translate3d(-1324px, 0px, 0px) scale(1);">
+				<ul id="thelist">
+					<li>
+						<p></p>
+						<a href="">
+							<img src="./零食折扣分享111_files/thumb_53e5d52006c80.jpg" style="width: 1323px;"></a>
+					</li>
+					<li>
+						<p></p>
+						<a href="">
+							<img src="./零食折扣分享111_files/thumb_53e5e230becbf.jpg" style="width: 1323px;"></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="nav">
+			<div id="prev" onclick="myScroll.scrollToPage(&#39;prev&#39;, 0,400,3);return false">← prev</div>
+			<ul id="indicator">
+				<li class="">1</li>
+				<li class="">2</li>
+			</ul>
+			<div id="next" onclick="myScroll.scrollToPage(&#39;next&#39;, 0);return false">next →</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<!--播放器开始-->
+	<script type="text/javascript" src="./零食折扣分享111_files/audio.js"></script>
+	<script>
+			window.addEventListener("DOMContentLoaded", function(){
+				playbox.init("playbox");
+			}, false);
+	</script>
+
+	<!--播放器结束-->
+	<div id="insert1"></div>
+	<ul class="mainmenu">
+
+		<!-- 改 -->
+		<li class="li0">
+			<div class="menubtn">
+				<a href="http://www.iweizhuli.com/index.php?g=Wap&m=Index&a=lists&classid=687&token=jeifef1395382046">
+					<div class="menumesg" style="height: 458.91562500000003px;">
+						<div class="menutitle">泊宁故事</div>
+						<div class="menuico"></div>
+					</div>
+				</a>
+				<a href="http://www.iweizhuli.com/index.php?g=Wap&m=Index&a=content&token=jeifef1395382046&wecha_id=&id=1035&wecha_id=">
+					<div class="menuimg" style="height: 458.91562500000003px;">
+						<img src="./img/citybg.jpg">
+						<span class="slide"><img src="./img/city.png" alt="" /></span>
+					</div>
+				</a>
+			</div>
+		</li>
+		<li class="li0">
+
+			<div class="menubtn">
+				<a href="http://www.iweizhuli.com/index.php?g=Wap&m=Index&a=lists&classid=684&token=jeifef1395382046">
+					<div class="menumesg" style="height: 458.91562500000003px;">
+						<div class="menutitle">泊仕汇</div>
+						<div class="menuico"></div>
+					</div>
+				</a>
+				<a href="">
+					<div class="menuimg" style="height: 458.91562500000003px;">
+						<img src="./img/booketbg.jpg">
+						<span class="slide" id="booket"><img src="./img/booket.png" alt="" /></span>
+					</div>
+				</a>
+			</div>
+		</li>
+		<li class="li0">
+
+			<div class="menubtn">
+				<a href="http://www.iweizhuli.com/index.php?g=Wap&m=Index&a=lists&classid=709&token=jeifef1395382046">
+					<div class="menumesg" style="height: 458.91562500000003px;">
+						<div class="menutitle">联手泊宁</div>
+						<div class="menuico"></div>
+					</div>
+				</a>
+				<a href="">
+					<div class="menuimg" style="height: 458.91562500000003px;">
+						<img src="./img/suprisebg.jpg">
+						<span class="slide"><img src="./img/suprise.png" alt="" /></span>
+					</div>
+				</a>
+			</div>
+		</li>
+		<!-- 改 -->
+		
+		<div class="clr"></div>
+	</ul>
+
+	<script>
+		var count = document.getElementById("thelist").getElementsByTagName("img").length;	
+		var count2 = document.getElementsByClassName("menuimg").length;
+
+
+		for(i=0;i<count;i++){
+		 document.getElementById("thelist").getElementsByTagName("img").item(i).style.cssText = " width:"+document.body.clientWidth+"px";
+
+		}
+		for(i=0;i<count2;i++){
+		 if(true){
+		document.getElementsByClassName("menuimg").item(i).style.cssText = " HEIGHT:"+(document.body.clientWidth/320)*111+"px";
+		document.getElementsByClassName("menumesg").item(i).style.cssText = " HEIGHT:"+(document.body.clientWidth/320)*111+"px";
+		 }else{
+		 document.getElementsByClassName("menuimg").item(i).style.cssText = " HEIGHT:48px";
+		document.getElementsByClassName("menumesg").item(i).style.cssText = " HEIGHT:48px";
+		 }
+		}
+
+		document.getElementById("scroller").style.cssText = " width:"+document.body.clientWidth*count+"px";
+
+
+		 setInterval(function(){
+		myScroll.scrollToPage('next', 0,400,count);
+		},3500 );
+
+		window.onresize = function(){ 
+		for(i=0;i<count;i++){
+		document.getElementById("thelist").getElementsByTagName("img").item(i).style.cssText = " width:"+document.body.clientWidth+"px";
+
+		}
+		for(i=0;i<count2;i++){
+		 
+		 if(true){
+		document.getElementsByClassName("menuimg").item(i).style.cssText = " HEIGHT:"+(document.body.clientWidth/320)*111+"px";
+		document.getElementsByClassName("menumesg").item(i).style.cssText = " HEIGHT:"+(document.body.clientWidth/320)*111+"px";
+		 }else{
+		 document.getElementsByClassName("menuimg").item(i).style.cssText = " HEIGHT:48px";
+		document.getElementsByClassName("menumesg").item(i).style.cssText = " HEIGHT:48px";
+		 }
+		}
+
+		 document.getElementById("scroller").style.cssText = " width:"+document.body.clientWidth*count+"px";
+		} 
+
+	</script>
+	<div class="plug-div">
+		<div class="plug-phone">
+			<div class="plug-menu themeStyle" style="background:#42322C">
+				<span class="close"></span>
+			</div>
+			<div class="themeStyle plug-btn plug-btn1 close" style="background:#42322C">
+				<a href="tel:18268942761">
+					<span style="background-image: url(./tpl/Wap/default/common/css/flash/images/img/tel.png);"></span>
+				</a>
+			</div>
+			<div class="plug-btn plug-btn5 close"></div>
+		</div>
+	</div>
+	<script src="./零食折扣分享111_files/zepto.min.js" type="text/javascript"></script>
+	<script src="./零食折扣分享111_files/plugmenu.js" type="text/javascript"></script>
+	<div class="copyright" style="text-align:center;margin-top:5px;font-size:10px;">
+		泊宁酒店
+		<footer style="text-align:center; color:#ffd800;margin-top:5px;font-size:10px;">
+			<a href="http://www.iweizhuli.com/index.php?g=Wap&m=Index&a=index&token=jeifef1396926107">技术支持 : 微助力</a>
+		</footer>
+	</div>
+
+	<!--分享前控制-->
+	<script>
+		document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+			window.shareData = {
+				"imgUrl": "http://www.iweizhuli.com/uploads/j/jeifef1395382046/9/3/d/2/thumb_53912a5532b75.jpg",
+				"timeLineLink":"http://www.iweizhuli.com" +  "/index.php?g=Wap&m=Index&a=index&token=jeifef1395382046",
+				"sendFriendLink":"http://www.iweizhuli.com" +  "/index.php?g=Wap&m=Index&a=index&token=jeifef1395382046",
+				"weiboLink":"http://www.iweizhuli.com" +  "/index.php?g=Wap&m=Index&a=index&token=jeifef1395382046",
+				"tTitle": "欢迎访问零食折扣分享微信官方网站",
+				"tContent": "欢迎访问零食折扣分享微信官方网站",
+				"fTitle": "欢迎访问零食折扣分享微信官方网站",
+				"fContent": "欢迎访问零食折扣分享微信官方网站",
+				"wContent": "欢迎访问零食折扣分享微信官方网站"
+			};
+
+			// 发送给好友
+			WeixinJSBridge.on('menu:share:appmessage', function (argv) {
+				WeixinJSBridge.invoke('sendAppMessage', {
+					"img_url": window.shareData.imgUrl,
+					"img_width": "640",
+					"img_height": "640",
+					 "link":window.shareData.sendFriendLink,
+					"desc": window.shareData.fContent,
+					"title": window.shareData.fTitle
+				}, function (res) {
+					_report('send_msg', res.err_msg);
+				})
+			});
+
+			// 分享到朋友圈
+			WeixinJSBridge.on('menu:share:timeline', function (argv) {
+				WeixinJSBridge.invoke('shareTimeline', {
+					"img_url": window.shareData.imgUrl,
+					"img_width": "640",
+					"img_height": "640",
+					"link": window.shareData.timeLineLink,
+					"desc": window.shareData.tContent,
+					"title": window.shareData.tTitle
+				}, function (res) {
+					_report('timeline', res.err_msg);
+				});
+			});
+
+			// 分享到微博
+			WeixinJSBridge.on('menu:share:weibo', function (argv) {
+				WeixinJSBridge.invoke('shareWeibo', {
+					"content": window.shareData.wContent,
+					"url": window.shareData.weiboLink
+				}, function (res) {
+					_report('weibo', res.err_msg);
+				});
+			});
+		}, false)
+	</script>
+	<!-- 改 -->
+	<div id="wrap" class="wrap">
+		这里是canvas
+	</div>
+	<input type="hidden" name="" id="lamp" value="img/cover.jpg">
+	<script src="lottrey.js"></script>
+	<script>
+		window.onload=function () {
+			var wrap=document.getElementById('wrap'),
+				imgsrc=document.getElementById("lamp").value,
+				coverType="image",
+				width=640;
+				height=window.innerHeight||document.documentElement.clientHeight,
+				callback=callBack;
+
+			var lottrey =new Lottery(wrap,imgsrc,coverType,width,height,callback);
+			lottrey.init();
+		}
+
+		function callBack () {
+			var wrap=document.getElementById('wrap');
+			wrap.className=wrap.className+" "+"z-opacity";
+			setTimeout(function () {
+				wrap.className=wrap.className+" "+"hiddleMask";
+			},1000);
+
+			var slides1=document.querySelectorAll(".slide");
+			for (var i = 0; i < slides1.length; i++) {
+				slides1[i].className=slides1[i].className+" show1";
+			};
+			var slides2=document.querySelectorAll(".menuico");
+			for (var i = 0; i < slides2.length; i++) {
+				slides2[i].className=slides2[i].className+" show2";
+			};
+		}
+	</script>
+	<!-- 改 -->
+</body>
+</html>

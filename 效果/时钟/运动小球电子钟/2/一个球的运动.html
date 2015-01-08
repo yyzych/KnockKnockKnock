@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		html,body {margin:0; padding:0; position:absolute; width:100%; height:100%; overflow: hidden}
+		#screen {width:80%; height:50%; background:#ddd; position: absolute; left:10%; top:10%; overflow:hidden}
+		span.blue, span.green, span.gray, span.red {
+		    position: absolute;
+		    font-size: 0;
+		    -webkit-border-radius: 5px;
+		    -moz-border-radius: 5px;
+		    -o-border-radius: 5px;
+		    border-radius: 5px;
+		}
+		.blue {background: #06c}
+		.green {background: #4eb84a}
+		.gray {background: #f3f3f3}
+		.red {background: #da4901}
+	</style>
+</head>
+<body>
+	<div id="screen"></div>
+	<script>
+		var scr=document.getElementById('screen');
+		var W = scr.offsetWidth,
+			H = scr.offsetHeight;
+
+	    function Dot (color, pos) {
+	        var g = Math.random();
+	        this.g = g < 0.1 ? 0.1 : g;
+
+	        this.vy = -this.randNum(1, 5);//变化的y的值，这个值是会变化的，跟this.g有关
+	        this.dir = Math.random() > .5 ? this.randNum(1, 5) : -1*this.randNum(1, 5);//水平方向上的距离不变的
+	        
+	        this.o = document.createElement('span');
+	        this.x = pos.l;//x,y表示当前的元素的left和top
+	        this.y = pos.t;
+
+	        scr.appendChild(this.o);
+	        this.setStyle(color, pos);
+	    }
+	    Dot.prototype={
+	        setStyle: function (c, pos) {
+	            var sty = this.o.style;
+	            this.o.className = c;
+	            sty['width'] = 10 + 'px';
+	            sty['height'] = 10 + 'px';
+	            sty['position'] = 'absolute';
+	            sty['left'] = pos.l + 'px';
+	            sty['top'] = pos.t + 'px';
+	        },
+	        randNum: function (f, t) {
+	            return Math.round(Math.random()*(t-f)) + f;
+	        },
+	        boundary: function () {
+	            //this.g是不变的。如果vy是正的，那么vy就会越来越来大，this.y改变的幅度就会越来越大;如果是负的，vy的值也是越来越大（从负到正），但this.y变化的幅度先是会越来越小然后会越来越大，也是先向上再向下
+	            this.vy += this.g;
+	            this.y += this.vy;
+	            this.x += this.dir;
+	            
+	            if (this.x < 0  || this.x > W) {
+	                clearInterval(this.st);
+	                scr.removeChild(this.o);
+	            }
+	            
+	            //球本身的高度为10
+	            if (this.y > H-10 && this.vy > 0) {//判断到底部了怎样
+	                this.vy *= -1;//刚开始变为负值时，球还是在底部，之后是先执行一次this.vy += this.g，所以每次跳到最高点时比前一次低一点的
+	            }
+
+	            this.o.style['left'] = this.x + 'px';
+	            this.o.style['top'] = this.y + 'px';
+	        },
+	        anim: function () {
+	            var _this = this;
+	            this.st = setInterval(function () {//加入动画队列不是现在就执行，所以不一定就是等这个球执行完动画后在执行其他球的动画的
+	                _this.boundary();
+	            }, 16)
+	        }
+	    };
+
+	    var ball=new Dot("blue",{l:100,t:100});
+        ball.anim();
+	</script>
+</body>
+</html>

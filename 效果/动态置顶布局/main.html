@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>动态置顶布局</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			font-size: 14px;
+			font-family: '微软雅黑';
+		}
+		html,body{
+			height: 100%;
+		}
+		.header{
+			padding: 10px 0;
+			font-size: 16px;
+			color: #FF8000;
+			margin: 0 auto;
+			width: 1024px;
+		}
+		.nav{
+			height: 40px;
+			line-height: 40px;
+			background-color: #383838;
+			color: #fff;
+			padding: 0 100px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+		.fixedTopPosi{
+			position: fixed;
+			top: 0;
+			left: 0;
+		}
+		.list-inline li{
+			display: inline-block;
+			list-style: none;
+		}
+		.list-inline li a{
+			color: #fff;
+			display: inline-block;
+			text-decoration: none;
+			min-width: 80px;
+			text-align: center;
+		}
+		.list-inline li.on a{
+			background-color: #6B6B6B;
+		}
+		div.content{
+			min-height: 1000px;
+			background-color: #D0D0D0;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<h1>黑客攻防入门图解</h1>
+	</div>
+	<div id="nav" class="nav">
+		<ul class="list-inline">
+			<li class="on"><a href="">首页</a></li>
+			<li><a href="">导航2</a></li>
+			<li><a href="">导航3</a></li>
+			<li><a href="">导航4</a></li>
+		</ul>
+	</div>
+	<div class="content"></div>
+	<script>
+		(function () {
+			function $ (id) {
+				return document.getElementById(id);
+			}
+			//全局参数
+			var fixedTopPosi="fixedTopPosi",
+				navBox=$('nav'),
+				parNode=null,
+				oldClassName=navBox.className||"",
+				limite=navBox.offsetHeight;
+
+			function createEvent () {
+				window.onscroll=function (e) {
+					if(!parNode){
+						parNode=document.documentElement.scrollTop>document.body.scrollTop?document.documentElement:document.body;
+					}
+					var curPosi=parNode.scrollTop;
+					if(curPosi>=limite){
+						navBox.className=navBox.className+" "+fixedTopPosi;
+					}else{
+						navBox.className=oldClassName;
+					}
+				}
+			}
+			createEvent();
+		})();
+	</script>
+</body>
+</html>

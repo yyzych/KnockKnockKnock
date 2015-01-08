@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Canvas adMaker -- http://www.cnblogs.com/NNUF/</title>
+	<!-- <link rel="stylesheet" href="js/style.css">
+	-->
+	<style>
+		#adMakerWarp{font-size: 13px;}
+		#adMakerWarp ul{margin: 0; padding: 0;}
+		#adMakerWarp li{list-style: none; line-height: 32px; overflow: hidden;}
+		#adMakerWarp li.line{height: 1px; background: #dcdcdc; margin: 8px 0;}
+		#adMakerWarp .left{float: left; width: 305px; padding: 15px; border: 1px solid #ccc; border-radius: 10px; background: #efefef;}
+		#adMakerWarp .right{float: left; display: inline; margin-left: 50px;}
+		#adMakerWarp canvas{border: 1px solid #ccc;}
+		#adMakerWarp input[type=text]{border-radius: 5px; border: 1px solid #ccc; height: 23px;padding-left: 3px;}
+		#adMakerWarp input.short{width:40px;}
+		#adMakerWarp hr{height: 1px; background: #ccc; border: none; margin: 5px 0;}
+		#adMakerWarp label{width: 80px; display: inline-block;}
+		#adMakerWarp label.color{float: left;}
+		#adMakerWarp input.long{width: 200px;}
+		#adMakerWarp input.btn{width: 150px;height: 35px; margin-top: 15px; margin-left: 75px;}
+		#adMakerWarp i{display: inline-block; width: 16px; height: 16px; float:left; margin-left: 2px;
+		    border: 1px solid #fff; margin-top: 6px; cursor: pointer;}
+		#adMakerWarp i:first-child{margin-left: 0;}
+		#adMakerWarp i.gray{background: #252525;}
+		#adMakerWarp i.white{background: #ffffff;}
+		#adMakerWarp i.yellow{background: #f4b300;}
+		#adMakerWarp i.green{background: #78ba00;}
+		#adMakerWarp i.blue{background: #2673ec;}
+		#adMakerWarp i.red{background: #ae113d;}
+		#adMakerWarp i.litter_coffe{background: #632f00;}
+		#adMakerWarp i.coffe{background: #2e1700;}
+		#adMakerWarp i.orange{background: #b01e00;}
+		#adMakerWarp i.purple{background: #7200ac;}
+		#adMakerWarp i.yel{background: #e1b700;}
+		#adMakerWarp i.current{background-image: url(http://sandbox.runjs.cn/uploads/rs/213/mnpxtazc/icon.png);background-repeat: no-repeat; background-position: 3px 3px;}
+		#mb{width: 100%; height: 100%; background: #000; opacity: 0.8; position:absolute; left: 0; top: 0; z-index: 1000; display: none;}
+		#MyPix{ position: absolute; left: 20%; top: 20%; z-index: 1001; display: none;}
+    </style>
+</head>
+<body>
+	<div id="adMakerWarp">
+		<div class="left">
+			<ul>
+				<!-- accept：表示可以选择的文件MIME类型，多个MIME类型用英文逗号分开，常用的MIME类型见下表。
+			multiple：是否可以选择多个文件，多个文件时其value值为第一个文件的虚拟路径。 -->
+				<li>
+					<label>图片上传：</label>
+					<input type="file" name="file" id="file"/>
+				</li>
+				<li class="line"></li>
+				<li>
+					<label>广告宽度：</label>
+					<input type="text" id="adWidth"  class="short" value="670"/>
+					<label>广告高度：</label>
+					<input type="text" id="adHeight" class="short" value="240"/>
+					px
+				</li>
+				<li class="line"></li>
+				<li>
+					<label>图片缩放：</label>
+					<input type="text" id="imgScale" class="short" value="1"/>
+					倍
+				</li>
+				<li>
+					<label>图片左偏移：</label>
+					<input type="text" id="iLeft" class="short" value="0"/>
+					<label>图片顶偏移：</label>
+					<input type="text" id="iTop" class="short" value="0"/>
+					px
+				</li>
+				<li class="line"></li>
+				<li id="colorWarp">
+					<label class="color">文字背景：</label> <i class="white current" rgb="255,255,255"></i> <i class="gray" rgb="37,37,37"></i>
+					<i class="yellow" rgb="244,179,0"></i>
+					<i class="green" rgb="120,186,0"></i>
+					<i class="blue" rgb="37,115,236"></i>
+					<i class="red" rgb="174,17,61"></i>
+					<i class="litter_coffe" rgb="99,47,0"></i>
+					<i class="coffe" rgb="46,23,0"></i>
+					<i class="orange" rgb="176,30,0"></i>
+					<i class="purple" rgb="114,0,172"></i>
+					<i class="yel" rgb="225,183,0"></i>
+				</li>
+				<li>
+					<label>背景透明度：</label>
+					<input type="text" id="bgOpacity" class="short" value="0.5"/>
+					<label>背景高度：</label>
+					<input type="text" id="bgHeight" class="short" value="60"/>
+					px
+				</li>
+				<li class="line"></li>
+				<li>
+					<label>标题字号：</label>
+					<input type="text" id="titleFontSize" class="short" value="25"/>
+					<label>标题颜色：</label>
+					<input type="text" id="titleFontColor" class="short" value="#000"/>
+				</li>
+				<li>
+					<label>标题左偏移：</label>
+					<input type="text" id="titleLeft" class="short" value="10"/>
+					<label>标题顶偏移：</label>
+					<input type="text" id="titleTop" class="short" value="210"/>
+				</li>
+				<li>
+					<label>标题文字：</label>
+					<input type="text" id="title" class="long" value="标题文字写这里!!!"/>
+				</li>
+				<li>
+					<label>描述字号：</label>
+					<input type="text" id="desFontSize" class="short" value="15"/>
+					<label>描述颜色：</label>
+					<input type="text" id="desFontColor" class="short" value="#000"/>
+				</li>
+				<li>
+					<label>描述左偏移：</label>
+					<input type="text" id="desLeft" class="short" value="10"/>
+					<label>描述顶偏移：</label>
+					<input type="text" id="desTop" class="short" value="230"/>
+				</li>
+				<li>
+					<label>描述文字：</label>
+					<input type="text" id="description" class="long" value="描述性文字写这里，字号较小!!!!!!!!!"/>
+				</li>
+				<li>
+					<input type="button" value="输出图像格式" id="putOut" class="btn"></li>
+			</ul>
+		</div>
+		<div class="right" id="paper">
+			<img src="http://sandbox.runjs.cn/uploads/rs/213/mnpxtazc/0.png" id="placeholder"></div>
+		<div id="mb"></div>
+		<img id="MyPix">
+	</div>
+	<!-- <script type="text/javascript" src="js/admake.js"></script>
+-->
+<script>
+	/**
+	 * author: VVG
+	 * My blog: http://www.cnblogs.com/NNUF/
+	 */
+	var Tool = {
+	    $:function (arg, context) {
+	        var tagAll, n, eles = [], i, sub = arg.substring(1);
+	        context = context || document;
+	        if (typeof arg == 'string') {
+	            switch (arg.charAt(0)) {
+	                case '#':
+	                    return document.getElementById(sub);
+	                    break;
+	                case '.':
+	                    if (context.getElementsByClassName) return context.getElementsByClassName(sub);
+	                    tagAll = $('*', context);
+	                    n = tagAll.length;
+	                    for (i = 0; i < n; i++) {
+	                        if (tagAll[i].className.indexOf(sub) > -1) eles.push(tagAll[i]);
+	                    }
+	                    return eles;
+	                    break;
+	                default:
+	                    return context.getElementsByTagName(arg);
+	                    break;
+	            }
+	        }
+	    },
+	    /* 添加样式名 */
+	    addClass:function (c, node) {
+	        if (!node)return;
+	        node.className = this.hasClass(c, node) ? node.className : node.className + ' ' + c;
+	    },
+
+	    /* 移除样式名 */
+	    removeClass:function (c, node) {
+	        var reg = new RegExp("(^|\\s+)" + c + "(\\s+|$)", "g");
+	        if (!this.hasClass(c, node))return;
+	        node.className = reg.test(node.className) ? node.className.replace(reg, '') : node.className;
+	    },
+
+	    /* 是否含有CLASS */
+	    hasClass:function (c, node) {
+	        if (!node || !node.className)return false;
+	        return node.className.indexOf(c) > -1;
+	    }
+	}
+	var AdMacker = function(){
+	    var image,width,height,iLeft,iTop,bgRGBA,bgOpacity,bgHeight,
+	        titleFontSize,titleFontColor,titleLeft,titleTop,title,
+	        desFontSize,desFontColor,desLeft,desTop,description;
+	    var bgRGB = '255,255,255';
+	    var imgScale = 1;
+
+	    var regex = {
+	        reg1:/^([1-9]\d*)$/,      // 验证正整数---第一数为1到9，然后后面的匹配数字
+	        reg2:/^-?(0|[1-9]\d*)$/, // 验证零正负整数--?:重复0次或多次
+	        reg3:/^(0|0\.\d*|1)$/,   // 验证透明度0-1
+	        reg4:/^([1-9]|10|0\.\d*)$/,      // 缩放比例0-10，不包含0
+	        reg5:/^#([0-9a-zA-Z]{3}|[0-9a-zA-Z]{6})$/   // 验证颜色值
+	    }
+	    var tips = ['宽高只能为大于0的整数','偏移量只能为零和正负整数',
+	        '透明度值在0-1之间，包括0和1','比例限制在0-10之间，不包含0',
+	        '字号只能为正整数','颜色值格式不正确，为#fff或#ffffff格式'];
+
+	    // 读取文件数据
+	    var FileData = new FileReader();// HTML5中，引入了FileReader接口，来实现对本地文件的异步操作。FileReader接口主要是将文件读入内存，并提供相应的方法，来读取文件中的数据。在本地读取文件
+	    // 文件加载事件
+	    FileData.onload = function(event){
+	        image = new Image();
+	        // 文件加载事件
+	        image.onload = function(){
+	            drawImg(image,iLeft,iTop,image.width*imgScale,image.height*imgScale);
+	        }
+	        // event.target.result 获取文件路径
+	        image.src =  event.target.result;//读取到的文件内容.这个属性只在读取操作完成之后才有效,并且数据的格式取决于读取操作是由哪个方法发起的. 只读。这里用的是readAsDataURL，即是把文件转换为base64后的字符串（data: URL格式的字符串）， 如果是图片，则赋值给img的src即可显示。 
+	    }
+
+	    // 创建画布
+	    function createCanvas() {
+	        var adMaker, canvas;
+	        if (!checkValue()) {
+	            return;
+	        }
+	        if (adMaker = Tool.$('#adMaker')) {
+	            adMaker.width = width;
+	            adMaker.height = height;
+	        } else {
+	            canvas = document.createElement('canvas');
+	            canvas.id = 'adMaker';
+	            canvas.width = width;
+	            canvas.height = height;
+	            Tool.$('#paper').innerHTML = '';
+	            Tool.$('#paper').appendChild(canvas);
+	        }
+	        //获取文件
+	        getfile();
+	    }
+
+	    function getfile() {
+	        var file = Tool.$('#file');
+	        // 验证上传文件格式
+	        var fileFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/;
+	        if (file.files.length === 0) {//所有type属性(attribute)为file的 <input> 元素都有一个files属性(property),用来存储用户所选择的文件
+	            alert('请选择图片!');
+	            return;
+	        } else {
+	            var oFile = file.files[0];//files是一个FileList对象
+	            if (!fileFilter.test(oFile.type)) {//还有oFile.size属性，可以判断大小
+	                alert("上传的文件必须是图片格式!");
+	                return;
+	            }
+	            // 传递数据到FileData，数据加载后引发FileData.onload事件
+	            FileData.readAsDataURL(oFile);//----------------------------------------------
+	        }
+	    }
+
+	    function drawImg(img,left,top,imgwidth,imgheight){
+	        var canvas = Tool.$('#adMaker');
+	        var context = canvas.getContext('2d');
+	        context.clearRect(0,0,width,height);
+	        context.drawImage(img,left,top,imgwidth,imgheight);
+	        // 绘制背景
+	        context.fillStyle = bgRGBA;
+	        context.fillRect(0,height - bgHeight, width, bgHeight);
+	        // 绘制标题文字
+	        context.fillStyle = titleFontColor;
+	        context.font = "bold "+ titleFontSize + "px 微软雅黑";
+	        context.fillText(title,titleLeft,titleTop);
+	        // 绘制描述文字
+	        context.fillStyle = desFontColor;
+	        context.font = "normal " + desFontSize + "px 微软雅黑";
+	        context.fillText(description,desLeft,desTop);
+	    }
+	    function putOut(){
+	        var canvas = Tool.$("#adMaker");
+	        if (canvas.getContext) {
+	            var ctx = canvas.getContext("2d");                // 获取2d画布
+	            var myImage = canvas.toDataURL("image/png");      // 转化为图像数据
+	        }
+	        var imageElement = Tool.$("#MyPix");  // 获取一个图像NODE
+	        imageElement.src = myImage;
+	        showImage();
+	        alert('请右键点击图片另存为存储图片！');
+	    }
+
+	    function showImage(){
+	        var mb = Tool.$('#mb');
+	        var img = Tool.$("#MyPix");
+	        mb.style.display = 'block';
+	        img.style.display = 'block';
+	        mb.onclick = function(){
+	            mb.style.display = 'none';
+	            img.style.display = 'none';
+	        }
+	    }
+
+	    function checkValue(){
+	        // 获取所有
+	        width = Tool.$('#adWidth').value;
+	        height = Tool.$('#adHeight').value;
+	        imgScale = Tool.$('#imgScale').value;
+	        iLeft = Tool.$('#iLeft').value;
+	        iTop = Tool.$('#iTop').value;
+	        bgOpacity = Tool.$('#bgOpacity').value;
+	        bgRGBA = 'rgba(' + bgRGB + ',' + bgOpacity + ')';
+	        bgHeight = Tool.$('#bgHeight').value;
+
+	        titleFontSize = Tool.$('#titleFontSize').value;
+	        titleFontColor = Tool.$('#titleFontColor').value;
+	        titleLeft = Tool.$('#titleLeft').value;
+	        titleTop = Tool.$('#titleTop').value;
+	        title = Tool.$('#title').value;
+
+	        desFontSize = Tool.$('#desFontSize').value;
+	        desFontColor = Tool.$('#desFontColor').value;
+	        desTop = Tool.$('#desTop').value;
+	        desLeft = Tool.$('#desLeft').value;
+	        description = Tool.$('#description').value;
+
+	        // 画布
+	        if(!checkFormat('adWidth',regex.reg1,tips[0],670))return false;
+	        if(!checkFormat('adHeight',regex.reg1,tips[0],240))return false;
+
+	        // 图片
+	        if(!checkFormat('imgScale',regex.reg4,tips[3],1))return false;
+	        if(!checkFormat('iLeft',regex.reg2,tips[1],0))return false;
+	        if(!checkFormat('iTop',regex.reg2,tips[1],0))return false;
+
+	        // 背景
+	        if(!checkFormat('bgOpacity',regex.reg3,tips[2],0.5))return false;
+	        if(!checkFormat('bgHeight',regex.reg1,tips[0],60))return false;
+
+	        // 标题
+	        if(!checkFormat('titleFontSize',regex.reg1,tips[4],25))return false;
+	        if(!checkFormat('titleFontColor',regex.reg5,tips[5],'#fff'))return false;
+	        if(!checkFormat('titleLeft',regex.reg2,tips[1],10))return false;
+	        if(!checkFormat('titleTop',regex.reg2,tips[1],10))return false;
+
+	        // 描述
+	        if(!checkFormat('desFontSize',regex.reg1,tips[4],25))return false;
+	        if(!checkFormat('desFontColor',regex.reg5,tips[5],'#fff'))return false;
+	        if(!checkFormat('desLeft',regex.reg2,tips[1],10))return false;
+	        if(!checkFormat('desTop',regex.reg2,tips[1],10))return false;
+
+	        return true;
+	    }
+
+	    function checkFormat(id,reg,tip,defaultValue){
+	        var node = Tool.$('#'+id);
+	        var value = node.value;
+	        if(!reg.test(value)){
+	            alert(tip);
+	            node.value = defaultValue;
+	            node.focus();
+	            return false;
+	        }
+	        return true;
+	    }
+
+	    // change事件
+	    var inputs = Tool.$('input');
+	    for (var i = 0, k = inputs.length; i < k; i++) {
+	        if (inputs[i].type != 'button'){
+	            inputs[i].onchange = createCanvas;
+	        }
+	    }
+	    Tool.$('#putOut').onclick = putOut;
+
+	    // 颜色点击事件
+	    var labelI = Tool.$('#colorWarp').getElementsByTagName('i');
+	    for (var j = 0, n = labelI.length; j < n; j++) {
+	        labelI[j].onclick = function(){
+	            bgRGB = this.getAttribute('rgb');
+	            var currents = Tool.$('.current',Tool.$('#colorWarp'));
+	            Tool.removeClass('current',currents[0]);
+	            Tool.addClass('current',this);
+	            createCanvas();
+	        }
+	    }
+	}();
+</script></body>
+</html>

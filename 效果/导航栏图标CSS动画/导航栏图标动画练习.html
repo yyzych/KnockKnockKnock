@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			background-color: #0a68bb;
+			background-size: cover;
+		}
+		nav{
+			margin: 0 auto;
+			width: 400px;
+			margin-top: 50px;
+		}
+		menu{
+			border-radius: 3px;
+		}
+		/*在menu的前面和后面添加元素，用来解决li向左浮动退出普通文档流后导致包含容器没有高度问题，ul还是menu还是其他有一样*/
+		menu:after,menu:before{
+			display: block;
+			content: '';
+		}
+		menu:after{
+			clear: both;
+		}
+		li{
+			list-style-type: none;
+			/*线性渐变*/
+			background: linear-gradient(rgba(220,220,255,0.5) 85%,rgba(255,255,255,0.5) 100%);
+			float: left;
+			cursor: pointer;
+			padding: 3px 10px;
+			border-top: 2px solid rgba(200,200,255,0.5);
+			border-bottom: 2px solid rgba(50,50,50,0.4);
+		}
+		li:first-child{
+			border-radius: 5px 0 0 5px;
+		};
+		li:last-child{
+			border-radius: 0 5px 5px;
+		}
+		a{
+			display: block;;
+			padding: 10px 13px;
+			font-size: 26px;
+			text-decoration: none;
+			border-radius: 5px;
+			position: relative;
+			top: 0px;
+			color: #fff;
+			transition:all .4s;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h3>这是css3动画</h3>
+		<div>
+			<ul>
+				<li>
+				<a href="#">☀</a>
+				</li>
+				<li>
+				<a href="#">✈</a>
+				</li>
+				<li>
+				<a href="#">❄</a>
+				</li>
+				<li>
+				<a href="#">☎</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<ul>
+				<li><a href="">Home</a></li>
+				<li><a href="">Blog</a></li>
+				<li><a href="">About</a></li>
+				<li><a href="">Contact</a></li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>

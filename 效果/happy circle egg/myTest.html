@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body,canvas{
+			margin:0;
+			padding:0;
+		}
+	</style>
+	<script src="myVector.js" type="text/javascript"></script>
+</head>
+<body>
+	<script>
+		(function () {
+			function $ (id) {
+				return document.getElementById(id);
+			}
+			var textSize=6,
+				pointsArr=[],
+				particles=[],
+				width=550,
+				height=400,
+				ctx=null,
+				mouseVector=new Vector();
+
+			//初始化canvas
+			function CreateCanvas(id,textSize) {
+				this.width=width||550;
+				this.height=height||400;
+				this.elem=null;
+				this.textSize=textSize||4;
+
+				this.init(id);
+			}
+			CreateCanvas.prototype={
+				init:function (id) {
+					this.elem=document.createElement("canvas");
+					this.elem.id=this.id;
+					this.elem.style.backgroundColor="#000";
+					this.elem.width=this.width;
+					this.elem.height=this.height;
+
+					this.createEvent();
+				},
+				getContext:function () {
+					if(this.elem.getContext){
+						return this.elem.getContext("2d");
+					}else{
+						return null;
+					}
+				},
+				draw:function () {
+					var ctx=this.getContext();
+					if(arguments.length>0&&ctx!=null){
+						// var pointsArr=arguments[0];
+						ctx.font="bold 8px serif";
+						ctx.textAlgin="left";
+						ctx.fillStyle="#fff";
+						ctx.textBaseline="top";
+
+						for (var i = 0; i < arguments.length; i++) {
+							ctx.fillText(arguments[i],0,20*i,this.width);
+						};
+
+						var w=Math.max(ctx.measureText(arguments[0]).width,ctx.measureText(arguments[1]).width);
+						var offsetX=(this.width-w*this.textSize)>>1,
+							offsetY=(this.height-28*this.textSize)>>1;
+
+						var textPoints=[];
+						var datas=ctx.getImageData(0,0,this.width,this.height).data;
+						for (var i = 0; i < datas.length; i+=4) {
+							if(datas[i+3]>0){//画了的地方才有值
+								var x=(i/4)%this.width;//宽度多少就表示一行有多少像素
+								var y=parseInt(i/(this.width*4));
+								textPoints.push([x*textSize+offsetX,y*textSize+offsetY])
+							}
+						};
+						return textPoints;
+					}
+					return null;
+				},
+				createEvent:function () {
+					var flag=/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(navigator.userAgent.toLowerCase());
+					var moveFun=flag?"touchmove":"mousemove",
+						outFun=flag?"touchend":"mouseout";
+					var self=this;
+					this.elem["on"+moveFun]=function (event) {
+						event=event||window.event;
+						event.preventDefault();
+						mouseVector.x=flag?event.touchs[0].pageX:event.clientX;
+						mouseVector.y=flag?event.touchs[0].pageY:event.clientY;
+					}
+					this.elem["on"+outFun]=function (event) {
+						event=event||window.event;
+						event.preventDefault();
+						mouseVector.reset(1000,1000);
+					}
+				}
+			}
+			//粒子对象
+			function Particle (x,y) {
+				this.curPosi=new Vector(x,y);
+				this.tarPosi=new Vector(x,y);
+				this.color="#f96";
+				this.angle=0;
+				this.angleChange=0;
+				this.vectorChange=new Vector();
+
+				this.init();
+			}
+			Particle.prototype={
+				draw:function () {
+					var halfTextSize=textSize*0.4;
+					ctx.save();
+					ctx.fillStyle=this.color;
+					ctx.translate(this.curPosi.x,this.curPosi.y);
+					ctx.rotate(this.angle);
+					ctx.fillRect(-halfTextSize,-halfTextSize,halfTextSize*2,halfTextSize*2);
+					ctx.restore();
+				},
+				init:function () {
+					this.curPosi.x=Math.random()*width;
+					this.curPosi.y=Math.random()*height;
+					this.angleChange=-0.5+Math.random();
+					this.color='#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6);
+				},
+				update:function () {
+					this.angle+=this.angleChange;
+					this.vectorChange=this.tarPosi.minusNew(this.curPosi);
+					this.vectorChange.scale(0.05);
+
+					var m=mouseVector.minusNew(this.curPosi);
+					if(m.getLength()<50){
+						m.scale(0.1);
+						// m.rotate(0.1);
+						this.curPosi.minus(m);//就是改变坐标,然后重新绘制
+						return;
+					}
+
+					this.curPosi.plus(this.vectorChange);
+				}
+			}
+
+			window.onload=function () {
+				var fps=60,text0="Bye,2014",text1="Hi, 2015";
+				var canvasObj=new CreateCanvas("wrap",textSize);
+				document.body.appendChild(canvasObj.elem);
+				ctx=canvasObj.getContext();
+				pointsArr=canvasObj.draw(text0,text1);
+				initParticles (pointsArr);
+				setInterval(update,1000/fps);
+			}
+
+			function initParticles (textPoints) {
+				var p;
+				textPoints.forEach(function (item,i) {
+					setTimeout(function () {
+						p=new Particle(item[0],item[1]);
+						particles.push(p);
+					},i*10);
+				})
+			}
+			function update () {
+				ctx.save();
+				ctx.globalAlpha=0.2;
+				ctx.fillStyle="#000";
+				ctx.fillRect(0,0,width,height);
+				ctx.restore();
+
+				for (var i = 0; i<particles.length;i++) {
+					particles[i].draw();
+					particles[i].update();
+				};
+			}
+		})();
+	</script>
+</body>
+</html>

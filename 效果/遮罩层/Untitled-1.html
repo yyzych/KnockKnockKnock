@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+	#mask{
+		display:none;
+		position: absolute; 
+		top: 0px; 
+		background-color: rgba(37, 36, 36, 0.61);
+		z-index: 999; 
+		left: 0px;  
+		height:100%;
+		width:100% 
+	}
+	#content{
+		display:none;
+		z-index:1000; 
+		position:fixed;/*必须要设置定位方式，什么定位方式没关系*/
+	}
+</style>
+<script>
+	function openmask(){
+		var mask=document.getElementById("mask");
+		var content=document.getElementById("content");
+		mask.style.display="block";
+		content.style.display="block";	
+	}
+</script>
+</head>
+
+<body>
+	<div id="mask"></div>
+    <div id="content">
+    	<input type="button" value="queding"/>
+        <span style="color:red;">你妹的啊</span>
+    </div>
+	<p>内容必须要设置定位方式，什么定位方式没关系</p>
+    <p>遮罩层的样式也有要求</p>
+    <a onclick="openmask()">haode</a>
+</body>
+</html>

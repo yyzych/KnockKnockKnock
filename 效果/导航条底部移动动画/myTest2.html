@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+	ul{
+		margin:0;
+		padding:0;	
+	}
+	li{
+		display:inline;
+	}
+	ul li a{
+		display:inline-block;
+		cursor: pointer;
+		height: 20px;
+		width: 39px;
+		border-right: 1px solid #333;
+	}
+	#condiv img{
+		height:10px;
+		width:35px;	
+		position:absolute;
+	}
+	#condiv{
+		position:relative;
+	}
+	#bottom-line{
+		width: 30px;
+		height: 3px;
+		background: blue;
+		position: absolute;
+		left: 0px;
+	}
+</style>
+</head>
+<body>
+	<div id="condiv">
+        <ul id="nav">
+            <li><a>首页</a></li>
+            <li><a>关于</a></li>
+            <li><a>照片</a></li>
+            <li><a>文章</a></li>
+        </ul>
+        <div id="bottom-line"></div>
+    </div>
+	<script>
+		function moveElement (elem,finalX,interval) {
+			// var elem=document.getElementById(elem);
+			if(elem.movement){
+				clearTimeout(elem.movement);
+			}
+			if(!elem.style.left){
+				elem.style.left=0+"px";
+			}
+			var cur=parseInt(elem.style.left);
+			if(cur===finalX){
+				return;
+			}
+			var posi;
+			if(finalX<cur){
+				posi=Math.ceil((cur-finalX)/10);
+				cur-=posi;
+			}
+			else if(finalX>cur){
+				posi=Math.ceil((finalX-cur)/10);
+				cur+=posi;
+			}
+			elem.style.left=cur+"px";
+			var repate="moveElement("+elem+","+finalX+","+interval+")";//全局作用域.好像elem如果直接是元素，用repate就没有用，要用匿名函数方式。不过换成elemId也是可以的
+			// elem.movement=setTimeout(repate,interval);
+			elem.movement=setTimeout(function () {
+				moveElement(elem,finalX,interval);
+			},interval);
+		}
+		window.onload=function () {
+			var bottomLine=document.getElementById("bottom-line");
+			var links=document.getElementById('nav').getElementsByTagName('a');
+			for (var i = 0; i < links.length; i++) {
+				// var computedStyle=document.defaultView.getComputedStyle(links[i])||links[i].currentStyle;
+				// var left=parseInt(computedStyle.left);
+				var left=links[i].offsetLeft;
+				// var left=50*i;
+				links[i].onmouseover=(function (x) {
+					return function () {
+						moveElement(bottomLine,x,10);
+					}
+				})(left);
+			};
+		}
+	</script>
+</body>
+</html>

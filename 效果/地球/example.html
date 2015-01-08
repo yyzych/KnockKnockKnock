@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>地球</title>
+	<style>
+		body {
+		  -webkit-font-smoothing: antialiased;
+		    padding: 0;
+		    margin: 0;
+		}
+		.container {
+		  position: relative;
+		  height: 768px;
+		  width: 1024px;
+		}
+		.planet-bg {
+		    position: absolute;
+		    z-index: 2;
+		    height: 768px;
+		    width: 100%;
+		    background: url(http://www.danyuschick.com/5109/PlanetTest/BG.png) no-repeat center center;
+		}
+		.planet-land {
+		    width: 100%;
+		    height: 768px;
+		    background: url(http://www.danyuschick.com/5109/PlanetTest/landMass.png) no-repeat center center;
+		}
+		.planet-shadow {
+		    position: absolute;
+		    top: 0;
+		    z-index: 2;
+		    width: 100%;
+		    height: 768px;
+		    background: url(http://www.danyuschick.com/5109/PlanetTest/shadow.png) no-repeat center center;
+		}
+	</style>
+</head>
+<body>
+	<div id="container" class="container">
+		<div class="planet-bg">
+			<div class="planet-land"></div>
+			<div class="planet-shadow"></div>
+		</div>
+		<div id="output" class="container"></div>
+		<div id="controls" style="display: none;"></div>
+	</div>
+	<script src="http://www.danyuschick.com/5109/Flat Surface Shader_files/prefixfree.min.js"></script><!-- 插件，学会使用 -->
+	<!-- 下面的3个js必须的 -->
+	<script src="http://www.danyuschick.com/5109/Flat Surface Shader_files/dat.gui.min.js"></script><!-- 插件，学会使用 https://code.google.com/p/dat-gui/-->
+	<script src="http://www.danyuschick.com/5109/Flat Surface Shader_files/fss.js"></script><!-- 插件-->
+	<script src="http://www.danyuschick.com/5109/Flat Surface Shader_files/example.js"></script>
+</body>
+</html>

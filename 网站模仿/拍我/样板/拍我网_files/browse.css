@@ -1,0 +1,269 @@
+html,body
+{   margin: 0;
+    padding: 0;
+    background-color: #eeeeee;
+    height: 100%}
+body
+{   font-family: "Microsoft YaHei",微软雅黑,STHei,华文黑体,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 62.5%;
+    height: 100%;}
+div#main_content
+{   margin-left: 100px;
+    height: 100%;}
+div#banner_box
+{   background-color: black;
+  font-size: 0;
+  margin-left: 100px;}
+div#banner_box div
+{   width: 100%;}
+div#banner_box img
+{   max-width: 100%;}
+div#tab
+{   position: relative;
+    z-index: 60;
+    width: 100%;
+    height: 40px;
+    background-color: #fafafa;
+    box-shadow: 1px 3px 3px 0px rgba(150,150,150,0.2);
+    line-height: 40px;}
+div#tab_content
+{   position: relative;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 40px;
+    border-left: 1px solid #eeeeee;}
+div.tab_blank
+{   display: inline-block;
+    float: left;
+    height: 40px;
+    width: 120px;
+    border-right: 1px solid #eeeeee;}
+div.tab_button
+{   display: inline-block;
+    float: left;
+    font-size: 1.6em;
+    color: #666666;
+    width: 10%;
+    max-width: 160px;
+    min-width: 90px;
+    text-align: center;
+    border-right: 1px solid #eeeeee;}
+div.tab_button a
+{   text-decoration: none;
+    display: block;
+    height: 37px;
+    border-bottom: 3px solid #fafafa;}
+div.tab_button a:link
+{   color: #666666;}
+div.tab_button a:visited
+{   color: #666666;}
+div.tab_button a:hover
+{   color: #666666;
+    border-bottom-color: #666666;}
+div.tab_button a.tab_active
+{   color: #333333;
+    border-bottom-color: #333333;}
+div#sort
+{   display: inline;
+    float: right;}
+select
+{   margin: 12px 15px auto 15px;
+    border: none;
+    background-color: #fafafa;
+    color: #666666;
+    cursor: pointer;}
+select:focus
+{   outline: none;}
+div#search
+{   display: inline;
+    float: right;
+    position: relative;
+    margin: 8px 15px auto 15px;
+    width: 275px;
+    height: 24px;
+    border: none;
+    border-radius: 4px;
+    background-color: #eeeeee;
+    overflow: hidden;}
+input#search_text
+{   position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    border: none;
+    width: 225px;
+    height: 16px;
+    background-color: #eee;}
+input#search_button
+{   position: absolute;
+    top: 4px;
+    right: 10px;}
+input#search_button:hover
+{   opacity: 0.7;
+    filter:Alpha(opacity=70);}
+input:focus
+{   outline: none;}
+div.search_dropdown
+{   width: 275px;
+    background-color: #fff;
+    box-shadow: 0 0 5px 0 rgba(150,100,150,0.3);
+    position: absolute;
+    top: 50px;
+    right: 15px;
+    z-index: 50;}
+div.search_dropdown a
+{   display: block;
+    width: 275px;
+    height: 40px;
+    line-height: 40px;
+    color: #666666;
+    font-size: 1.2em;
+    text-decoration: none;}
+div.search_dropdown a:hover
+{   background-color: #f7f7f7;}
+div.dropdown_line
+{   width: 245px;
+    height: 1px;
+    margin: auto;
+    background-color: #eeeeee;}
+div.search_dropdown a span
+{   display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px;
+    margin-right: 15px;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;}
+span.photog
+{   border-radius: 15px;}
+img.search_type
+{   float: right;
+    margin-top: 12px;
+    margin-right: 15px;}
+div#photos_box
+{   width: 100%;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 5;}
+div#photos
+{   width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 0;}
+div#photos div
+{   position: relative;
+    display: inline-block;
+    width: 280px;
+    height: 280px;
+    margin: 0 8px 16px 8px;
+    box-shadow: 0px 0px 5px 1px #dbdbdb;}
+span.hover_box
+{   position: absolute;
+    top: 10px;
+    right: 10px;}
+span.comment_box,span.share_box span
+{   position: relative;
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    margin-left: 10px;
+    border-radius: 2px;
+    background-color: rgba(0,0,0,0.15);
+    cursor: pointer;}
+span.comment_box:hover,span.share_button:hover
+{   background-color: rgba(0,0,0,0.2);}
+span.share_box
+{   display: inline-block;}
+span.hover_box span img
+{   margin: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left:0;}
+span.weibo:hover
+{   background-color: #ea716e;}
+span.renren:hover
+{   background-color: #76a9da;}
+span.douban:hover
+{   background-color: #71c368;}
+span.qzone:hover
+{   background-color: #ffc028;}
+span.fix_box
+{   display: inline-block;
+    width: 280px;
+    height: 50px;
+    text-align: left;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    background-color: #000;
+    background: -webkit-linear-gradient(bottom,rgba(0,0,0,0.5),rgba(0,0,0,0));
+    background: -moz-linear-gradient(bottom,rgba(0,0,0,0.5),rgba(0,0,0,0));
+    background: -o-linear-gradient(bottom,rgba(0,0,0,0.5),rgba(0,0,0,0));
+    background: -ms-linear-gradient(bottom,rgba(0,0,0,0.5),rgba(0,0,0,0));}
+span.fix_box a
+{   font-size: 12px;
+    color: #ccc;
+    line-height: 50px;
+    text-decoration: none;
+    margin-left: 15px;}
+span.fix_box a:hover
+{   color: #fff;}
+span.fix_box img
+{   vertical-align: middle;
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+    opacity: 0.6;
+    filter:Alpha(opacity=60);}
+span.fix_box img:hover
+{   opacity: 1;
+    filter:Alpha(opacity=100);}
+img.collect
+{   margin-top: 14px;}
+img.like
+{   margin-top: 17px;}
+div#page_turn
+{   height: 40px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    margin-bottom: 50px;
+    font-size: 0;}
+div#page_turn a
+{   margin-left: 30px;
+    margin-right: 30px;}
+div#page_turn a img:hover
+{   opacity: 0.9;
+    filter:Alpha(opacity=90);}
+div#page_turn a:hover
+{   background-color: #777777;}
+div#page_turn a img
+{   position: relative;
+    top: 8px;}
+div.footer
+{   width: 90%;
+    height: 60px;
+    line-height: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 1px solid #dddddd;
+    font-size: 14px;
+    color: #666666;
+    word-spacing: 5px;}
+div.footer a
+{   float: right;
+    color: #333333;
+    text-decoration: none;}
+div.footer a:hover
+{   color: #333333;
+    text-decoration: underline;}

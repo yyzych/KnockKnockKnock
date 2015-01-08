@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			background-color: #333;
+			font-family: Tahoma, Geneva, sans-serif;
+		}
+		.clock{
+			perspective:1000px;
+			-webkit-perspective:1000px;
+			-moz-perspective:1000px;
+			-o-perspective:1000px;
+			-ms-perspective:1000px;
+			transform-style: preserve-3d;
+		    -webkit-transform-style: preserve-3d;/*该属性用以表示被嵌套的元素在3D空间采用何种渲染方式（flat 或 preserve-3d），如果使用了flat（默认），那么所有子节点元素均是不再有3D 效果*/
+		    -o-transform-style: preserve-3d;
+		    -moz-transform-style: preserve-3d;
+		}
+		.clock>div{
+			float: left;
+			width: 128px;
+			height: 128px;
+			position: relative;
+			overflow: hidden;
+			margin-right: 20px;
+		}
+		#second{
+			width: 64px;
+			height: 64px;
+			margin-top: 64px;
+		}
+		.top, .bottom{
+			width:100%;
+			height: 64px;
+			overflow: hidden;
+			position: absolute;
+			background-color: #eee;
+		}
+		#second .top, #second .bottom{
+			height: 32px;
+		}
+		.top{
+			background-color: #ddd;
+			border-radius: 10px 10px 0 0;
+			border-bottom: 1px solid #999;
+			top: 0px;
+			transform-origin:bottom;
+			-webkit-transform-origin:bottom;
+			-ms-transform-origin:bottom;
+			-moz-transform-origin:bottom;
+			-o-transform-origin:bottom;
+		}
+		.bottom{
+			background-color: #eee;
+			border-radius: 0 0 10px 10px;
+			top: 65px;
+			transform-origin:top;
+			-webkit-transform-origin:top;
+			-ms-transform-origin:top;
+			-moz-transform-origin:top;
+			-o-transform-origin:top;
+		}
+		#second .bottom{
+			top: 33px;
+		}
+		.top span, .bottom span{
+			font-size: 6.4em;
+			display: block;
+			text-align: center;
+			height: 128px;
+			line-height: 128px;
+			width: 128px;
+		}
+		#second .top span, #second .bottom span{
+			height: 64px;
+			line-height: 64px;
+			width: 64px;
+			font-size: 3.2em;
+		}
+		.bottom span{
+			position:absolute;
+			top: -64px;
+		}
+		#second .bottom span{
+			top: -32px;
+		}
+		#topdiv{
+			transition: transform 1s;
+			-webkit-transition:-webkit-transform 1s;
+			-moz-transition:-moz-transform 1s;
+			-o-transition:-o-transform 1s;
+			-ms-transition:-ms-transform 1s;
+		}
+		#topdiv:hover{
+			transform:rotateX(80deg);/*为什么没有反应*/
+			-webkit-transform:rotateX(80deg);
+			-moz-transform:rotateX(80deg);
+		}
+	</style>
+</head>
+<body>
+	<div class="clock">
+		<div id="hours" class="unit">
+			<div class="top">
+				<span>21</span>
+			</div>
+			<div class="top">
+				<span>21</span>
+			</div>
+			<div class="bottom">
+				<span>21</span>
+			</div>
+			<div class="bottom">
+				<span>21</span>
+			</div>		
+		</div>
+		<div id="minute" class="unit">
+			<div class="top">
+				<span>21</span>
+			</div>
+			<div class="top">
+				<span>21</span>
+			</div>
+			<div class="bottom">
+				<span>21</span>
+			</div>
+			<div class="bottom">
+				<span>21</span>
+			</div>
+		</div>
+		<div id="second" class="unit">
+			<!-- <div class="top">
+				<span>21</span>
+			</div> -->
+			<div id="topdiv" class="top">
+				<span>21</span>
+			</div>
+			<div class="bottom">
+				<span>21</span>
+			</div>
+			<div class="bottom">
+				<span>21</span>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			font-size: 14px;
+			color:rgb(63,63,63);
+		}
+		textarea{
+			width: 900px;
+			background: #eee;
+		}
+		.checkbox{
+			height: 20px;
+			line-height: 20px;
+		}
+		.checkbox input{
+			float: left;
+			border: 0;
+			padding: 0;
+			margin: 4px;
+		}
+		div{
+			margin: 5px 0;
+		}
+	</style>
+</head>
+<body>
+	<textarea name="" id="arr" cols="30" rows="10">56,13,98,78,21,90,17,28,18,77,46,93,15,80,44,21,90,17,28,18,77,46,93,15,80,44,10,19,91,95,59,36,101</textarea>
+	<div>
+		<label class="checkbox" for=""><input type="checkbox" name="" id="ifLog">打印过程</label>
+	</div>
+	<div>
+		<button id="bubble">冒泡排序</button>
+		<button id="selection">选择排序</button>
+		<button id="insertion">插入排序</button>
+		<button id="quick">快速排序</button>
+		<button id="merge">合并排序</button>
+	</div>
+	<textarea name="output" id="output" rows="10" readonly></textarea>
+	<div id="log"></div>
+	<script>
+		(function () {
+			var $=function (id) {
+				return document.getElementById(id);
+			};
+			var input=$('arr'),
+				output=$("output"),
+				ifLog=$("ifLog"),
+				res=[];
+			var sortUtil={
+				bubble:function (arr) {
+					for (var i = 0; i < arr.length; i++) {
+						for (var j = 0; j<arr.length-i; j++) {
+							if(arr[j]>arr[j+1]){
+								api.swap(arr,j,j+1);
+							}
+						};
+					};
+				},
+				selection:function (arr) {
+					for (var i = 0; i < arr.length; i++) {
+						var flag=i;
+						for (var j = i+1; j < arr.length; j++) {
+							if(arr[j]<arr[flag]){
+								flag=j;
+							}
+						};
+						api.swap(arr,i,flag);//循环一次选出最小的排到前面去
+					};
+				},
+				quick:function (arr) {
+					function qk(arr,s,e) {
+						var pos=s,mark=arr[s];
+						if(s<e){
+							for (var i = s+1; i <= e; i++) {
+								if(arr[i]<mark){
+									api.replaceTo(arr,s,i);//s:插入的位置，i:被插入的元素下标
+									pos++;
+								}
+							};
+							arguments.callee(arr,s,pos-1);
+							arguments.callee(arr,pos+1,e);
+						}
+					}
+
+					qk(arr,0,arr.length-1);
+				}
+			}
+			var api={
+				flag:false,
+				init:function (value) {
+					var arr1=value.split(/\D+/);//用所有不是数字的字符作为分割符,分割获取数组
+					var arr2=[];
+					for(var i=0;i<arr1.length;i++){
+						arr2.push( arr1[i] | 0 );       //转换成数字，如果有非数字字符统一转换成0， '|'表示按位或运算符。非数值会先调用Number(),如果不能转换为数字，即NaN或无穷，则当作是0。	与0一起按位或，因为0的不会改变原来的数值，它的二进制码都为0的。
+					}
+					return arr2;
+				},
+				exec:function (type) {
+					res=[];//恢复默认值
+					res=api.init(input.value);
+					output.value="";
+					var start=new Date().getTime();
+					sortUtil[type](res);//按引用来传递的。且res=sortUtil[type](res)会有问题，值为undefined
+					var end=new Date().getTime();
+					api.print("reslut: "+res+";\t time:"+(end-start));
+				},
+				print:function (value) {
+					output.value+=value+"\n";
+				},
+				swap:function (arr,f,l) {
+					if(f==l)return;
+					var temp=arr[f];
+					arr[f]=arr[l];
+					arr[l]=temp;
+					if(this.flag){
+						api.print(arr);
+					}
+				},
+				replaceTo:function (arr,f,l) {
+					if(f==l)return;
+					var temp=arr[l];
+					arr.splice(l,1);
+					arr.splice(f,0,temp);
+					if(this.flag){
+						print(arr);
+					}
+				}
+			}
+			
+			window.onload=function () {
+				$('bubble').onclick = function(){
+					api.flag=ifLog.checked;
+				  api.exec('bubble');
+				};
+				$('selection').onclick = function(){
+					api.flag=ifLog.checked;
+				  api.exec('selection');
+				};
+				$('insertion').onclick = function(){
+					api.flag=ifLog.checked;
+				  api.exec('insertion');
+				};
+				$('quick').onclick = function(){
+					api.flag=ifLog.checked;
+				  api.exec('quick');
+				};
+				$('merge').onclick = function(){
+					api.flag=ifLog.checked;
+				  api.exec('merge');
+				};
+			};
+		})();
+	</script>
+</body>
+</html>

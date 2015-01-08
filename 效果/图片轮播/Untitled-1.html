@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+	img{
+		height: 150px;
+	}
+</style>
+<script>
+	var i=1,j=1;
+	function changeImg(elemid,interal){
+		var elem=document.getElementById(elemid);
+		if(i>=4){
+			i=1;
+		}
+		else{
+			i++;
+		}
+		if(elem.donghua){
+			clearTimeout(elem.donghua);
+		}
+		elem.src=i+".jpg";
+		var repate="changeImg('"+elemid+"',"+interal+")";
+		elem.donghua=setTimeout(repate,interal);
+	}
+	function changeImg2(){
+		var elem=document.getElementById("imgwell2");
+		if(j>=4){
+			j=1;
+		}
+		else{
+			j++;
+		}
+		elem.src=j+".jpg";
+	}
+	var infer;
+	window.onload=function (){
+		changeImg("imgwell",3000);
+		
+		infer=window.setInterval("changeImg()",2000);
+		
+		var p=document.getElementsByTagName("p")[0];
+		p.onmouseover=function (){
+			clearTimeout(infer);
+		}
+		p.onmouseout=function(){
+			infer=window.setInterval("changeImg2()",2000);
+		}
+	}
+</script>
+</head>
+
+<body>
+	<div>
+    	<img id="imgwell" src="1.jpg" alt="noneImg" />
+    </div>
+    <hr />
+    <div>
+    	<img height="200" id="imgwell2" src="1.jpg" alt="noneImg" />
+    </div>
+    <div>
+    	<p>停止</p>
+    </div>
+</body>
+</html>

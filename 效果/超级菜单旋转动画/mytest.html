@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+			font:normal 62.5%/1.5 Arial,'微软雅黑';
+		}
+		input[type=checkbox]{
+			position: absolute;
+			left: -5000px;
+		}
+		header{
+			height: 56px;
+			background-color: #1AC0D2;
+			color: #fff;
+			line-height: 56px;
+		}
+		label.header__trigger{
+			float: left;
+			width: 56px;
+			text-align: center;
+			height: 56px;
+			cursor: pointer;
+			margin-right: 10px;
+		}
+		span.header__bar{
+			position: relative;
+			height: 2px;
+			width: 24px;
+			display: block;
+			background-color: #fff;
+			top: 50%;
+			margin: -1px auto 0 auto;
+			transform:rotate(0deg);
+			transition:all 0.3s linear;
+		}
+		span.header__bar:after,span.header__bar:before{
+			position: absolute;
+			content: "";
+			display: block;
+			top: 7px;
+			background-color: #fff;
+			height: 2px;
+			width: 24px;
+		}
+		span.header__bar:before{
+			top: -7px;
+		}
+		span.header__title{
+			font-size: 1.9em;
+		}
+		#layoutState:checked + .header__trigger .header__bar{
+			transform:rotate(180deg);
+		}
+		#layoutState:checked + .header__trigger .header__bar:before, #layoutState:checked + .header__trigger .header__bar:after
+		{
+			transform:rotate(45deg);
+			left: 11px;
+			width: 16px;
+			top: -5px
+		}
+		#layoutState:checked + .header__trigger .header__bar:after{
+			transform:rotate(-45deg);
+			top: 5px;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<input type="checkbox" name="layoutState" id="layoutState">
+		<label class="header__trigger" for="layoutState"><!-- label的for="layoutState"，所以点击这个后会直接选择checkbox -->
+			<span class="header__bar"></span>
+		</label>
+		<span class="header__title">标题</span>
+	</header>
+</body>
+</html>

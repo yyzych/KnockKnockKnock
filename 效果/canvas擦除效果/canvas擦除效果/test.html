@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<title>html5 canvas</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			width: 768px;
+			position: relative;
+		}
+		canvas{
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: transparent;
+			border: 1px solid #333;
+		}
+	</style>
+</head>
+<body>
+	<canvas width="500" height="500"></canvas>
+	<div class="">
+		<h1>你好啊</h1>
+	</div>
+	<img id="lamp" src="pet2.jpg" style="display:none">
+	<script>
+		(function () {
+			document.body.style.mozUserSelect="none";
+			document.body.style.webkitUserSelect="none";
+
+			window.onload=function () {
+				var canvas=document.getElementsByTagName('canvas')[0];
+				if(canvas.getContext){
+					var ctx=canvas.getContext("2d");
+					var height=canvas.height,
+						width=canvas.width,
+						offsetX=canvas.offsetLeft,
+						offsetY=canvas.offsetTop;
+					var flag=false;
+
+					function layer (ctx) {
+						var imgsrc=document.getElementById('lamp');
+						var pat=ctx.createPattern(imgsrc,"repeat");
+						ctx.fillStyle=pat;
+						ctx.fillRect(0,0,width,height);
+					}
+					function eventDown (event) {
+						flag=true;
+						event.preventDefault();
+					}
+					function eventUp (event) {
+						flag=false;
+						event.preventDefault();
+					}
+					function eventMove (event) {
+						event.preventDefault();
+						if(flag){
+							if(event.changeTouchs){
+								event=event.changeTouchs[event.changeTouchs.length-1];
+							}
+							var x=(event.clientX+document.body.scrollLeft||event.pageX)-offsetX||0;
+							var y=(event.clientY+document.body.scrollTop||event.pageY)-offsetY||0;
+							with(ctx){
+								beginPath();
+								arc(x,y,20,0,Math.PI*2,false);
+								fill();
+							}
+						}
+					}
+
+					ctx.fillStyle="transparent";
+					ctx.clearRect(0,0,height,width);
+					layer(ctx);
+					ctx.globalCompositeOperation = 'destination-out';//后绘制的图形擦除与先绘制的图形的重叠部分
+
+					canvas.onmousemove=eventMove;
+					canvas.ontouchmove=eventMove;
+					canvas.onmousedown=eventDown;
+					canvas.ontouchstart=eventDown;
+					canvas.onmouseup=eventUp;
+					canvas.ontouchend=eventUp;
+				}
+			}
+		})();
+	</script>
+</body>
+</html>

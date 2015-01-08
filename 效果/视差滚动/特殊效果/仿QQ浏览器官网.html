@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+			overflow: hidden;
+		}
+		.rotateBlock{
+			position: absolute;
+			left: 1120px;
+			top: -1000px;
+			-webkit-transform: rotate(45deg);
+		}
+		.block{
+			width: 2000px;
+			height: 3000px;
+			position: absolute;
+			line-height: 3000px;
+			font-size: 7em;
+		}
+		.green_b {
+			background-color: #6BB445;
+			left: 0;
+		}
+		.orange_b{
+			background-color: #F5A81F;
+			left: 2000px;
+		}
+		.blue_b{
+			background-color: #09A1EC;
+			left: 4000px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div id="rotateBlock" class="rotateBlock">
+			<div id="green_b" class="block green_b">
+				Green Happiness is under the tree  that year
+			</div>
+			<div id="orange_b" class="block orange_b">
+				Red Youth is like a fire 
+			</div>
+			<div id="blue_b" class="block blue_b">
+				BlueLife is like a boat 
+			</div>
+		</div>
+	</div>
+	<script>
+		function getOldStyle (dom,cssName) {
+			var res=(dom.style[cssName]?dom.style[cssName]:getcss(dom,cssName));
+			if(res){
+				return parseInt(res);
+			}
+			return 0;
+		}
+		function getcss(dom,cssname,selectortext){
+			var cssrulelist = window.getMatchedCSSRules(dom); //cssrulelist 类
+			var value = '';
+			for(var i = 0; i<cssrulelist.length; i++){
+				var csslist = cssrulelist[i];
+				if(selectortext){
+					if( selectortext == csslist.selectortext){
+						return csslist.style[cssname];
+					}
+				}else{
+					value = csslist.style[cssname];
+					if(value) return value;
+				}
+			}
+		}
+
+
+		var rotateBlock = document.getElementById('rotateBlock'),
+			orange_b = document.getElementById('orange_b'),
+			green_b = document.getElementById('green_b'),
+			blue_b = document.getElementById('blue_b');
+		window.addEventListener('mousewheel',mouseWheelHandler);
+		window.addEventListener("DOMMouseScroll", mouseWheelHandler); //for firefox
+
+		function mouseWheelHandler(e){
+			var e = e || window.event;
+			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+
+			green_b.style.left = getOldStyle(green_b,'left') + delta*80 + 'px';
+			orange_b.style.left = getOldStyle(orange_b,'left') + delta*80 + 'px';
+			blue_b.style.left = getOldStyle(blue_b,'left') + delta*80 + 'px';
+		}
+	</script>
+</body>
+</html>

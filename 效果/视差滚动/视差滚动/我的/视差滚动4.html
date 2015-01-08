@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+			font:18px/1.5 '微软雅黑';
+		}
+		.container{
+			position: relative;
+		}
+		img{
+			position: absolute;
+		}
+		#ahri{
+			left: 550px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<img id="sona" src="./视差滚动四_images/lol_sona.jpg">
+		<img id="ahri" src="./视差滚动四_images/lol_ahri.jpg">
+	</div>
+	<script>
+		(function () {
+			function $ (id) {
+				return document.getElementById(id);
+			}
+
+			var sona = $('sona'),
+				ahri = $('ahri');
+			var old_top1=-1000,
+				old_top2=1000;
+
+			window.addEventListener("scroll",scrollHandler);
+			scrollHandler();
+			function scrollHandler (e) {
+				var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+				sona.style.top=old_top1+scrollTop*2+"px";
+				ahri.style.top=old_top2-scrollTop*0+"px";
+			}
+		})();
+	</script>
+</body>
+</html>

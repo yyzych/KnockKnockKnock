@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			font-size: 12px;
+		}
+		#mask{
+			position: fixed;/*如果为absolute则只是充满了浏览器的视口，滚动的时候下面不变没有的*/
+			height: 100%;
+			background: rgba(0,0,0,0.5);
+			z-index: 9;
+			width: 100%;
+			top:0px;
+			left: 0px;
+			display: none;
+		}
+		/*#mask div{
+			display: inline;
+		}*/
+		.container{
+			/*margin: 50px auto;*/
+			background-color: white;
+			padding: 10px;
+			border-radius:5px;
+			position: absolute;
+			overflow: hidden;
+			z-index: 10;
+		}
+		.closeBt{
+			background:url(http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/backabt.png);
+			display: block;
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			height:30px;
+			width:30px;
+		}
+	</style>
+</head>
+<body>
+	<a href="javascript:void(0)" imgsrc="http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/8.jpg" title="这是一只老虎哦">
+      <img src="http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/8(1).jpg">
+    </a>
+    <a href="javascript:void(0)" imgsrc="http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/8.jpg" title="这是一只老虎哦">
+      <img src="http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/8(1).jpg">
+    </a>
+    <div id="mask"></div>
+    <script>
+    	(function () {
+    		function FullBox (elem) {
+    			var mask=document.getElementById("mask");
+    			var that=this;//赋值给that是为了方便以后调用方法，
+    			this.conEle=elem;
+    			this.fadeto=function (elem,fadeType,time,propValue) {
+					if(!elem)
+						return;
+					else{
+						if(fadeType==="fadeOut"){
+							if(elem.opacityAnimate){
+								clearTimeout(elem.opacityAnimate);
+							}
+							if(!elem.style.opacity){
+								elem.style.opacity="1";
+							}
+							var curOpacity=parseInt(elem.style.opacity*10);
+							if(curOpacity===propValue*10){
+								return;
+							}
+							curOpacity-=1;
+							elem.style.opacity=curOpacity/10;
+							elem.opacityAnimate=setTimeout(function () {
+								that.fadeto(elem,fadeType,time,propValue);
+							},time);
+						}
+						else if (fadeType==="fadeIn"){
+							if(elem.opacityAnimate){
+								clearTimeout(elem.opacityAnimate);
+							}
+							if(!elem.style.opacity){
+								elem.style.opacity="0";
+							}
+							var curOpacity=parseInt(elem.style.opacity*10);
+							if(curOpacity===propValue*10){
+								return;
+							}
+							curOpacity+=1;
+							elem.style.opacity=curOpacity/10;
+							elem.opacityAnimate=setTimeout(function () {
+								that.fadeto(elem,fadeType,time,propValue);
+							},time);
+						}
+					}
+				};
+				this.animate=function (elem,options,time) {
+					if (!elem) return;
+					if(options.height&&options.width){
+						with(elem.style){
+							if (typeof height=="undefined") {
+								height=0+"px"
+							}
+							if(typeof width=="undefined"){
+								width=0+"px"
+							}
+						}
+						var curHei=parseFloat(elem.style.height);
+						var curWid=parseFloat(elem.style.width);
+						if (curHei==options.height) {//因为是等比的放大的，所以有一个相等就说明另一个也相等了
+							return;
+						}
+						var dist=0;
+						if(curHei<options.height){
+								var dist=Math.ceil((options.height-curHei)/10);
+								curHei+=dist;
+								curWid+=(options.width/options.height)*dist;
+						}
+						else if(curHei>options.height){
+								var dist=Math.ceil((curHei-options.height)/10);
+								curHei-=dist;
+								curWid-=(options.width/options.height)*dist;
+						}
+						elem.style.height=curHei+"px";
+						elem.style.width=curWid+"px";
+						setTimeout(function () {
+							that.animate(elem,options,time)
+						},time);
+					}
+				}
+				this.init=function () {
+					// ----获取跨浏览器的视口高度-------------------
+					// var pageWidth=window.innerWidth;
+					// var pageHeight=window.innerHeight;
+					// if(typeof pageHeight!="number"){
+					// 	if(document.compatMode=="CSS1Compat"){
+					// 		pageWidth=document.documentElement.clientWidth;
+					// 		pageHeight=document.documentElement.clientHeight;
+					// 	}else{
+					// 		pageHeight=document.body.clientHeight;
+					// 		pageWidth=document.body.clientWidth;
+					// 	}
+					// }
+					// ----或--因为mask也是充满整个视口的，所以可以根据他的大小来获取视口大小----------------
+					mask.style.display="block";
+					var left=mask.clientHeight/2-12;//浏览器的视口高宽
+					var top=mask.clientWidth/2-12;
+					var loadImg=document.createElement("img");
+					loadImg.src="http://sandbox.runjs.cn/uploads/rs/385/tu0uhve8/loader.gif";
+					loadImg.alt="请等待";
+					loadImg.style.position="absolute";
+					loadImg.style.left=left+"px";
+					loadImg.style.top=top+"px";
+					mask.appendChild(loadImg);
+
+					var conImg=document.createElement("img");
+					conImg.onload=function () {
+						var imgHei=conImg.height;
+						var imgWid=conImg.width;
+						var left=mask.clientWidth/2-imgWid/2;
+						var top=mask.clientHeight/2-imgHei/2;
+						var innerHtml="<div class='container' id='container' style='width:"+0+"px;height:"+0+"px;left:"+left+"px;top:"+top+"px;'><div id='wrap' style='display:none'><img src='"+conImg.src+"'/></div><a class='closeBt'></a>";
+						mask.innerHTML=innerHtml;
+						//动画
+						var option={
+							height:imgHei,
+							width:imgWid
+							// left:
+							// top:
+						}
+						that.animate(document.getElementById("container"),option,10);
+						//淡入
+						setTimeout(function () {
+							var temp=document.getElementById("wrap");
+							temp.style.display="block";
+							temp.style.opacity="0";
+							that.fadeto(temp,"fadeIn",50,1);
+						},700);
+						var container=document.getElementById("container");
+						var closeBt=container.getElementsByTagName("a")[0];
+						that.bind(closeBt)
+					}
+					conImg.src=this.conEle.getAttribute("imgsrc");//对于新创建img元素，一旦它的src属性被赋值，就立即开始下载资源
+					this.bind(mask);
+				};
+				this.bind=function (elem) {
+					elem.onclick=function () {
+						// that.fadeto(mask,"fadeOut",50,0);
+						// setTimeout(function () {
+							mask.style.display="none";//有问题，即使点击图片也会触发mask的事件，为什么？？事件路由？
+							mask.removeChild(mask.children[0]);//有问题	
+						// },500);
+					}
+				};
+    		}
+
+    		var links=document.getElementsByTagName('a');
+    		for (var i = 0; i < links.length; i++) {
+    			links[i].onclick=function () {
+    				var fullBox=new FullBox(this);
+    				fullBox.init();
+    			}
+    		};
+    	})();
+    </script>
+</body>
+</html>

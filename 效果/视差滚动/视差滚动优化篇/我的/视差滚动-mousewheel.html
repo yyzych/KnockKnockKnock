@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+		}
+		.container{
+			position: relative;
+		}
+		.circle{
+			height: 100px;
+			width: 100px;
+			border-radius: 50%;
+			background-color: rgba(255,0,0,0.5);
+		}
+		.circle:nth-of-type(1){
+			position: relative;
+			top: 100px;
+			left: 100px;
+		}
+		.circle:nth-of-type(2){
+			position: relative;
+			top: 300px;
+			left: 300px;
+			height: 50px;
+			width: 50px;
+			background-color: rgba(0,0,255,0.5);
+		}
+		.circle:nth-of-type(3){
+			position: relative;
+			top: 0px;
+			left: 600px;
+			height: 150px;
+			width: 150px;
+			background-color: rgba(0,255,0,0.5);
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="circle"></div>
+		<div class="circle"></div>
+		<div class="circle"></div>
+	</div>
+	<script>
+		(function () {
+			var circles=document.getElementsByClassName("circle");
+
+			window.addEventListener("mousewheel",srollHandler);
+
+			function srollHandler (e) {
+				e=e||window.event;
+				var detla=Math.max(-1,Math.min(1,e.wheelDelta));
+				// detla只是用来表示上滚(1)还是下滚(-1)，具体滚动多少值可以自己决定，如乘上10,30等
+				circles[0].style.top=getCurTop(circles[0])+detla*10+"px";
+				circles[1].style.top=getCurTop(circles[1])+detla*30+"px";
+				circles[2].style.top=getCurTop(circles[2])+detla*50+"px";
+			}
+
+			function getCurTop (dom) {
+				var res=dom.style.top?parseInt(dom.style.top):getCssSheet(dom,"top");
+				return res;
+			}
+			function getCssSheet (dom,cssName,selectorText) {
+				var cssRuleList=getMatchedCSSRules(dom);
+				var res;
+				for (var i = 0; i < cssRuleList.length; i++) {
+					var csslist=cssRuleList[i];
+					if(selectorText){
+						if(selectorText==csslist.selectorText){
+							return csslist.style[cssName];
+						}
+					}else{
+						res=csslist.style[cssName];
+						if(res) return parseInt(res);
+					}
+				};
+			}
+		})();
+	</script>
+</body>
+</html>

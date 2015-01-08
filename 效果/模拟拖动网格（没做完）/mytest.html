@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>我的</title>
+	<style>
+		*{
+			margin: 0;
+			overflow:hidden;
+			-webkit-user-select:none;
+			-moz-user-select:none;
+			-ms-user-select:none;
+			-o-user-select:none;
+			user-select:none;
+		}
+		canvas{
+			margin: 0px auto;
+			display: block;/*注意这句*/
+			border: 1px dashed #ccc;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script>
+		/*
+		* 太难了。。。做不来
+		*/
+		(function () {
+			//修改默认requestAnimationFrame函数
+			window.requestAnimationFrame=function () {
+				return window.requestAnimationFrame||
+					window.webkitRequestAnimationFrame||
+					window.mozRequestAnimationFrame||
+					window.oRequestAnimationFrame ||
+				    window.msRequestAnimationFrame ||
+					function (fn) {
+						setTimeout(fn,1000/60);
+					};
+			}();
+
+			//全局变量
+			var canvas=document.getElementById('canvas'),
+				ctx=canvas.getContext("2d"),
+				cloth,
+				boundX,boundY,
+				mouseObj={
+					down:false,
+					button:1,
+					x:0,
+					y:0,
+					oldX:0,
+					oldY:0
+				};
+
+			//配置参数
+			var Settings={
+				HEIGHT:30,
+				WIDTH:50,
+				SPACING:7,
+				PHYSICS_ACCURACY:3,
+				TEAR_DISTANCE:60,
+				GRAVITY:1200//重力
+			};
+
+			//格子类,这个事不需要暴露给用户的
+			var Point=function (x,y) {
+				this.x=x;
+				this.y=y;
+				this.oldX=x;
+				this.oldY=y;
+				this.vx=0;
+				this.vy=0;
+				this.pin_x=null;
+				this.pin_y=null;
+				//约束数组
+				this.constraints=[];
+			};
+			Point.prototype={
+				attach:function (point) {//添加相邻的约束点
+					this.constraints.push(new Constraint(this,point));
+				},
+				pin:function (pinx,piny) {//如果是第一行就设置
+					this.pin_x = pinx;
+					this.pin_y = piny;
+				},
+				addForce:function (x,y) {
+					this.vx += x;
+					this.vy += y;
+				},
+				remove_constraint:function (constraint) {
+					this.constraints.splice(this.constraints.indexOf(constraint),1)
+				},
+				resolve_constraints:function () {
+					if(this.pin_x!=null&&this.pin_y!=null){
+						// 只有第一行是不为null的
+						// 没有点约束他所以设他的值不变
+						this.x=this.pin_x;
+						this.y=this.pin_y;
+						return;
+					}
+					var i=this.constraints.length;
+					while(i--) {
+						this.constraints[i].resolve();//重新设置他约束的那些点
+					}
+					//边缘处理
+					this.x>boundX?this.x=2*boundX-this.x:1>this.x&&(this.x=2-this.x);
+					this.y<1?this.y=2-this.y:this.y>boundY&&(this.y=2*boundY-this.y);
+				},
+				draw:function () {//其实是约束数组在画
+					if(!this.constraints.length) return;
+					var i=this.constraints.length;
+					while(i--){
+						this.constraints[i].draw();
+					}
+				},
+				update:function (delta) {
+					if(mouseObj.down){
+
+					}
+
+					this.addForce(0,Settings.GRAVITY);//添加重力
+					delta*=delta;//???
+					//弹性运动
+					var nx=this.x+((this.x-this.oldX)*0.99)+((this.vx/2)*delta);
+					var ny=this.y+((this.y-this.oldY)*0.99)+((this.vy/2)*delta);
+
+					this.oldX = this.x;
+					this.oldy = this.y;
+
+					this.x = nx;
+					this.y = ny;
+
+					this.vy = this.vx = 0
+				}
+			};
+
+			//布类
+			var Cloth=function () {
+				var cloth_width=Settings.WIDTH,
+					cloth_height=Settings.HEIGHT,
+					spacing=Settings.SPACING;
+				this.points=[];
+				var startX=canvas.width/2-cloth_width*spacing/2,
+					startY=20;
+				for (var i = 0; i <= cloth_height; i++) {
+					for (var j = 0; j <= cloth_width; j++) {
+						var x=startX+j*spacing,
+							y=startY+i*spacing;
+						var p=new Point(x,y);
+						//一个点只约束他上面的和左边的点
+						j!=0&&p.attach(this.points[this.points.length-1]);
+						i==0&&p.pin(p.x,p.y);
+						i!=0&&p.attach(this.points[j+(i-1)*(cloth_width+1)]);//上面是小于等于
+						this.points.push(p);
+					};
+				};
+			};
+			Cloth.prototype={
+				update:function () {
+					var i=Settings.PHYSICS_ACCURACY;
+					while(i--){
+						var j=this.points.length;
+						// 如果不添加点之间的相互约束只有重力存在那么就会一直往下，不会有相互牵扯的效果
+						while(j--)this.points[j].resolve_constraints();
+					}
+					i=this.points.length;
+					while(i--) this.points[i].update(0.016);
+				},
+				draw:function () {
+					ctx.beginPath();
+					var i = cloth.points.length;
+					while (i--) cloth.points[i].draw();
+					//或这样，没什么区别
+					// for (var i = 0; i < cloth.points.length; i++) {
+					// 	cloth.points[i].draw();
+					// };
+					ctx.stroke();
+				}
+			};
+
+			//约束类
+			function Constraint (p1,p2) {
+				this.p1=p1;//约束源
+				this.p2=p2;//被约束的粒子
+				this.length=Settings.SPACING;
+			}
+			Constraint.prototype={
+				draw:function () {//其实就是画线，然后组成了格子
+					ctx.moveTo(this.p1.x,this.p1.y);//必须要先跳回到原来的点
+					ctx.lineTo(this.p2.x,this.p2.y);
+				},
+				resolve:function () {
+					var diff_x=this.p1.x-this.p2.y,
+						diff_y=this.p1.y-this.p2.y,
+						dist=Math.sqrt(diff_x*diff_x+diff_y*diff_y),
+						diff=(this.length-dist)/dist;//???
+					//如果两个点的距离超过这个值，就去掉这个点对他的约束
+					if(dist>Settings.TEAR_DISTANCE) this.p1.remove_constraint(this);
+
+					var px=diff_x*diff*0.5;//???
+					var py=diff_y*diff*0.5;
+					this.p1.x+=px;
+					this.p1.y+=py;
+					this.p2.x-=px;
+					this.p2.y-=px;
+				}
+			}
+
+			//更新函数
+			function update () {
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				cloth.update();
+				cloth.draw();
+				requestAnimationFrame(update);
+			}
+			//绑定事件
+			function createEvent () {
+				
+			}
+			//启动函数
+			function start () {
+				ctx.strokeStyle = '#888';
+				boundY=canvas.height-1;
+				boundX=canvas.width-1;
+				cloth=new Cloth();
+				createEvent();
+				update();
+			}
+			window.onload=function () {
+				canvas.height=350;
+				canvas.width=630;
+				start();
+			}
+		})();
+	</script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>RunJS</title>
+  <style>
+      .mini-dpicker{
+        text-align:center;
+        width:195px;
+        padding:5px 2px 2px 2px;
+        background:#0fa0FF;
+        font-weight:700;
+      }
+      .mini-dpicker select{
+        margin:0 5px;
+      }
+      .mini-dpicker-nextmonth,.mini-dpicker-premonth{
+        cursor:pointer;
+        color:#d3d7d4;
+      }
+      .mini-dpicker-hover{
+        background:#426ab3;
+      }
+      th,td{
+        color:#11264f;
+      }
+      td{
+        width:24px;
+        cursor:pointer;
+        text-align:center;
+        background:#2a5caa;
+      }
+      .mini-dpicker-selected{
+        background:#feeeed;
+      }
+  </style>
+  <script class="jquery library" src="jquery-2.1.1.js" type="text/javascript"></script>
+  <script type="text/javascript" src="http://sandbox.runjs.cn/js/sandbox/jquery/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+  <input type="text" value="选择日期" id="picker" readonly="true"style="height:40px;width:200px;"/>
+  <div id="keepLive" style="margin:200px 0px;"></div>
+  <script>
+        (function(a) {
+            jQuery.fn.minipicker = function(m) {
+                var e = {
+                    showOn: "click",
+                    hideOn: "click",
+                    weekOn: false,
+                    timeOn: false,
+                    left: 0,
+                    top: 30,
+                    split: "/",
+                    beginYear: 1979,
+                    endYear: 2050,
+                    keepLive: false
+                };
+                var m = $.extend(e, m),
+                    h,
+                    j,
+                    c,
+                    f = this,
+                    b = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+                    k = "<div class='mini-dpicker'>" + "<div class='mini-dpicker-header'>" + "<a class='mini-dpicker-premonth' title='上个月'style='float:left;'><<</a>" + "<select class='mini-year'></select>" + "<select class='mini-month'></select>" + "<a class='mini-dpicker-nextmonth' title='下个月'style='float:right;'>>></a>" + "</div>" + "<table cellpadding='1'>" + "<tr>" + "<th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th>" + "</tr>" + "</table>" + "</div>";
+                if (!m.keepLive) {
+                    this.live(m.showOn,
+                    function() {
+                        if ($(this).attr("mini-flag") == null) {
+                            var n = g(this).appendTo($("body")).fadeIn();
+                            $(this).attr("mini-flag", true);
+                            n.delegate(".mini-dpicker-hover", m.hideOn,
+                            function() {
+                                d(this, f)
+                            })
+                        }
+                    })
+                } else {
+                    g(this).appendTo(this).attr("keepLive", true).css("position", "relative").show()
+                }
+
+                function g(o) {
+                    var s = $(k).css({
+                        position: "absolute",
+                        zIndex: 100,
+                        display: "none"
+                    }),
+                    p = s.find(".mini-year"),
+                    q = s.find(".mini-month"),
+                    t = new Date(),
+                    n = {
+                        top: o.offsetTop + m.top + "px",
+                        lefg: o.offsetLeft + m.left + "px"
+                    };
+                    h = t.getDate();
+                    j = t.getFullYear();
+                    c = t.getMonth() + 1;
+                    s.css({
+                        top: n.top,
+                        left: n.left
+                    });
+                    for (var r = m.beginYear; r <= m.endYear; r++) {
+                        $("<option value='" + r + "'>" + r + "年</option>").appendTo(p)
+                    }
+                    for (var r = 1; r <= 12; r++) {
+                        $("<option value='" + r + "'>" + r + "月</option>").appendTo(q)
+                    }
+                    l(j, c, s);
+                    return s
+                }
+                $(".mini-dpicker-nextmonth").live("click",
+                function() {
+                    var o = $(this),
+                    r = o.parent().next("table"),
+                    n = r.attr("year"),
+                    q = r.attr("month");
+                    q++;
+                    if (q > 12) {
+                        q = 1;
+                        n++
+                    }
+                    var p = o.parents(".mini-dpicker");
+                    l(n, q, p)
+                });
+                $(".mini-dpicker-premonth").live("click",
+                function() {
+                    var p = $(this),
+                    q = p.parent().next("table"),
+                    n = q.attr("year"),
+                    o = q.attr("month");
+                    o--;
+                    if (o < 1) {
+                        o = 12;
+                        n--
+                    }
+                    l(n, o, p.parents(".mini-dpicker"))
+                });
+                $(".mini-year").live("change",
+                function() {
+                    var n = $(this),
+                    o = n.val(),
+                    p = n.next().val();
+                    l(o, p, n.parents(".mini-dpicker"))
+                });
+                $(".mini-month").live("change",
+                function() {
+                    var n = $(this),
+                    p = n.val(),
+                    o = n.prev().val();
+                    l(o, p, n.parents(".mini-dpicker"))
+                });
+
+                function d(u, q) {
+                    var r = $(u),
+                    v = r.parents("table"),
+                    t = r.html(),
+                    n;
+                    if (r.html() != "") {
+                        n = v.attr("year") + m.split + v.attr("month") + m.split + t;
+                        if (m.weekOn) {
+                            n = n + " " + b[r.attr("week")]
+                        }
+                        if (m.timeOn) {
+                            var s = new Date(),
+                            p = s.getHours(),
+                            o = s.getMinutes();
+                            second = s.getSeconds();
+                            n = n + " " + p + ":" + o + ":" + second
+                        }
+                        q.val(n);
+                        q.removeAttr("mini-flag");
+                        r.parents(".mini-dpicker").fadeOut("fast",
+                        function() {
+                            $(this).remove()
+                        })
+                    } else {
+                        q.val("")
+                    }
+                }
+                $(".mini-dpicker td").live("mouseover",
+                function() {
+                    $(this).addClass("mini-dpicker-hover")
+                }).live("mouseout",
+                function() {
+                    $(this).removeClass("mini-dpicker-hover")
+                });
+
+                function l(w, t, s) {//w:年 t:月
+                    var y = s.find("table"),
+                        o = new Date(w, t - 1, 1).getDay(),//Date.UTC().getDay();获取星期几;
+                        x = i(t, w),//或new Date(w,t,0).getDate();
+                        u = true;
+                    y.attr("year", w).attr("month", t);
+                    s.find(".mini-year").val(w);
+                    s.find(".mini-month").val(t);
+                    y.find("tr:not(:first)").remove();
+                    if (j == w && c == t) {
+                        u = true
+                    } else {
+                        u = false
+                    }
+                    var p = 1,
+                    v = $("<tr/>"),
+                    q = null;
+                    for (var r = 0; r < 7; r++) {
+                        q = $("<td/>");
+                        if (r < o) {
+                            v.append(q)
+                        } else {
+                            if (p == h && u) {
+                                q.addClass("mini-dpicker-selected").html(p).attr("week", r);
+                                p++
+                            } else {
+                                q.html(p).attr("week", r);
+                                p++
+                            }
+                        }
+                        v.append(q);
+                        if (r == 6) {
+                            y.append(v)
+                        }
+                    }
+                    var r = 0,
+                    v = $("<tr/>");
+                    while (r < 7) {
+                        if (p <= x) {
+                            if (p == h && u) {
+                                v.append($("<td/>").addClass("mini-dpicker-selected").html(p).attr("week", r))
+                            } else {
+                                v.append($("<td/>").html(p).attr("week", r))
+                            }
+                        } else {
+                            v.append($("<td/>"))
+                        }
+                        r++;
+                        p++;
+                        if (r == 7) {
+                            y.append(v);
+                            v = $("<tr/>");
+                            if (p < x) {
+                                r = 0
+                            }
+                        }
+                    }
+                }
+
+                //获取天数Date.getDate();
+                function i(p, n) {
+                    p = p - 1;
+                    var q = ((n % 4 == 0 && n % 100 != 0) || n % 400 == 0) ? true: false;
+                    var o;//天数
+                    switch (parseInt(p)) {
+                    case 0:
+                    case 2:
+                    case 4:
+                    case 6:
+                    case 7:
+                    case 9:
+                    case 11:
+                        o = 31;
+                        break;
+                    case 3:
+                    case 5:
+                    case 8:
+                    case 10:
+                        o = 30;
+                        break;
+                    case 1:
+                        o = q ? 29 : 28;//巧
+                    }
+                    return o;
+                }
+
+                return this
+            }
+        })(jQuery);
+        $("#picker").minipicker({
+            showOn: "click",
+            hideOn: "click",
+            left: 0,
+            top: 40,
+            split: "-",
+            timeOn: false,
+            weekOn: false,
+            beginYear: 2010,
+            endYear: 2015,
+            keepLive: false
+        }); //设置一个总的方法，然后传递参数，在这个方法里操作所有。
+        $("#keepLive").minipicker({
+            keepLive: true
+        });
+  </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		/*
+		* 国外的一个效果。关键是在filter这个属性
+		* 不知道原理是为什么，知道的人告诉我下啊！！！
+		*/
+		body{
+			margin: 0;
+			font-size: 62.5%;
+			font-family: arial,'微软雅黑';
+			background-color: yellow;
+		}
+		.container{
+			/*
+			* 对比度是影响照片全局的（当然，已经是纯黑和纯白的像素是不会受到增加对比度的影响的，因为已经没办法再增加对比了）。对比度影响明暗之间的过渡层次，对比度越高，从中性灰到纯黑和纯白之间的色阶数量就越少，明暗对比就越大，反之同理。
+			*/
+			-webkit-filter:contrast(40);
+			background-color: yellow;/*一定要设置背景颜色，white也可以*/
+			width: 250px;
+			height: 150px;
+			padding: 10px 0;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			overflow: hidden;
+			-webkit-transform:translate(-50%, -50%) scale(2);/*居中，放大，里面的东西也会跟着放大*/
+		}
+		.smallBlack,.largeBlack,.middleRed{
+			border-radius: 50%;
+			background-color: #000;
+			-webkit-filter:blur(15px);
+		}
+		.smallBlack{
+			width: 15px;
+			height: 15px;
+			-webkit-filter:blur(5px);
+		}
+		.largeBlack{
+			width: 100px;
+			height: 100px;
+			top: 50%;
+			left: 50%;
+			margin: -50px 0 0 -50px;
+			position: absolute;
+		}
+		.wrap{
+			width: 120px;
+			height: 120px;
+			top: 50%;
+			left: 50%;
+			margin: -60px 0 0 -60px;
+			position: absolute;
+			-webkit-animation:pulse1 5s linear;
+			-webkit-animation-iteration-count: infinite;
+		}
+		.middleRed{
+			width: 50px;
+			height: 50px;
+			background-color: red;
+			position: absolute;
+			top: 50%;
+			margin-top: -25px;
+			-webkit-animation:pulse 5s ease;
+			-webkit-animation-iteration-count:infinite;
+		}
+		@-webkit-keyframes pulse1{
+			from{
+				-webkit-transform:rotate(0deg);
+			}
+			to{
+				-webkit-transform:rotate(360deg);
+			}
+		}
+		@-webkit-keyframes pulse{
+			0%{
+				-webkit-transform:translate(0px);
+			}
+			50%{
+				-webkit-transform:translate(200px);
+			}
+			100%{
+				-webkit-transform:translate(0px);
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="wrap">
+			<div class="smallBlack"></div>
+		</div>
+		<div class="largeBlack"></div>
+		<div class="middleRed"></div>
+	</div>
+</body>
+</html>

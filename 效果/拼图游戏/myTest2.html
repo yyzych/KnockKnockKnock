@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		#container{
+			height: 600px;
+			width: 100%;
+			position: relative;
+			border: 1px dashed #333;
+		}
+		#myDiv{
+			position: absolute;
+			left: 50px;
+			top: 50px;
+			background-color: #8C8CFF;
+			height: 100px;
+			width: 100px;
+		}
+		span{
+			display: block;
+			height: 200px;
+			width: 200px;
+			background-image: url(bg.jpg);
+			background-repeat: no-repeat;
+			position: absolute; 
+		}
+		img{
+			height: 600px;
+			width:600px;
+		}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<!-- <div id="myDiv"></div> -->
+	</div>
+	<img src="bg.jpg" style="display:none" id="bgImg" alt="">
+	<script>
+		function getRandom (begin,end) {
+			var res=Math.random()*end+begin;
+			return res;
+		}
+		function init (option,bround) {
+			var bgImg=document.getElementById("bgImg");
+			bgImg.style.display="";
+			var imgHei=bgImg.offsetHeight,//隐藏的话是没有offsetHeight的
+				imgWid=bgImg.offsetWidth,
+				itemHei=option.height,
+				itemWid=option.width,
+				container=document.getElementById('container');
+			bgImg.style.display="none";
+			bround.bottom=bround.bottom-itemHei;
+			bround.right=bround.right-itemWid;
+
+			var hNum=imgHei/itemHei,wNum=imgWid/itemWid;
+			for (var i = 0; i < hNum; i++) {
+				for (var j = 0; j < wNum; j++) {
+					var span=document.createElement("span");
+					span.style.backgroundImage=bgImg.src;
+					var bx=j*itemWid;
+					var by=i*itemHei;
+					span.style.backgroundPosition=-bx+"px "+(-by)+"px";
+					span.style.left=getRandom(bround.left,bround.right)+"px";
+					span.style.top=getRandom(bround.top,bround.bottom)+"px";
+					container.appendChild(span);
+					drag(span,bround);//注意bround是对象，是按引用传递的，你每次改变之后后面也都跟着改变了。
+				};
+			};
+		}
+		function drag (elem,bround) {
+			var elemHei=elem.offsetHeight,
+				elemWid=elem.offsetWidth;
+			// bround.bottom=bround.bottom-elemHei;
+			// bround.right=bround.right-elemWid;
+
+			elem.onmousedown=function (event) {//不能使用click事件。因为在up之后又会触发click事件。事件发生的顺序：mousedown->mouseup->click.
+				elem.innerHTML="准备";
+				event=event||window.event;
+				var curX=event.clientX,
+					curY=event.clientY,
+					offsetX=elem.offsetLeft,
+					offsetY=elem.offsetTop;//是距离offsetParent的y
+
+				document.onmousemove=function (event) {
+					var x=event.clientX-curX+offsetX,
+						y=event.clientY-curY+offsetY;//每次移动后面的两个是不变的
+
+					x=Math.max(Math.min(x,bround.right),bround.left);
+					y=Math.max(Math.min(y,bround.bottom),bround.top);
+					
+					elem.style.left=x+"px";
+					elem.style.top=y+"px";
+
+					event.preventDefault();
+				};
+				document.onmouseup=function (event) {
+					document.onmousemove=null;
+				}
+
+				event.preventDefault();//会选中文字的。
+			}
+		}
+
+		var broundElem=document.getElementById('container');
+		var bround={
+			left:0,//被拖动元素相对于容器元素的可以设置的最左边坐标。注意，并不是容器元素本身的坐标的坐标。
+			top:0,
+			bottom:broundElem.clientHeight,
+			right:broundElem.clientWidth
+		};
+		// drag(document.getElementById("myDiv"),bround);
+		init({height:200,width:200},bround);
+	</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>无限滚动瀑布流</title>
+	<style>
+		body{
+			font-size: 12px;
+			font-family: 微软雅黑 Arial;
+			margin: 0;
+			padding: 0;
+		}
+		.container{
+			padding: 15px;
+			background-color: #9FCFFF;
+		}
+		.wrap{
+			position: relative;
+			width: 1020px;
+			margin: 0 auto;
+			background-color: #fff;
+		}
+		.item{
+			width: 240px;
+			position: relative;
+			background-color: #CDCDCD;
+			height: 150px;
+		}
+		#add{
+			position: fixed;
+			right: 50px;
+			bottom: 50px;
+		}
+	</style>
+</head>
+<body>
+	<input type="button" value="添加" id="add">
+	<div class="container">
+		<div id="wrap" class="wrap">
+			<div style="height:200px;" class="item">1</div>
+			<div class="item">2</div>
+			<div style="height:180px;" class="item">3</div>
+			<div style="height:110px;" class="item">4</div>
+			<div class="item">5</div>
+			<div class="item">6</div>
+		</div>
+	</div>
+	<script>
+		(function () {
+			function $ (id) {
+				return document.getElementById(id);
+			}
+			function createElement (option) {
+				var elem=document.createElement(option.tagName);
+				elem.className=option.cssName;
+				elem.innerHTML=option.text;
+				return elem;
+			}
+			function getAjaxObject () {
+				var xmlObject;
+				if(window.XMLHttpRequest){
+					xmlObject=new XMLHttpRequest();
+				}else if(window.ActiveXObject){
+					xmlObject=new ActiveXObject("Microsoft.XMLHTTP");
+				}else{
+					return null;
+				}
+				return xmlObject;
+			}
+
+			function Waterfull () {
+				this.colHei=[];
+				this.marBot=20;//必须要初始化，否则是没有这个属性的
+				this.itemWidth=220;
+				this.wrapId="";
+				this.colNum=4;//想要每行几个
+				this.gap=10;//每行item之间的间距
+			}
+			Waterfull.prototype.init=function (option) {
+				var wrap=$(this.wrapId);
+				//初始化数据
+				for(var item in this){
+					if(option.hasOwnProperty(item)){
+						this[item]=option[item];
+					}
+				}
+				var conWid=$(this.wrapId).clientWidth;
+				var gap=Math.floor((conWid-this.colNum*this.itemWidth)/(this.colNum-1));
+				if(gap<10){
+					//太挤，减去1列
+					this.colNum-=1;
+					gap=Math.floor((conWid-this.colNum*this.itemWidth)/(this.colNum-1));
+				}
+				this.gap=gap;
+				for (var i = 0; i < this.colNum; i++) {
+					this.colHei[i]=0;
+				}
+				//如果一开始wrap里面就有item的话，就要先布局一下
+				var items=$(this.wrapId).children;
+				for (var i = 0,j=0; i < items.length; i++) {
+					items[i].style.position="absolute";
+					items[i].style.top=this.colHei[j]+"px";
+					items[i].style.left=j*(this.itemWidth+this.gap)+"px";
+					this.colHei[j]+=items[i].offsetHeight+this.marBot;
+					j++;
+					if(j==this.colNum)
+						j=0;
+				};
+				var parHei=Math.max.apply(Math,this.colHei);
+				$(this.wrapId).style.height=parHei+"px";
+			};
+			Waterfull.prototype.layout=function (boxs) {
+				var items=boxs;
+				var j=this.getMinColIndex();
+				for (var i = 0; i < items.length; i++) {
+					items[i].style.position="absolute";
+					items[i].style.top=this.colHei[j]+"px";
+					items[i].style.left=j*(this.itemWidth+this.gap)+"px";
+					$(this.wrapId).appendChild(items[i]);
+					this.colHei[j]+=items[i].offsetHeight+this.marBot;
+					j++;
+					if(j==this.colNum)
+						j=0;
+				};
+				var parHei=Math.max.apply(Math,this.colHei);
+				$(this.wrapId).style.height=parHei+"px";
+			};
+			Waterfull.prototype.getMinColIndex=function () {
+				var index=0;
+				for (var i = 0; i < this.colNum; i++) {
+					if(this.colHei[index]>this.colHei[i+1]){
+						index=i+1;
+					}
+				};
+				return index;
+			}
+
+
+			var waterfull=new Waterfull(),
+				addBtn=$("add");
+			waterfull.init({
+				marBot:20,
+				itemWidth:240,
+				wrapId:"wrap",
+				colNum:4
+			});
+
+			addBtn.onclick=function (event) {
+				var nItems=[];//如果直接用字符串的话，他不是一个元素，没有style等属性的
+				nItems[nItems.length]=createElement({tagName:"div",cssName:"item",text:"7"});
+				nItems[nItems.length]=createElement({tagName:"div",cssName:"item",text:"8"});
+				waterfull.layout(nItems);
+			}
+			var num=9;
+			var jsonObj={
+				"items":[
+					{"tagName":"div","cssName":"item","text":"你好1"},
+					{"tagName":"div","cssName":"item","text":"你好2"},
+					{"tagName":"div","cssName":"item","text":"你好3"},
+					{"tagName":"div","cssName":"item","text":"你好4"},
+				]
+			};
+			window.onscroll=function (event) {
+				var elem=document.body.scrollTop>document.documentElement.scrollTop?document.body:document.documentElement;
+				var clientHei=window.innerHeight||elem.clientHeight;
+				if(elem.scrollTop>elem.scrollHeight-clientHei-20){
+					//Ajax在这里使用就行
+					// var xmlObject=getAjaxObject();
+					// xmlObject.open("GET","data.json",true);
+					// xmlObject.onreadystatechange=function () {
+					// 	if(xmlObject.readyState==4&&xmlObject.status==200){
+					// 		alert("yes!");
+					// 	}
+					// };
+					// // xmlObject.setRequestHeader("Content-type","pplication/x-www-form-urlencoded");
+					// xmlObject.send();
+					
+
+					// var nItems=[];//如果直接用字符串的话，他不是一个元素，没有style等属性的
+					// nItems[nItems.length]=createElement({tagName:"div",cssName:"item",text:num});
+					// nItems[nItems.length]=createElement({tagName:"div",cssName:"item",text:num+1});
+					// num+=2;
+
+					var nItems=[];
+					//JSON的属性虽然有双引号，但是其实是和javascript没有区别，还是一样引用就行了。就当成是javascript对象就好了。
+					for (var i = 0; i < jsonObj.items.length; i++) {
+						nItems[nItems.length]=createElement(jsonObj.items[i]);
+					};					
+					waterfull.layout(nItems);
+				}
+			}
+		})();
+	</script>
+</body>
+</html>

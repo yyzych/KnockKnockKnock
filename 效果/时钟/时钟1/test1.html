@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			background-color: #333;
+			font-family: Tahoma, Geneva, sans-serif;
+		}
+		.clock{
+			perspective:1000px;
+			-webkit-perspective:1000px;
+			-moz-perspective:1000px;
+			-o-perspective:1000px;
+			-ms-perspective:1000px;
+			transform-style: preserve-3d;
+		    -webkit-transform-style: preserve-3d;/*该属性用以表示被嵌套的元素在3D空间采用何种渲染方式（flat 或 preserve-3d），如果使用了flat（默认），那么所有子节点元素均是不再有3D 效果*/
+		    -o-transform-style: preserve-3d;
+		    -moz-transform-style: preserve-3d;
+		}
+		.clock>div{
+			float: left;
+			width: 128px;
+			height: 128px;
+			position: relative;
+			overflow: hidden;
+			margin-right: 20px;
+		}
+		#second{
+			width: 64px;
+			height: 64px;
+			margin-top: 64px;
+		}
+		.top, .bottom{
+			width:100%;
+			height: 64px;
+			overflow: hidden;
+			position: absolute;
+			background-color: #eee;
+		}
+		#second .top, #second .bottom{
+			height: 32px;
+		}
+		.top{
+			background-color: #ddd;
+			border-radius: 10px 10px 0 0;
+			border-bottom: 1px solid #999;
+			top: 0px;
+			transform-origin:bottom;
+			-webkit-transform-origin:bottom;
+			-ms-transform-origin:bottom;
+			-moz-transform-origin:bottom;
+			-o-transform-origin:bottom;
+		}
+		.bottom{
+			background-color: #eee;
+			border-radius: 0 0 10px 10px;
+			top: 65px;
+			transform-origin:top;
+			-webkit-transform-origin:top;
+			-ms-transform-origin:top;
+			-moz-transform-origin:top;
+			-o-transform-origin:top;
+		}
+		#second .bottom{
+			top: 33px;
+		}
+		.top span, .bottom span{
+			font-size: 6.4em;
+			display: block;
+			text-align: center;
+			height: 128px;
+			line-height: 128px;
+			width: 128px;
+		}
+		#second .top span, #second .bottom span{
+			height: 64px;
+			line-height: 64px;
+			width: 64px;
+			font-size: 3.2em;
+		}
+		.bottom span{
+			position:absolute;
+			top: -64px;
+		}
+		#second .bottom span{
+			top: -32px;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		(function () {
+			var clockMoudle=function () {
+				var Tool={
+					$:function (id) {
+						return document.getElementById(id);
+					},
+					createElement:function (option) {
+						option=this.extend({tagName:"div",text:"",className:""},option)
+						var elem=document.createElement(option.tagName);
+						elem.innerHTML=option.text;
+						elem.className=option.className;
+						return elem;
+					},
+					extend:function (old,cur) {
+						var res={};
+						for(var name in old){
+							if(cur.hasOwnProperty(name)){
+								res[name]=cur[name];
+							}else{
+								res[name]=old[name];
+							}
+						}
+						return res;
+					},
+					transform:function (obj,transName) {
+						try{
+							with(obj.style){
+								transform=transName;
+								WebKitTransform=transName;
+								MozTransform=transName;
+								OTransform=transName;
+								msTransform=transName;
+							}
+						}catch(e){
+							throw "错了";
+						}
+					}
+				};
+
+				function ClockUnit (id,curVal,minVal,maxVal) {
+					this.val=curVal;
+					this.text=this.val;
+					this.minVal=minVal;
+					this.maxVal=maxVal;
+					this.elem=null;
+					this.topBak=null;
+					this.topFnt=null;
+					this.btmBak=null;
+					this.btmFnt=null;
+					this.period=function () {}//表示到最大值之后干什么，如秒钟到了最大值就要翻分钟，分钟到了最大值就要翻时钟
+
+					this.init(id);
+					this.animateReset();
+				}
+				ClockUnit.prototype=function () {
+					var clkUnitCN="unit",
+						clkTop="top",
+						clkBtm="bottom";
+
+					return {
+						init:function (id) {
+							this.elem=Tool.createElement({className:clkUnitCN});
+							this.elem.setAttribute("id",id);
+
+							this.topBak=Tool.createElement({className:clkTop});
+							this.topBak.txt=Tool.createElement({tagName:"span"});
+							this.topBak.appendChild(this.topBak.txt);
+							this.elem.appendChild(this.topBak);
+
+							this.topFnt=Tool.createElement({className:clkTop});
+							this.topFnt.txt=Tool.createElement({tagName:"span"});
+							this.topFnt.appendChild(this.topFnt.txt);
+							this.elem.appendChild(this.topFnt);
+
+							this.btmBak=Tool.createElement({className:clkBtm});
+							this.btmBak.txt=Tool.createElement({tagName:"span"});
+							this.btmBak.appendChild(this.btmBak.txt);
+							this.elem.appendChild(this.btmBak);
+
+							this.btmFnt=Tool.createElement({className:clkBtm});
+							this.btmFnt.txt=Tool.createElement({tagName:"span"});
+							this.btmFnt.appendChild(this.btmFnt.txt);
+							this.elem.appendChild(this.btmFnt);
+						},
+						update:function () {
+							this.updateText();
+							if(this.val>this.maxVal){
+								this.setValue(this.minVal);
+								this.period();
+							}else if(this.val<this.minVal){//不会发生
+								this.setValue(this.maxVal);
+								this.period();
+							}
+						},
+						setValue:function (v) {
+							this.val=v;
+							this.updateText();
+						},
+						updateText:function () {
+							if(this.val<=9){
+								this.text="0"+this.val;
+							}else{
+								this.text=this.val;
+							}
+						},
+						addVal:function () {//加一秒
+							this.val++;
+							this.update();
+						},
+						delVal:function () {
+							this.val--;
+							this.update();
+						},
+						animateReset:function () {
+							Tool.transform(this.topFnt,"");
+							Tool.transform(this.topBak,"");
+							Tool.transform(this.btmFnt,"");
+							Tool.transform(this.btmBak,"");
+
+							this.btmBak.txt.innerHTML = this.text;
+							this.topBak.txt.innerHTML = this.text;
+							this.btmFnt.txt.innerHTML = this.text;
+							this.topFnt.txt.innerHTML = this.text;
+						},
+						turnDown:function () {
+							//翻的效果
+							var self=this;
+							self.addVal();//每翻转一次，值就加1
+							self.topBak.txt.innerHTML=self.text;
+							var deg1=0;
+							var timer1=setInterval(function () {
+								if(deg1>=-90){
+									Tool.transform(self.topFnt,"rotateX("+deg1+"deg)");
+									deg1-=10;
+								}else{
+									var deg2=90;
+									Tool.transform(self.btmFnt,"rotateX("+deg2+"deg)");
+									self.btmFnt.txt.innerHTML=self.text;
+									self.topFnt.txt.innerHTML=self.text;
+									var timer2=setInterval(function () {
+										if(deg2>=0){
+											Tool.transform(self.btmFnt,"rotateX("+deg2+"deg)");
+											deg2-=10;
+										}else{
+											self.btmBak.txt.innerHTML=self.text;
+											self.animateReset();
+											clearInterval(timer2);
+										}
+									},30);
+									clearInterval(timer1);
+								}
+							},30);
+						}
+					}
+				}();
+
+				function Clock (container) {
+					var parent=Tool.createElement({className:"clock"});
+					var time=new Date();
+					var hour=new ClockUnit("hours",time.getHours(),0,23);
+					var minute=new ClockUnit("minute",time.getMinutes(),0,59);
+					var second=new ClockUnit("second",time.getSeconds(),0,59);
+					second.period=function () {
+						minute.turnDown();		
+					}
+					minute.period=function () {
+						hour.turnDown();
+					}
+					parent.appendChild(hour.elem);
+					parent.appendChild(minute.elem);
+					parent.appendChild(second.elem);
+					container.appendChild(parent);
+
+					this.timer=null;
+					this.start=function () {
+						this.timer=setInterval(function () {
+							second.turnDown();
+						},1000);
+					}
+					
+					this.start();
+				}
+
+				return {
+					run:function (p) {
+						var _clock=new Clock(p);
+					}
+				};
+			}();
+
+			clockMoudle.run(document.body);
+		})();
+	</script>
+</body>
+</html>

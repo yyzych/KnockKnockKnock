@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin:0px;
+			padding: 0px;
+		}
+		body{
+			text-align: center;/*继承属性*/
+		}
+		h1{
+			margin: 50px 0px 20px;
+		}
+		.main{
+			width: 400px;
+			padding: 50px 0;
+			border: 3px solid green;
+			background-color: #B9EAE3;
+			margin: 0 auto;
+		}
+		#resultNum{
+			font-size:5em;font-family:Verdana
+		}
+		div input{
+			margin-top: 50px;
+			font-size: 36px;
+			padding: 8px 20px;
+		}
+	</style>
+</head>
+<body>
+	<h1>抽奖结果</h1>
+	<div class="main">
+		<span id="resultNum">0</span>
+	</div>
+	<div>
+		<input id="goBtn" type="button" value="开始">
+	</div>
+	<script>
+		(function () {
+			var api={
+				num:0,
+				interval:1,
+				timer:null,
+				elem:document.getElementById("resultNum"),
+				updateNum:function () {
+					var that=this;
+					this.timer=setTimeout(function () {
+						that.updateNum();
+					},this.interval);
+					var randNum=Math.floor(Math.random()*this.num+1);
+					this.elem.lastChild.nodeValue=randNum;
+				},
+				begin:function  () {
+					this.updateNum(this);
+				},
+				end:function () {
+					clearTimeout(this.timer);
+				}
+			};
+			var goBtn=document.getElementById('goBtn'),
+				resultNum=document.getElementById('resultNum');
+			api.num=500;
+			goBtn.onclick=function () {
+				var value=this.value;
+				if(value=="开始"){
+					api.begin();
+					resultNum.style.color="";//清除属性
+					this.value="停止";
+				}else{
+					api.end();
+					resultNum.style.color="red";
+					this.value="开始";
+				}
+			}
+		})();
+	</script>
+</body>
+</html>

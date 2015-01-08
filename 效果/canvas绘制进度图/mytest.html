@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>RunJS</title>
+		<style>
+			body {
+				background: #333;
+			}
+			#canvas {
+				display: block;
+				width: 300px;
+				margin: 100px auto;
+			}
+			@font-face {
+				font-family: "bebas";/*自定义字体，名称*/
+				src: url("http://thecodeplayer.com/uploads/fonts/BebasNeue.otf");
+			}		
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="300" height="300"/>
+		<script>
+			window.onload=function () {
+				var ctx=document.getElementById('canvas');
+				if(ctx.getContext){
+					var context=ctx.getContext("2d");
+					var timer,degrees=0,newDegrees=0,animation_loop;//timer，animation_loop一个用来画一次的时候，另一个用来循环
+					var difference;
+
+					//画背景
+					function init () {
+						var bgcolor="#222";
+						var width=ctx.width,
+							height=ctx.height;
+
+						context.clearRect(0,0,width,height);
+
+						context.beginPath();
+						context.strokeStyle=bgcolor;
+						context.lineWidth=30;
+						context.arc(width/2,height/2,100,0,Math.PI*2,false);
+						// context.arc(context.width/2,context.height/2,100,0,Math.PI*2,false);//注意context是没有高度的，是canvas有高度
+
+						context.stroke();
+					}
+					//画进度条
+					function draw (degrees) {
+						var color="lightgreen";
+						var width=ctx.width,
+							height=ctx.height;
+						context.strokeStyle=color;
+						context.beginPath();
+						context.lineWidth=10;
+						var radius=degrees*Math.PI/180;//度数
+						context.arc(width/2,height/2,100,0-90*Math.PI/180,radius-90*Math.PI/180,false);
+						context.stroke();
+
+						context.fillStyle=color;
+						context.font="50px bebas";
+						text=Math.floor(degrees/360*100)+"%";
+						textWid=context.measureText(text).width;
+						context.fillText(text,width/2-textWid/2,height/2+15);
+
+						animation_loop=setInterval(animate,1000/difference);//好像负数也没有关系的
+					}
+					function animate () {
+						if(animation_loop!=null){
+							clearTimeout(animation_loop);
+						}
+						if(degrees==newDegrees){
+							// window.clearTimeout(timer);
+							return;
+						}
+						if(degrees<newDegrees){
+							degrees++;
+						}else if(degrees>newDegrees){
+							degrees--;
+						}
+						init();
+						draw(degrees);
+					}
+
+					//刚开始画一次
+					newDegrees=Math.round(Math.random()*360);
+					difference=newDegrees-degrees;//新的度数和原来的度数之差，相差越大，则绘制的时间间隔就得越短--负数怎么办
+					animate();
+
+					timer=setInterval(function() {
+						newDegrees=Math.round(Math.random()*360);
+						difference=newDegrees-degrees;//新的度数和原来的度数之差，相差越大，则绘制的时间间隔就得越短--负数怎么办
+						animate();
+					}, 3000);
+
+				}
+			}
+		</script>
+	</body>
+</html>

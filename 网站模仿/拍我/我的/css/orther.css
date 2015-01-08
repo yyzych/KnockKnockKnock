@@ -1,0 +1,58 @@
+/*
+* orther.css
+*/
+
+/**{
+	margin: 0;
+	padding: 0;
+}*/
+body,input,select,textarea{
+	font-family: "Hiragino Sans GB","Microsoft YaHei","微软雅黑",tahoma,arial,simsun,"宋体";
+	color: #333;
+	line-height: normal;
+	outline: none;
+}
+body{
+	background-image: url(../img/orther_bg.jpg);
+	font-size: 14px;
+	color: #aaaaaa;
+}
+
+div.content{
+	margin: 0 auto;
+	width: 450px;
+	font-size: 1.3em;
+	margin-top: 8%;
+}
+#employ h1{
+	font-weight: normal;
+	font-size: 1.8em;
+	text-align: center;
+	margin-bottom: 40px;
+}
+#employ div.content{
+	width: 580px;
+	color: #dddddd;
+	height: 1530px;
+	margin: 36px auto 80px auto;
+	padding: 40px 100px 50px 100px;
+	border:1px solid #000000;
+	box-shadow: 0px 0px 5px 5px #111111;
+	font-size: 1em;
+	line-height: 200%;
+}
+div.content .header{
+	letter-spacing: 4px;
+}
+div.content .soon_on{
+	font-size: 350%;
+	margin: 50px 0 80px;
+	color: #dddddd;
+}
+a,a:hover,a:link,a:visited{
+	color: #aaaaaa;
+	text-decoration: none;
+	cursor: pointer;
+	text-decoration: underline;
+	color: #dddddd;
+}

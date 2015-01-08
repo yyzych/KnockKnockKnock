@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		* { 
+			margin: 0; 
+			padding: 0 
+		}
+		body {
+		    background: black;
+		}
+		canvas {
+		    background: black;
+		    display: block;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script>
+		var canvas = document.getElementById( 'canvas' ),
+		    ctx = canvas.getContext( '2d' ),
+		    spring = 0.03,/*弹性*/
+		    bounce = -0.9,/*弹簧*/
+		    friction = 0.95,/*摩擦*/
+		    vx = 0,
+		    vy = 0;
+
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+		var ball = { x: 0, y: 0, radius: 40, }
+		var mouse = { x: 0, y: 0 };
+		canvas.addEventListener( 'mousemove', function ( event ) {
+		    mouse.x = event.pageX,
+		    mouse.y = event.pageY;
+		});
+
+		(function draw() {
+			// vx=0;
+			// vy=0;
+		    requestAnimationFrame( draw );
+		    ctx.clearRect( 0, 0, canvas.width, canvas.height );
+
+		    // for wall collision detection
+		    var top = 0,
+		        right = canvas.width,
+		        left = 0,
+		        bottom = canvas.height;
+
+		    if (ball.x + ball.radius > right) {
+		        ball.x = right - ball.radius;
+		        vx *= bounce;
+		    } else if (ball.x - ball.radius < left) {
+		        ball.x = left + ball.radius;
+		        vx *= bounce;
+		    }
+		    if (ball.y + ball.radius > bottom) {
+		        ball.y = bottom - ball.radius;
+		        vy *= bounce;
+		    } else if (ball.y - ball.radius < top) {
+		        ball.y = top + ball.radius;
+		        vy *= bounce;
+		    }
+
+		    // vx = mouse.x - ball.x;
+		    // vy = mouse.y - ball.y;
+		    vx += (mouse.x - ball.x) * spring,
+		    vy += (mouse.y - ball.y) * spring;
+
+		    vx *= friction;
+		    vy *= friction;
+		    console.log(vx);
+		    ball.x += vx;
+		    ball.y += vy;
+
+		    // draw rubber band
+		    ctx.beginPath();
+		    ctx.moveTo(ball.x, ball.y);
+		    ctx.lineTo(mouse.x, mouse.y);
+		    ctx.closePath();
+		    ctx.strokeStyle = 'white';
+		    ctx.stroke();
+
+		    // draw ball
+		    ctx.beginPath();
+		    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, false);
+		    ctx.fillStyle = 'red';
+		    ctx.fill();
+		})();
+	</script></body>
+</html>

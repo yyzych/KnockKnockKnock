@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<title>html5 canvas</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			width: 768px;
+			position: relative;
+		}
+		canvas{
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: transparent;
+			border: 1px solid #333;
+			opacity:1;
+			-webkit-transition:opacity 1.8s;
+			-moz-transition:opacity 1.8s;
+			-o-transition:opacity 1.8s;
+			-ms-transition:opacity 1.8s;
+			transition:opacity 1.8s;
+		}
+		.noOp{
+			opacity: 0;
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<canvas width="500" height="500"></canvas>
+	<div class="">
+		<h1>你好啊</h1>
+	</div>
+	<img id="lamp" src="pet2.jpg" style="display:none">
+	<script>
+		var EventUtil={
+			addHandler:function (element,type,handler) {
+				if(element.addEventListener){
+					element.addEventListener(type,handler,false);
+				}else if(element.attachEvent){
+					element.attachEvent("on"+type,handler);
+				}else{
+					element["on"+type]=handler;
+				}
+			},
+			removeHandler:function (element,type,handler) {
+				if(element.removeEventListener){
+					element.addEventListener(type,handler,false);
+				}else if(element.detachEvent){
+					element.detachEvent("on"+type,handler);
+				}else{
+					element["on"+type]=none;
+				}
+			}
+		}
+		var canvas=document.getElementsByTagName('canvas')[0];
+
+		window.onload=function () {
+			if(canvas.getContext){
+				var ctx=canvas.getContext("2d");
+				var height=canvas.height,width=canvas.width;
+				var radius=20;
+
+				function layer (ctx) {
+					var imgsrc=document.getElementById('lamp');
+					var pat=ctx.createPattern(imgsrc,"repeat");
+					ctx.fillStyle=pat;
+					ctx.fillRect(0,0,height,width);
+					// ctx.drawImage(imgsrc,0,0);
+				}
+
+				ctx.clearRect(0,0,height,width);
+				layer(ctx);
+
+				tapClip(ctx,radius);
+			}
+		}
+		//通过修改globalCompositeOperation来达到擦除的效果
+		function tapClip(ctx,radius){
+			// document.body.style.mozUserSelect="none";
+			// document.body.style.webkitUserSelect="none";
+
+		    var hastouch = "ontouchstart" in window?true:false,
+		        tapstart = hastouch?"touchstart":"mousedown",
+		        tapmove = hastouch?"touchmove":"mousemove",
+		        tapend = hastouch?"touchend":"mouseup";
+		    
+		    canvas.addEventListener(tapstart , function(e){
+		    	if(typeof timeout != "undefined"){
+		    		clearTimeout(timeout)
+		    	}　　 
+		    	
+		        e.preventDefault();
+		        
+		        x1 = hastouch?e.targetTouches[0].pageX:e.clientX-canvas.offsetLeft;
+		        y1 = hastouch?e.targetTouches[0].pageY:e.clientY-canvas.offsetTop;
+		        
+		        ctx.lineCap = "round";　　//设置线条两端为圆弧
+		        ctx.lineJoin = "round";　　//设置线条转折为圆弧
+		        ctx.lineWidth = radius*2;　　
+		        ctx.globalCompositeOperation = "destination-out";
+		        
+		        ctx.save();
+		        ctx.beginPath();
+		        ctx.arc(x1,y1,1,0,2*Math.PI);
+		        ctx.fill();
+		        ctx.restore();
+		        
+		        canvas.addEventListener(tapmove , tapmoveHandler);
+
+		        canvas.addEventListener(tapend , function(){
+		            canvas.removeEventListener(tapmove , tapmoveHandler);
+		            //延时执行防止用户狂点；没30个像素抽查，没有每一个都抽查过去，提高性能
+		            timeout = setTimeout(function(){
+			            var imgData = ctx.getImageData(0,0,canvas.width,canvas.height);//本地无法测试，因为跨域了
+			            // var dd = 0;
+			            // for(var x=0;x<imgData.width;x+=30){
+			            //     for(var y=0;y<imgData.height;y+=30){
+			            //         var i = (y*imgData.width + x)*4;//竖着来的
+			            //         if(imgData.data[i+3] > 0){
+			            //             dd++
+			            //         }
+			            //     }
+			            // }
+			            var data=imgData.data;
+			            var aphla,sum=0;
+			            for (var i = 1,len=imgData.width*imgData.height/30; i < len; i++) {
+			            	aphla=data[120*i-1];
+			            	if(aphla>0){
+			            		sum++;
+			            	}
+			            };
+			            if(sum/(imgData.width*imgData.height/30)<0.4){
+			            	canvas.className = "noOp";
+			            }
+			            // if(dd/(imgData.width*imgData.height/900)<0.4){
+			            //     canvas.className = "noOp";
+			            // }　　　　
+		        	},100)
+		        });
+
+		        function tapmoveHandler(e){
+		            e.preventDefault()
+		            x2 = hastouch?e.targetTouches[0].pageX:e.clientX-canvas.offsetLeft;
+		            y2 = hastouch?e.targetTouches[0].pageY:e.clientY-canvas.offsetTop;
+		            
+		            // ctx.save();--不是用clip()的，所以不用保存状态
+		            ctx.moveTo(x1,y1);
+		            ctx.lineTo(x2,y2);
+		            ctx.stroke();
+		            // ctx.restore()
+		            
+		            x1 = x2;
+		            y1 = y2;
+		        }
+		    })
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>RunJS</title>
+		<style>
+			input {
+				outline: none;
+			}
+			input[type=search] {
+				-webkit-appearance: textfield;/*使用“appearance”属性，来改变任何元素的浏览器默认风格.并不是所有浏览器都支持，要加上前缀*/
+				-webkit-box-sizing: content-box;
+				font-size: 100%;
+			}
+			input::-webkit-search-decoration,
+			input::-webkit-search-cancel-button {
+				display: none;
+			}
+
+			input[type=search] {
+				background: #ededed url(http://webdesignerwall.com/demo/expandable-search-form/images/search-icon.png) no-repeat 9px;
+				border: solid 1px #ccc;
+				padding: 9px 10px 9px 32px;
+				width: 55px;
+				
+				-webkit-border-radius: 10em;
+				-moz-border-radius: 10em;
+				border-radius: 10em;
+				
+				-webkit-transition: all .5s;
+				-moz-transition: all .5s;
+				transition: all .5s;
+			}
+			input[type=search]:focus {
+				width: 130px;
+				background-color: #fff;
+				border-color: #6dcff6;
+				
+				-webkit-box-shadow: 0 0 5px rgba(109,207,246,.5);
+				-moz-box-shadow: 0 0 5px rgba(109,207,246,.5);
+				box-shadow: 0 0 5px rgba(109,207,246,.5);
+			}
+		</style>
+	</head>
+	<body>
+		<form>
+      <input type="search" placeholder="搜索">
+      <input type="button" value="hello">
+    </form>
+	</body>
+</html>

@@ -1,0 +1,178 @@
+@import url(elem-basic.css);
+@import url(functionModule.css);
+
+.upgradebody header{
+	box-shadow:0 0 10px rgba(207,207,207,.77);
+	padding: 10px 0;
+}
+.table-content,.header-inner{
+	width: 80%;
+	margin: auto;
+}
+@media (max-width: 768px){
+	.table-content,.header-inner{
+		width: 95%;
+	}
+}
+.header-inner{
+	color: #6A6AFF;
+	height: 36px;
+	line-height:36px;
+	padding: 0 15px;
+	box-sizing: border-box;
+}
+.screen-page{
+	padding-top: 60px;
+	margin-bottom: 60px;
+}
+.icon{
+	display: inline-block;
+	background-image: url(../img/sites-icons.png);
+	vertical-align: middle;
+}
+.icon-logo{
+	background-position: -521px -183px;
+	width: 145px;
+	height: 35px;
+	margin-top: -4px;
+}
+.logo-title{
+	font-size: 1.7em;
+	color: #5f7fb0;
+	margin-left: 30px;
+}
+a.login-btn{
+	color: #5f7fb0;
+}
+#powerTip{
+	text-align: left;
+	max-width: 400px;
+	padding:3px 8px;
+	background-color: rgba(0,0,0,0.8);
+	color: #fff;
+	display: none;
+	z-index: 999;
+	position: absolute;
+	border-radius: 4px;
+	opacity: 0;
+	transition:opacity 0.3s ease;
+}
+#powerTip:before{
+	position: absolute;
+	left: 50%;
+	top:-12px;
+	color: rgba(0,0,0,0.8);
+	margin-left: -5px;
+	/*border-left: 5px solid */
+	content:"▲";
+}
+
+/*表格样式*/
+.table-content table{
+	width: 100%;
+	border-spacing: 0;
+	border-collapse: collapse;/*给table设置了这个属性才能给tr（注意是tr，td还是可以得）设置边框*/
+}
+.table-content tr td{
+	min-width: 60px;
+	width: 360px;
+}
+.table-content tr td:first-child{
+	width: 250px;
+}
+@media (max-width: 768px){
+	.table-content tr td{
+		width: auto;
+	}
+}
+.table-content tr{
+	border-top: 1px solid #E4E4E4;
+}
+.table-content tr:first-child{
+	border-top: 0;
+}
+.table-content thead th{
+	font-weight: bold;
+	font-size: 2em;
+}
+.table-content th.general{
+	border-bottom: 3px solid #bfbfbf;
+}
+.table-content th.pro{
+	color: #5f7fb0;
+	border-bottom: 3px solid #5f7fb0;
+}
+.table-content td, .table-content th{
+	padding:8px 0;
+	text-align: center;
+	vertical-align: middle;
+	color: #707070;
+	font-size: 1.4em;
+}
+.table-content td i{
+	margin-right: 11px;
+}
+.sprite-support{
+	background-position: -543px -265px;
+	width: 20px;
+	height: 20px;
+}
+.sprite-general{
+	background-position: -584px -234px;
+	width: 20px;
+	height: 20px;
+}
+.sprite-unsupport{
+	background-position: -606px -265px;
+	width: 20px;
+	height: 20px;
+}
+.table-content .sub-title{
+	font-size: 12px;
+	color: #aaa;
+	margin: 0;
+}
+.table-content .sub-title a{
+	color: #5f7fb0;
+}
+.table-content .sub-title a:hover{
+	text-decoration: underline;
+}
+.table-content td.bg-color{
+	background-color: #EDF0F5;
+	border-bottom: 1px solid #fff;
+}
+.table-content tr.action:last-child td{
+	text-align: right;
+}
+.table-content tr.action{
+	border:none;
+}
+.table-content tr.action .btn{
+	font-size: .8em;
+	background-image: linear-gradient(to bottom,#6c8cbc,#5f7fb0);
+	color: #fff;
+	border:1px solid #7C7C7C;
+	line-height: 18px;
+	border-radius:2px 
+}
+.table-content .power-tip a{
+	color: inherit;
+	border-bottom: 1px dashed #084482;
+}
+
+
+.footer-inner{
+	text-align: center;
+	padding: 10px 0;
+}
+.footer-inner .list-inline >li{
+	float: none;
+}
+.footer-links{
+	padding: 13px 0px 10px;
+}
+.footer-links>li{
+	float: none;
+	font-size: 1.4em;
+}

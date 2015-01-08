@@ -1,0 +1,666 @@
+<!-- saved from url=(0016)http://paiwo.co/ -->
+<html>
+<head lang="zh-CN">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+	<title>拍我网 | 浏览客片</title>
+
+	<link rel="stylesheet" type="text/css" href="./拍我网_files/navi.css">
+	<link rel="stylesheet" type="text/css" href="./拍我网_files/browse.css">
+	<style>
+.hide {
+display: none;
+}
+</style>
+
+	<script type="text/javascript" src="./拍我网_files/jquery.js"></script>
+
+	<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F4c5c9adb6a16cd129fb08b66e320353d' type='text/javascript'%3E%3C/script%3E"));
+</script>
+	<script src="./拍我网_files/h.js" type="text/javascript"></script>
+</head>
+<body>
+	<a href="http://tongji.baidu.com/hm-web/welcome/ico?s=4c5c9adb6a16cd129fb08b66e320353d" target="_blank">
+		<img border="0" src="./拍我网_files/21.gif" width="20" height="20"></a>
+
+	<div class="navi">
+		<a class="logo" title="拍我网">
+			<img src="./拍我网_files/logo.png" alt="logo"></a>
+		<a class="navi_portrait" href="">
+			<img src="./拍我网_files/portrait60.jpg"></a>
+		<a class="login" href="http://paiwo.co/logout">
+			<img src="./拍我网_files/login.png">
+			<p>退出</p>
+		</a>
+		<a href="http://paiwo.co/gallery" class="navi_title navi_active" id="navi_browse">
+			<img src="./拍我网_files/navi_Browse.png" alt="browse">
+			<p id="navi_browse">浏览客片</p>
+		</a>
+		<a href="http://paiwo.co/photog" class="navi_title" id="navi_photographer">
+			<img src="./拍我网_files/navi_findPhotographer.png" alt="photographer">
+			<p id="navi_photographer">找摄影师</p>
+		</a>
+		<a href="http://paiwo.co/demand" class="navi_title" id="navi_demand">
+			<img src="./拍我网_files/navi_Demand.png" alt="demand">
+			<p id="navi_demand">顾客需求</p>
+		</a>
+		<a href="http://paiwo.co/event" class="navi_title" id="navi_events">
+			<img src="./拍我网_files/navi_Events.png" alt="events">
+			<p id="navi_events">参与活动</p>
+		</a>
+		<a href="./拍我网_files/拍我网.htm" class="navi_title hide" id="navi_mypage">
+			<img src="./拍我网_files/navi_MyPage.png" alt="MyPage">
+			<p id="navi_mypage">我的主页</p>
+		</a>
+		<a href="http://paiwo.co/order" class="navi_title" id="navi_order">
+			<img src="./拍我网_files/navi_Order.png" alt="order">
+			<p id="navi_order">我的订单</p>
+		</a>
+		<a href="http://paiwo.co/message" class="navi_title" id="navi_chat">
+			<img src="./拍我网_files/navi_Chat.png" alt="chat">
+			<p id="navi_chat">站内消息</p>
+		</a>
+		<a href="http://paiwo.co/user" class="navi_title" id="navi_settings">
+			<img src="./拍我网_files/navi_Setting.png" class="navi_images" alt="setting">
+			<p id="navi_settings">个人中心</p>
+		</a>
+		<a id="iwantphoto" href="">我要拍照</a>
+	</div>
+
+	<div id="banner_box">
+		<div>
+			<img src="./拍我网_files/banner001.jpg"></div>
+	</div>
+	<div id="tab">
+		<div id="tab_content">
+			<div class="tab_blank"></div>
+			<div class="tab_button">
+				<a href="" id="selected" class="tab_active">热门精选</a>
+			</div>
+			<div class="tab_button">
+				<a href="" id="hot">人气摄影师</a>
+			</div>
+			<div class="tab_button">
+				<a href="" id="travel">旅拍活动</a>
+			</div>
+			<div class="tab_button">
+				<a href="" id="tags">筛选标签</a>
+			</div>
+			<div id="search">
+				<input id="search_text" type="text" placeholder="搜索摄影师、图片标签">
+				<input id="search_button" type="image" src="./拍我网_files/search.png" alt="搜索"></div>
+			<div id="sort">
+				<select>
+					<option>按人气排序</option>
+					<option>按时间排序</option>
+				</select>
+			</div>
+			<div class="search_dropdown hide">
+				<a href="">
+					<span class="photog">
+						<img src="./拍我网_files/portrait30.jpg"></span>
+					摄影师名字
+					<img class="search_type" src="./拍我网_files/portrait.png"></a>
+				<div class="dropdown_line"></div>
+				<a href="">
+					<span class="photog">
+						<img src="./拍我网_files/portrait30.jpg"></span>
+					摄影师名字
+					<img class="search_type" src="./拍我网_files/portrait.png"></a>
+				<div class="dropdown_line"></div>
+				<a href="">
+					<span class="photog">
+						<img src="./拍我网_files/portrait30.jpg"></span>
+					摄影师名字
+					<img class="search_type" src="./拍我网_files/portrait.png"></a>
+				<div class="dropdown_line"></div>
+				<a href="">
+					<span>
+						<img src="./拍我网_files/portrait30.jpg"></span>
+					胶片
+					<img class="search_type" src="./拍我网_files/tag_gray.png"></a>
+				<div class="dropdown_line"></div>
+				<a href="">
+					<span>
+						<img src="./拍我网_files/portrait30.jpg"></span>
+					小清新
+					<img class="search_type" src="./拍我网_files/tag_gray.png"></a>
+			</div>
+		</div>
+	</div>
+	<div id="main_content">
+		<div id="photos_box">
+			<div id="photos">
+				<o style="display:none" id="pageno">1</o>
+				<o style="display:none" id="hasnext">1</o>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/9947379e1e5a26a487a23f5f2d8a304a.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/373de546cadeaddcb9b1ec4fd0a844a1.jpg_280x280"></a>
+					<span class="hover_box" style="display: none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/1b4fe83ac91c5754a7b982659b957f58.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/5bb316d3541dec6aa5c2a1ff9e18012c.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/544806d1f0cb5d183d804678b78c1bd0.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/db78e37027989878aecd255e5cbfa330.jpg_280x280"></a>
+					<span class="hover_box" style="display: none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/a2fa47aa4854d9ca2fc0445b2113c8ce.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/2dc6de8ddaf178fc7219d6000f5d4908.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/640b51bded21acb77875892f61543d32.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/05109c9ad52d98a8ab0dadf7387223d7.jpg_280x280"></a>
+					<span class="hover_box" style="display: none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/4dc06be6867b74e46024bdb3012e844f.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/7b632b866d4c3b321262dc6580819c4b.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/ae366838105fa2b7038aa60419edba0e.jpg_280x280"></a>
+					<span class="hover_box" style="display: none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/d87c92adf4780833253c5bc69d68135d.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/2ceaf25a70e8ba496ec3bdf4249b4fec.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/f140ef788adc985f56902e8a2702b225.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/01b7279f3a1eec9800d9175e55d18246.jpg_280x280"></a>
+					<span class="hover_box" style="display:none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/7f167510e590384efae6a9a7e322093d.jpg_280x280"></a>
+					<span class="hover_box" style="display: none;">
+						<span class="share_box">
+							<span class="qzone" style="display: none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display: none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display: none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display: none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/6234648b350cdfbd0b806d021615704c.jpg_280x280"></a>
+					<span class="hover_box" style="display: none;">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+				<div>
+					<a class="photo" href="">
+						<img src="./拍我网_files/f995641d3e9834232cbf50ff3be1a0b0.jpg_280x280"></a>
+					<span class="hover_box" style="">
+						<span class="share_box">
+							<span class="qzone" style="display:none;">
+								<img src="./拍我网_files/share_qzone.png"></span>
+							<span class="douban" style="display:none;">
+								<img src="./拍我网_files/share_douban.png"></span>
+							<span class="renren" style="display:none;">
+								<img src="./拍我网_files/share_renren.png"></span>
+							<span class="weibo" style="display:none;">
+								<img src="./拍我网_files/share_weibo.png"></span>
+							<span class="share_button">
+								<img src="./拍我网_files/share16.png"></span>
+						</span>
+						<span class="comment_box">
+							<img src="./拍我网_files/comment16.png"></span>
+					</span>
+					<span class="fix_box">
+						<a href="">橙三爷</a>
+						<img class="like" src="./拍我网_files/like20.png">
+						<img class="collect" src="./拍我网_files/collect20.png"></span>
+				</div>
+
+			</div>
+			<div id="page_turn">
+				<a id="previous_page">
+					<img src="./拍我网_files/previouspage.png"></a>
+				<a id="next_page">
+					<img src="./拍我网_files/nextpage.png"></a>
+			</div>
+			<div class="footer">
+				<span>©2014 paiwo.co 版权所有 浙ICP备14026381号-1</span>
+				<a href="http://paiwo.co/employ">加入我们</a>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="./拍我网_files/browse.js"></script>
+	<!--script type="text/javascript" src="/static/js/browse/stick.js">
+		</script>
+		<script type="text/javascript">
+		jQuery(function($) {
+		$(document).ready( function() {
+		$('#tab').stickUp();
+		});
+		});
+	</script-->
+</body>
+</html>

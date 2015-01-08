@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<title>html5 canvas</title>
+</head>
+<body>
+	<canvas></canvas>
+	<script>
+		(function(bodyStyle) {
+			bodyStyle.mozUserSelect = 'none';//让文字不被选中
+			bodyStyle.webkitUserSelect = 'none';
+			 
+			var img = new Image();//为什么要重新设置一个image对象？？
+			var canvas = document.querySelector('canvas');
+			canvas.style.backgroundColor='transparent';
+			canvas.style.position = 'absolute';
+			 
+			img.addEventListener('load', function(e) {
+				var ctx;
+				var w = img.width,
+				h = img.height;
+				var offsetX = canvas.offsetLeft,
+					offsetY = canvas.offsetTop;
+				var mousedown = false;
+				 
+				function layer(ctx) {            
+					var img=document.getElementById("lamp");
+					var pat=ctx.createPattern(img,"repeat");                
+					ctx.fillStyle = pat;
+					ctx.fillRect(0, 0, w, h);
+				}
+				 
+				function eventDown(e){
+					e.preventDefault();
+					mousedown=true;
+				}
+				 
+				function eventUp(e){
+					e.preventDefault();
+					mousedown=false;
+				}
+				 
+				function eventMove(e){
+					e.preventDefault();
+					if(mousedown) {
+						if(e.changedTouches){//在触摸设备上才有，保存着touch对象，这个对象保存着clientX信息
+							e=e.changedTouches[e.changedTouches.length-1];//为什么取最后一个对象？？
+						}
+
+						//加上document.body.scrollLeft为了防止有滚动条存在
+						var x = (e.clientX + document.body.scrollLeft || e.pageX) - offsetX || 0,
+							y = (e.clientY + document.body.scrollTop || e.pageY) - offsetY || 0;
+						with(ctx) {
+							beginPath()
+							arc(x, y, 20, 0, Math.PI * 2);
+							fill();
+						}
+					}
+				}
+				 
+				canvas.width=w;
+				canvas.height=h;
+				// canvas.style.backgroundImage='url('+img.src+')';
+				ctx=canvas.getContext('2d');
+				ctx.fillStyle='transparent';
+				ctx.fillRect(0, 0, w, h);//什么用？---先把画面清除干净,,应该是clearRect()吧
+				layer(ctx);
+				 
+				ctx.globalCompositeOperation = 'destination-out';//后绘制的图形擦除与先绘制的图形的重叠部分
+
+				canvas.addEventListener('touchstart', eventDown);//设备触摸事件
+				canvas.addEventListener('touchend', eventUp);
+				canvas.addEventListener('touchmove', eventMove);
+				canvas.addEventListener('mousedown', eventDown);
+				canvas.addEventListener('mouseup', eventUp);
+				canvas.addEventListener('mousemove', eventMove);
+			});
+			img.src = 'pet2.jpg';
+		})(document.body.style);
+	</script>
+	<div class="">
+		<h1>你好啊</h1>
+	</div>
+	<img id="lamp" src="pet2.jpg" style="display:none"></body>
+</html>

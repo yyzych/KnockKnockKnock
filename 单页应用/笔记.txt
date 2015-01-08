@@ -1,0 +1,4 @@
+笔记记录：
+1.$.getScript(path,callback);
+	通过 AJAX 请求来获得并运行一个 JavaScript 文件
+2.

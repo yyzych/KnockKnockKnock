@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		html,body {margin:0; padding:0; position:absolute; width:100%; height:100%; overflow: hidden}
+		#screen {width:80%; height:50%; background:#ddd; position: absolute; left:10%; top:10%; overflow:hidden}
+		span.blue, span.green, span.gray, span.red { position: absolute; font-size: 0; -webkit-border-radius: 5px; -moz-border-radius: 5px; -o-border-radius: 5px; border-radius: 5px; }
+		.blue {background: #06c}
+		.green {background: #4eb84a}
+		.gray {background: #f3f3f3}
+		.red {background: #da4901}
+	</style>
+</head>
+<body>
+	<div id="screen"></div>
+	<script>
+		(function () {
+			var Tool={
+				$:function (id) {
+					return document.getElementById(id);
+				},
+				extend:function (old,cur) {
+					var res={};
+					for(var name in old){
+						if(!cur.hasOwnProperty(name)){
+							res[name]=old[name];
+						}else{
+							res[name]=cur[name];
+						}
+					}
+					return res;
+				},
+				addEvent:function (elem,name,fun) {
+					if(elem.addEventListener){
+						elem.addEventListener(name,fun,false);
+					}else if(elem.attachEvent){
+						elem.attachEvent("on"+name,fun);
+					}else{
+						elem["on"+name]=fun;
+					}
+				},
+				createElement:function (option) {
+					option=option||{tagName:"div",text:"",className:""};
+					var elem=document.createElement(option.tagName);
+					elem.innerHTML=option.text;
+					elem.className=option.className;
+					return elem;
+				},
+				random:function (f,l) {
+					return Math.random()*l+f;
+				},
+				hasClass:function (elem,name) {
+					if(!elem||!elem.className){
+						return false;
+					}
+					return elem.className.indexOf(name)>-1;
+				},
+				addClass:function (elem,name) {
+					if(!elem){
+						return;
+					}
+					elem.className=this.hasClass(elem,name)?elem.className:elem.className+" "+name;
+				}
+			}
+			//只能说太有才了了。。每个数字都对应4个字符，从左到右依次对应4个字符
+			var NUM = [
+			    '####   ##########  #####################    ',
+			    '#  #   #   #   ##  ##   #      ##  ##  #    ',
+			    '#  #   #   #   ##  ##   #      ##  ##  #  # ',
+			    '#  #   #####################   #########    ',
+			    '#  #   ##      #   #   ##  #   ##  #   #  # ',
+			    '#  #   ##      #   #   ##  #   ##  #   #    ',
+			    '####   #########   #########   #########    '
+			];
+
+			(function (win) {
+				var ballSize=10,ballSpace=8,
+					parWidth,parHeight,parent;
+
+				function resize () {
+					parHeight=parent.clientHeight;
+					parWidth=parent.clientWidth;
+					var posi={};
+					posi.x=(parWidth-(32*(ballSize+ballSpace)+20*7))/2;
+					posi.y=(parHeight-7*(ballSpace+ballSize))/2;
+					return posi;
+				}
+
+				function Ball (cssName,posi,par) {
+					this.x=posi.x;
+					this.y=posi.y;
+					this.dirX=Math.random()>0.5?Tool.random(1,5):-Tool.random(1,5);
+					this.dirY=-Tool.random(1,5);
+					var globel=Math.random();//默认的话是大于等于0小于1的
+					this.globel=globel<0.1?0.1:globel;
+					this.obj={};
+					this.par=par||parent;
+					this.timer=null;
+
+					this.init(cssName,posi);
+				}
+				Ball.prototype={
+					init:function (cssName,posi) {
+						this.obj=Tool.createElement({tagName:"span",className:cssName,text:""});
+						this.par.appendChild(this.obj);
+						with(this.obj.style){
+							height=ballSize+"px";
+							width=ballSize+"px";
+							position="absolute";
+							left=posi.x+"px";
+							top=posi.y+"px";
+						}
+					},
+					move:function () {
+						this.x+=this.dirX;
+						this.dirY+=this.globel;
+						this.y+=this.dirY;
+
+						if(this.x<0||this.x>parWidth){
+							clearInterval(this.timer);
+							this.par.removeChild(this.obj);
+							return;
+						}
+						if(this.y>parHeight-10&&this.dirY>0){
+							this.dirY*=-1;
+						}
+
+						this.obj.style.left=this.x+"px";
+						this.obj.style.top=this.y+"px";
+					},
+					animate:function () {
+						var self=this;
+						self.timer=setInterval(function () {
+							self.move();
+						},16);
+					}
+				}
+
+				function Clock (posi) {
+					this.curTime=[];
+					this.oldTime=[];
+					this.objs=[];
+					this.animObjs={};
+					this.curModel=[];
+					this.oldModel=[];
+					this.posi=posi;
+
+					this.run();
+				}
+				Clock.prototype={
+					getTime:function () {
+						//clear animObjs ?
+						this.animObjs={};//如果不清空的话他就会保留前面的对象，之后的动画就无法触发
+
+						this.oldTime=this.curTime;
+						var time=new Date(),
+							h=time.getHours(),
+							m=time.getMinutes(),
+							s=time.getSeconds();
+						this.curTime=[
+							Math.floor(h/10),
+							h%10,
+							Math.floor(m/10),
+							m%10,
+							Math.floor(s/10),
+							s%10
+						];
+					},
+					run:function () {
+						var self=this;
+						self.getTime();
+						self.cNum();
+
+						setTimeout(function () {
+							self.run();
+						},1000);//setTimeout,setInterval中的this都是window对象
+					},
+					cNum:function () {
+						this.getTimeModel(this.curTime,this.curModel);
+						if(this.oldTime&&this.oldTime.length){
+							this.getTimeModel(this.oldTime,this.oldModel);
+						}
+						this.drawTime();
+					},
+					getTimeModel:function (time,model) {
+						for (var i = 0; i < 7; i++) {
+							var temp=[];
+							for(var j=0;j<time.length;j++){
+								temp.push(NUM[i].substr(time[j]*4,4));
+								if(j==1||j==3){
+									temp.push(NUM[i].substr(40,4));
+								}
+							}
+							model[i]=temp.join('');
+						};
+					},
+					drawTime:function () {
+						var index=0;
+						for (var i = 0; i < this.curModel.length; i++) {
+							for (var j = 0; j < this.curModel[i].length; j++) {
+								var _char=this.curModel[i].charAt(j);
+								var cssName="gray";
+								if(_char=="#"){
+									if(Math.floor(j/4)<3){
+										cssName="red";
+									}else if(Math.floor(j/4)<6){
+										cssName="blue";
+									}else if(Math.floor(j/4)<8){
+										cssName="green";
+									}
+								}
+								if(this.objs.length>=4*8*7){
+									var self=this;
+									with(self.objs[index].obj){
+										className=cssName;
+										// style.left=self.posi.x+j*(ballSize+ballSpace)+Math.floor(j/4)*20+"px";
+										// style.top=self.posi.y+i*(ballSpace+ballSize)+"px";
+									}
+								}else{
+									this.objs.push(new Ball(cssName,{
+										x:this.posi.x+j*(ballSize+ballSpace)+Math.floor(j/4)*20,
+										y:this.posi.y+i*(ballSpace+ballSize)
+									}))
+								}
+
+								//动画部分
+								if(this.oldModel.length==7){
+									var _ochar=this.oldModel[i].charAt(j);
+									if(_ochar=="#"&&_char==" "){
+										var name='b_'+i+'_'+j,
+											_cssName;
+										if(Math.floor(j/4)<3){
+											_cssName="red";
+										}else if(Math.floor(j/4)<6){
+											_cssName="blue";
+										}else if(Math.floor(j/4)<8){
+											_cssName="green";
+										}
+										if(!this.animObjs[name]){//如果原来不存在
+											this.animObjs[name]=new Ball(_cssName,{
+												x:this.posi.x+j*(ballSize+ballSpace)+Math.floor(j/4)*20,
+												y:this.posi.y+i*(ballSpace+ballSize)
+											});
+											this.animObjs[name].animate();
+										}
+									}
+								}
+								index++;
+							};
+						};
+					}
+				}
+
+
+				Tool.addEvent(win,"load",function (event) {
+					event=event||win.event;
+					parent=Tool.$("screen");
+					var posi=resize();
+					var clock=new Clock(posi);
+				})
+			})(window);
+		})();
+	</script>
+</body>
+</html>

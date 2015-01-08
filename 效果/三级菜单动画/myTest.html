@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.menu{
+			padding: 10px; border: solid 1px #444; background-color: #F8F8F8; margin: 30px auto; height: 500px; width: 360px;
+		}
+		#menu *{
+			padding: 0px; margin: 0px; list-style: none; font-size: 12px; line-height: 14px;
+		}
+		#menu a{
+			color: #333; text-decoration: none; cursor: pointer; vertical-align: middle;
+		}
+		#menu a:hover{
+			color: green;
+		}
+		#menu li ul{
+			background: url("http://sandbox.runjs.cn/uploads/rs/267/g3ugugjp/line_conn.gif") repeat-y 0 0; padding-left: 18px; overflow: hidden; display: none;
+		}
+		/*最后一个ul没有前面的点点点*/
+		#menu li ul.isLastUl{
+			background: none;
+		}
+		/*注意CSS执行顺序和优先权*/
+		#menu li input{
+			width: 18px; height: 18px;background: url("http://sandbox.runjs.cn/uploads/rs/267/g3ugugjp/zTreeStandard.gif") no-repeat; border: none; cursor: pointer; vertical-align: middle; outline: 0px;
+		}
+		#menu li span input{
+			width: 16px; height: 16px; cursor: default; vertical-align: middle;
+		}
+		/*s1 s2,s3 s4,s5 s6是一对，奇数表示折叠状态，偶数表示展开状态,s1表示最上面没有点，s5表示下面没有点*/
+		#menu .s1{background-position:-44px 0;}
+		#menu .s2{background-position:-62px 0;}
+		#menu .s3{background-position:-44px -18px;}
+		#menu .s4{background-position:-62px -18px;}
+		#menu .s5{background-position:-44px -36px;}
+		#menu .s6{background-position:-62px -36px;}
+		/*最里层的ul图标，e3表示最后一个节点，它的下部分是没有点点点的*/
+		#menu .e1{background-position:-26px -18px; cursor:default;}
+		#menu .e3{background-position:-26px -36px; cursor:default;}
+		/*r1,r2表示文件夹图标的打开还是折叠*/
+		#menu .r2{background-position:-80px -16px; margin-right:2px;}
+		#menu .r1{background-position:-80px -0; margin-right:2px;}
+		/*文件图标*/
+		#menu .m1{background-position:-80px -32px; margin-right:2px;}
+	</style>
+</head>
+<body>
+	<div class="menu" id="menu">
+		<!-- <ul class="container">
+			<li>
+				<input class="s1" type="button" value="">
+				<span class="r1"><input class="r1" type="button" value=""><a>父级</a></span>
+				<ul>
+					<li>子级</li>
+					<li>子级</li>
+					<li>子级</li>
+				</ul>
+			</li>
+			<li>
+				<input class="s3" type="button" value="">
+				<span class="r1"><input class="r1" type="button" value=""><a>父级</a></span>
+				<ul>
+					<li>子级</li>
+				</ul>
+			</li>
+			<li>
+				<input class="s5" type="button" value="">
+				<span class="r1"><input class="r1" type="button" value=""><a>父级</a></span>
+				<ul>
+					<li>子级</li>
+				</ul>
+			</li>
+		</ul> -->
+	</div>
+	<script>
+		(function (){
+			function data (layer) {
+				var arr=[];
+				for (var i = 0; i < 8; i++) {
+					if(layer<2){
+						var temp={
+							id:i,//干嘛用的
+							name:"菜单"+layer+"_"+i,
+							next:arguments.callee(layer+1)
+						}
+						arr.push(temp);
+					}
+					else{
+						var temp={
+							id:i,
+							name:"菜单"+layer+"_"+i,
+							next:layer
+						}
+						arr.push(temp);
+					}
+				}
+				return arr;
+			}
+			function getItem (type,className,name) {
+				var res="";
+				// 没有空白符所以中间不会有文本节点存在
+				if(type===1){
+					res+="<li><input type='button' onclick='api.changeStatus(this);' class='"+className+"'/><span><input type='button' class='r1'/><a>"+name+"</a></span>";
+				}else{
+					res+="<li><input type='button' class='"+className+"'/><span><input type='button' class='m1'/><a href='www.baidu.com' target='_blank'>"+name+"</a></span>";
+				}
+				return res;
+			}
+			api={
+				options:{flag:true,toOpenElem:{},toCloseElem:{},height:0},//height:用于展开时要展开的高度
+				init:function (arr,isLastUl) {
+					var conStr="<ul"+(isLastUl?" class='isLastUl'":"")+">";
+					for (var i = 0; i < arr.length; i++) {
+						if(typeof arr[i].next==="object"){
+							var className=(i==0&&this.options.flag?'s1':(i+1==arr.length?'s5':'s3'));
+							conStr+=getItem(1,className,arr[i].name);//getItem是全局属性，可以访问到
+							this.options.flag=false;//flag判断是否为第一层的第一个节点
+							conStr+=this.init(arr[i].next,(i+1==arr.length));//当前的第i个节点+1如果等于当前的数组长度就说明是的最后一ul
+						}else{
+							var className=(i+1)==arr.length?"e3":"e1";
+							conStr+=getItem(0,className,arr[i].name);
+						}
+						conStr+="</li>";
+					};
+					conStr+="</ul>";
+					return conStr;
+				},
+				changeStatus:function (elem) {
+					var className=elem.className.substr(1);
+					//判断当前展开还是折叠,偶数：展开状态
+					if(className%2){
+						this.options.toOpenElem=elem.parentNode.children[2];//children非标准属性
+						this.options.height=this.getHeight(this.options.toOpenElem);//都不能省略this，因为api并不是函数，这里不是函数闭包，是api的属性不是变量
+						var tempHei=this.options.height/10;
+						this.unfold(1,tempHei);
+						elem.className="s"+(parseInt(className)+1);
+						elem.parentNode.children[1].children[0].className="r2";
+						var formerOpened=elem.parentNode.parentNode.formerOpened;
+						if(typeof formerOpened=="object"){
+							this.options.toCloseElem=formerOpened;
+							// this.options.height=formerOpened.offsetHeight;
+							this.fold(1,formerOpened.offsetHeight/10);
+							var formerPar=formerOpened.parentNode;
+							formerPar.children[0].className="s"+(parseInt(formerPar.children[0].className.substr(1))-1);
+							formerPar.children[1].children[0].className="r1";
+						}
+						elem.parentNode.parentNode.formerOpened=elem.parentNode.children[2];
+					}else{
+						this.options.toCloseElem=elem.parentNode.children[2];
+						this.options.height=this.options.toCloseElem.offsetHeight;
+						var tempHei=this.options.height/10;
+						this.fold(1,tempHei);
+						elem.className='s'+(parseInt(className)-1);
+						elem.parentNode.children[1].children[0].className="r1";
+						elem.parentNode.parentNode.formerOpened="";
+					}
+				},
+				fold:function (count,tempHei) {
+					var h1=(11/(count+1)-1)*tempHei;
+					with(this.options.toCloseElem.style){
+						height=h1+"px";
+					}
+					if(count<10){
+						var that=this;
+						setTimeout(function(){
+							that.fold(count+1,tempHei);
+						},25);
+					}else{
+						with(this.options.toCloseElem.style){
+							height="";
+							display="none";
+						}
+					}
+				},
+				unfold:function (count,tempHei) {
+					var h1=this.options.height-(11/(count+1)-1)*tempHei;
+					this.options.toOpenElem.style.height=h1+"px";
+					this.options.toOpenElem.style.display="block";
+					if(count<10){
+						var that=this;
+						setTimeout(function(){
+							that.unfold(count+1,tempHei);
+						},25);
+					}else{
+						// this.options.toOpenElem.style.display="block";
+						this.options.toOpenElem.style.height="";
+					}
+				},
+				getHeight:function (elem) {
+					// var temp=elem.cloneNode(true);
+					// temp.style.position="absolute";
+					// temp.style.display="block";
+					// elem.parentNode.appendChild(temp);
+					// var hei=temp.offsetHeight;
+					// elem.parentNode.removeChild(temp);
+					// return hei;
+					//或
+					elem.style.display="block";
+					var tmp= elem.offsetHeight;//当display=none时值为0
+					elem.style.display="none";
+					return tmp;
+					
+				}
+			};
+
+			window.onload=function () {
+				document.getElementById("menu").innerHTML=api.init(data(0));
+			};
+		})();
+	</script>
+</body>
+</html>

@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>RunJS</title>
+	<style>
+		body{
+			background-color: #111736;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		var canvas = document.createElement('canvas');
+		canvas.innerHTML = '您的浏览器还不支持HTML5';
+		document.body.appendChild(canvas);
+
+		function log(a, b) {
+			if (log.count < 10) {
+				console.log(a);//向web控制台输出一条消息
+				(b != undefined) && console.log(b);
+				log.count++;
+			}
+		}
+		log.count = 0;
+
+		(function(exports, undefined) {
+			function Vector(x, y) {
+				this.x = x;
+				this.y = y;
+			}
+			Vector.prototype = {
+				addSelf: function(v) {
+					this.x += v.x;
+					this.y += v.y;
+					return this;
+				},
+				subSelf: function(v) {
+					this.x -= v.x;
+					this.y -= v.y;
+					return this;
+				},
+				mulSelf: function(n) {
+					this.x *= n;
+					this.y *= n;
+					return this;
+				},
+				divSelf: function(n) {
+					this.x /= n;
+					this.y /= n;
+					return this;
+				},
+				set: function(x, y) {
+					this.x = x;
+					this.y = y;
+				},
+				setLength: function(n) {
+					return this.getNormal().mulSelf(n);
+				},
+				getLength: function() {
+					return Math.sqrt(this.x * this.x + this.y * this.y);
+				},
+				getNormal: function() {
+					return new Vector(this.x / this.getLength(), this.y / this.getLength());
+				},
+				normalize: function() {
+					var length = this.getLength();
+					this.x = this.x / length;
+					this.y = this.y / length;
+					return this;
+				},
+				equal: function(v) {
+					return v.x == this.x && v.y == this.y;
+				},
+				reverse: function() {
+					return new Vector(-this.x, -this.y);
+				},
+				getRadian: function() {
+					return -Math.atan2(this.x, this.y);
+				},
+				add: function(v) {
+					return new Vector(this.x + v.x, this.y + v.y);
+				},
+				sub: function(v) {
+					return new Vector(this.x - v.x, this.y - v.y);
+				},
+				mul: function(num) {
+					return new Vector(this.x * num, this.y * num);
+				},
+				div: function(num) {
+					return new Vector(this.x / num, this.y / num);
+				},
+				dot: function(v) {
+					return this.x * v.x + this.y * v.y;
+				},
+				cross: function(v) {
+					return this.x * v.y - this.y * v.x;
+				},
+				rotate: function(radian) {
+					return new Vector(this.x * Math.cos(radian) + this.y * Math.sin(radian), -this.x * Math.sin(radian) + this.y * Math.cos(radian));
+				},
+				shadowTo: function(v) {
+					return v.getNormal().mul(this.mapping(v));
+				},
+				shadowToNormal: function(v) {
+					return this.sub(this.shadowTo(v));
+				},
+				mapping: function(v) {
+					return this.dot(v) / v.getLength();
+				},
+				reflexBy: function(v) {
+					var n = this.shadowTo(v);
+					return n.mulSelf(2).sub(this);
+				}
+			}
+
+			var signed2DTriArea = function(pointA, pointB, pointC) {
+				return ((pointA.x - pointC.x) * (pointB.y - pointC.y) - (pointA.y - pointC.y) * (pointB.x - pointC.x));
+			};
+
+			function LineSegment(va, vb) {
+				this.a = va;
+				this.b = vb;
+			}
+			LineSegment.prototype = {
+				intersectLineSegments: function(another) {
+					var a1 = signed2DTriArea(this.a, this.b, another.b);
+					var a2 = signed2DTriArea(this.a, this.b, another.a);
+					if (a1 * a2 < 0) {
+						var a3 = signed2DTriArea(another.a, another.b, this.a);
+						var a4 = a3 + a2 - a1;
+						if (a3 * a4 < 0) {
+							return true;
+						}
+					}
+					if (this.isIn(another.b) || this.isIn(another.a) || another.isIn(this.b) || another.isIn(this.a)) {
+						return true;
+					}
+					return false;
+				},
+				isIn: function(v) {
+					var av = this.a.sub(v),
+						bv = this.b.sub(v);
+					var cross = av.cross(bv);
+
+					if (cross == 0) {
+						return av.x * bv.x <= 0 && av.y * bv.y <= 0;
+					}
+					return false;
+				},
+				getDist: function(v) {
+					var ba = this.a.sub(this.b),
+						av = v.sub(this.a),
+						bv = v.sub(this.b);
+					if (ba.dot(bv) * ba.dot(av) < 0) {
+						return av.shadowToNormal(ba).getLength();
+					} else {
+						return Math.min(av.getLength(), bv.getLength());
+					}
+
+				}
+			}
+
+			function Path() {
+				this.lines = [];
+			}
+			Path.prototype = {
+				moveTo: function(x, y) {
+					this.start = new Vector(x, y);
+					this.head = this.start;
+				},
+				lineTo: function(x, y) {
+					if (this.start) {
+						var end = new Vector(x, y);
+						this.lines.push(new LineSegment(this.start, end));
+						this.start = end;
+					}
+				},
+				close: function() {
+					if (this.start && this.lines.length > 0) {
+						if (this.head.equal(this.start)) {
+							return;
+						} else {
+							this.lineTo(this.head.x, this.head.y);
+						}
+
+					}
+				},
+				each: function(cb) {
+					this.lines.every(cb);
+				},
+				fixup: function(context) {
+					context.beginPath();
+					this.lines.forEach(function(line) {
+						context.moveTo(line.a.x, line.a.y);
+						context.lineTo(line.b.x, line.b.y);
+					})
+				}
+			}
+
+			exports.Vector = Vector;
+			exports.LineSegment = LineSegment;
+			exports.Path = Path;
+		})(window);
+
+		var clockArray = {
+			all: (function() {
+				var arr = [];
+				for (var i = 0; i < 7; i++)
+					for (var j = 0; j < 4; j++) {
+						arr.push({
+							x: j,
+							y: i
+						});
+					}
+				return arr;
+			})(),
+			d1: (function() {
+				var arr = [];
+				for (var i = 0; i < 7; i++)
+					arr.push({
+						x: 3,
+						y: i
+					});
+				return arr;
+			})(),
+			d2: (function() {
+				var arr = [];
+				arr.push({
+					x: 0,
+					y: 0
+				});
+				arr.push({
+					x: 1,
+					y: 0
+				});
+				arr.push({
+					x: 2,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 1
+				});
+				arr.push({
+					x: 3,
+					y: 2
+				});
+				arr.push({
+					x: 0,
+					y: 3
+				});
+				arr.push({
+					x: 1,
+					y: 3
+				});
+				arr.push({
+					x: 2,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 3
+				});
+				arr.push({
+					x: 0,
+					y: 4
+				});
+				arr.push({
+					x: 0,
+					y: 5
+				});
+				arr.push({
+					x: 0,
+					y: 6
+				});
+				arr.push({
+					x: 1,
+					y: 6
+				});
+				arr.push({
+					x: 2,
+					y: 6
+				});
+				arr.push({
+					x: 3,
+					y: 6
+				});
+				return arr;
+			})(),
+			d3: (function() {
+				var arr = [];
+				arr.push({
+					x: 0,
+					y: 0
+				});
+				arr.push({
+					x: 1,
+					y: 0
+				});
+				arr.push({
+					x: 2,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 1
+				});
+				arr.push({
+					x: 3,
+					y: 2
+				});
+				arr.push({
+					x: 0,
+					y: 3
+				});
+				arr.push({
+					x: 1,
+					y: 3
+				});
+				arr.push({
+					x: 2,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 4
+				});
+				arr.push({
+					x: 3,
+					y: 5
+				});
+				arr.push({
+					x: 0,
+					y: 6
+				});
+				arr.push({
+					x: 1,
+					y: 6
+				});
+				arr.push({
+					x: 2,
+					y: 6
+				});
+				arr.push({
+					x: 3,
+					y: 6
+				});
+				return arr;
+			})(),
+			d4: (function() {
+				var arr = [];
+				arr.push({
+					x: 0,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 0
+				});
+				arr.push({
+					x: 0,
+					y: 1
+				});
+				arr.push({
+					x: 3,
+					y: 1
+				});
+				arr.push({
+					x: 0,
+					y: 2
+				});
+				arr.push({
+					x: 3,
+					y: 2
+				});
+				arr.push({
+					x: 0,
+					y: 3
+				});
+				arr.push({
+					x: 1,
+					y: 3
+				});
+				arr.push({
+					x: 2,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 4
+				});
+				arr.push({
+					x: 3,
+					y: 5
+				});
+				arr.push({
+					x: 3,
+					y: 6
+				});
+				return arr;
+			})(),
+			d5: (function() {
+				var arr = [];
+				arr.push({
+					x: 0,
+					y: 0
+				});
+				arr.push({
+					x: 1,
+					y: 0
+				});
+				arr.push({
+					x: 2,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 0
+				});
+				arr.push({
+					x: 0,
+					y: 1
+				});
+				arr.push({
+					x: 0,
+					y: 2
+				});
+				arr.push({
+					x: 0,
+					y: 3
+				});
+				arr.push({
+					x: 1,
+					y: 3
+				});
+				arr.push({
+					x: 2,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 4
+				});
+				arr.push({
+					x: 3,
+					y: 5
+				});
+				arr.push({
+					x: 0,
+					y: 6
+				});
+				arr.push({
+					x: 1,
+					y: 6
+				});
+				arr.push({
+					x: 2,
+					y: 6
+				});
+				arr.push({
+					x: 3,
+					y: 6
+				});
+				return arr;
+			})(),
+			d6: (function() {
+				var arr = [];
+				arr.push({
+					x: 0,
+					y: 0
+				});
+				arr.push({
+					x: 1,
+					y: 0
+				});
+				arr.push({
+					x: 2,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 0
+				});
+				arr.push({
+					x: 0,
+					y: 1
+				});
+				arr.push({
+					x: 0,
+					y: 2
+				});
+				arr.push({
+					x: 0,
+					y: 3
+				});
+				arr.push({
+					x: 1,
+					y: 3
+				});
+				arr.push({
+					x: 2,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 3
+				});
+				arr.push({
+					x: 0,
+					y: 4
+				});
+				arr.push({
+					x: 0,
+					y: 5
+				});
+				arr.push({
+					x: 3,
+					y: 4
+				});
+				arr.push({
+					x: 3,
+					y: 5
+				});
+				arr.push({
+					x: 0,
+					y: 6
+				});
+				arr.push({
+					x: 1,
+					y: 6
+				});
+				arr.push({
+					x: 2,
+					y: 6
+				});
+				arr.push({
+					x: 3,
+					y: 6
+				});
+				return arr;
+			})(),
+			d7: (function() {
+				var arr = [];
+				arr.push({
+					x: 0,
+					y: 0
+				});
+				arr.push({
+					x: 1,
+					y: 0
+				});
+				arr.push({
+					x: 2,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 1
+				});
+				arr.push({
+					x: 3,
+					y: 2
+				});
+				arr.push({
+					x: 3,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 4
+				});
+				arr.push({
+					x: 3,
+					y: 5
+				});
+				arr.push({
+					x: 3,
+					y: 6
+				});
+				return arr;
+			})(),
+			d8: (function() {
+				var arr = [];
+				arr.push({
+					x: 0,
+					y: 0
+				});
+				arr.push({
+					x: 1,
+					y: 0
+				});
+				arr.push({
+					x: 2,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 0
+				});
+				arr.push({
+					x: 0,
+					y: 1
+				});
+				arr.push({
+					x: 3,
+					y: 1
+				});
+				arr.push({
+					x: 0,
+					y: 2
+				});
+				arr.push({
+					x: 3,
+					y: 2
+				});
+				arr.push({
+					x: 0,
+					y: 3
+				});
+				arr.push({
+					x: 1,
+					y: 3
+				});
+				arr.push({
+					x: 2,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 3
+				});
+				arr.push({
+					x: 0,
+					y: 4
+				});
+				arr.push({
+					x: 3,
+					y: 4
+				});
+				arr.push({
+					x: 0,
+					y: 5
+				});
+				arr.push({
+					x: 3,
+					y: 5
+				});
+				arr.push({
+					x: 0,
+					y: 6
+				});
+				arr.push({
+					x: 1,
+					y: 6
+				});
+				arr.push({
+					x: 2,
+					y: 6
+				});
+				arr.push({
+					x: 3,
+					y: 6
+				});
+				return arr;
+			})(),
+			d9: (function() {
+				var arr = [];
+				arr.push({
+					x: 0,
+					y: 0
+				});
+				arr.push({
+					x: 1,
+					y: 0
+				});
+				arr.push({
+					x: 2,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 0
+				});
+				arr.push({
+					x: 0,
+					y: 1
+				});
+				arr.push({
+					x: 3,
+					y: 1
+				});
+				arr.push({
+					x: 0,
+					y: 2
+				});
+				arr.push({
+					x: 3,
+					y: 2
+				});
+				arr.push({
+					x: 0,
+					y: 3
+				});
+				arr.push({
+					x: 1,
+					y: 3
+				});
+				arr.push({
+					x: 2,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 4
+				});
+				arr.push({
+					x: 3,
+					y: 5
+				});
+				arr.push({
+					x: 0,
+					y: 6
+				});
+				arr.push({
+					x: 1,
+					y: 6
+				});
+				arr.push({
+					x: 2,
+					y: 6
+				});
+				arr.push({
+					x: 3,
+					y: 6
+				});
+				return arr;
+			})(),
+			d0: (function() {
+				var arr = [];
+				arr.push({
+					x: 0,
+					y: 0
+				});
+				arr.push({
+					x: 1,
+					y: 0
+				});
+				arr.push({
+					x: 2,
+					y: 0
+				});
+				arr.push({
+					x: 3,
+					y: 0
+				});
+				arr.push({
+					x: 0,
+					y: 1
+				});
+				arr.push({
+					x: 3,
+					y: 1
+				});
+				arr.push({
+					x: 0,
+					y: 2
+				});
+				arr.push({
+					x: 3,
+					y: 2
+				});
+				arr.push({
+					x: 0,
+					y: 3
+				});
+				arr.push({
+					x: 3,
+					y: 3
+				});
+				arr.push({
+					x: 0,
+					y: 4
+				});
+				arr.push({
+					x: 3,
+					y: 4
+				});
+				arr.push({
+					x: 0,
+					y: 5
+				});
+				arr.push({
+					x: 3,
+					y: 5
+				});
+				arr.push({
+					x: 0,
+					y: 6
+				});
+				arr.push({
+					x: 1,
+					y: 6
+				});
+				arr.push({
+					x: 2,
+					y: 6
+				});
+				arr.push({
+					x: 3,
+					y: 6
+				});
+				return arr;
+			})()
+
+		};
+		(function(exports) {
+			var requestAnimFrame = (function() {
+				return window.requestAnimationFrame ||
+					window.webkitRequestAnimationFrame ||
+					window.mozRequestAnimationFrame ||
+					window.oRequestAnimationFrame ||
+					window.msRequestAnimationFrame ||
+					function(callback) {
+						window.setTimeout(callback, 1000 / 60);
+				};
+			})();
+
+
+			var loops = [];
+
+			function Loop(callback, name, that) {
+				if (this === window)
+					throw 'err';
+				loops.push({
+					name: name,
+					instance: this
+				});
+				this.callback = callback;
+				this.context = that;
+				this.steps = [];
+			}
+			Loop.clear = function() {
+				loops.forEach(function(loop) {
+					loop.instance.pause();
+				});
+				loops = [];
+			}
+			Loop.destroy = function(name, onEnd) {
+				loops.forEach(function(loop, index, array) {
+					if (loop.name === undefined)
+						return;
+					if (loop.name === name) {
+						loop.instance.pause(onEnd);
+						array.splice(index, 1);
+						loops = array;
+					}
+				});
+			}
+			Loop.prototype = (function() {
+				function loop() {
+					if (!this.keepRunning) {
+						this.onEnd && this.onEnd();
+						delete this.onEnd;
+						return;
+					}
+					var self = this;
+					requestAnimFrame(function() {
+						var now = +new Date;
+						var dt = (now - self.lastTime);
+						if (dt >= 3000) {
+							dt = 250;
+						}
+
+						self.callback.call(self.context, dt / 1000);
+						self.steps.forEach(function(step, index, array) {
+							step.elapse += dt;
+							if (step.elapse >= step.interval) {
+								step.elapse = 0;
+								step.callback();
+								if (!step.repeat) {
+									//删除该项
+									array.splice(index, 1);
+									self.steps = array;
+								}
+							}
+						});
+						self.lastTime = now;
+						loop.call(self);
+					});
+				}
+				return {
+					start: function() {
+						this.keepRunning = true;
+						this.lastTime = +new Date();
+						loop.call(this);
+					},
+					// onEnd 当loop停止后立即回调执行
+					pause: function(onEnd) {
+						this.keepRunning = false;
+						this.onEnd = onEnd;
+					},
+					step: function(callback, interval, repeat) {
+						if (interval === undefined)
+							interval = 1000;
+						if (repeat === undefined)
+							repeat = true;
+						this.steps.push({
+							elapse: 0,
+							interval: interval,
+							callback: callback,
+							repeat: repeat
+						});
+						return this;
+					}
+				}
+			})();
+
+			function FPSCounter(interval) {
+				if (interval === undefined || interval === 0) {
+					interval = 3000;
+				}
+				this.interval = interval;
+				this.lastTime = +new Date();
+				this.count = 0;
+				this.elapse = 0;
+				this.fps = 0;
+			}
+			FPSCounter.prototype.process = function(dt) {
+				if (this.elapse < this.interval) {
+					this.elapse += dt;
+					this.count++;
+				} else {
+					this.fps = parseInt(this.count / this.elapse);
+					this.elapse = 0;
+					this.count = 0;
+				}
+			}
+			FPSCounter.prototype.process2 = function() {
+				var elapse = new Date().getTime() - this.lastTime;
+				if (elapse < this.interval) {
+					this.count++;
+				} else {
+					this.fps = parseInt(this.count / this.elapse);
+					this.lastTime = +new Date();
+					this.count = 0;
+				}
+			}
+			FPSCounter.prototype.output = function(fn) {
+				fn ? fn(this.fps) : console.log(this.fps);
+			}
+
+			function FPS_avg() {
+				this.lastTime = +new Date();
+				this.avg = 0;
+			}
+			FPS_avg.prototype.process = function(dt) {
+				var fps = parseInt(1 / dt);
+				fps = isNaN(fps) ? 0 : fps;
+				this.avg = parseInt(this.avg * 0.1 + fps * 0.9);
+			}
+			FPS_avg.prototype.output = function(fn) {
+				fn ? fn(this.avg) : console.log(this.avg);
+			}
+
+
+			exports.Loop = Loop;
+			exports.FPSCounter = FPSCounter;
+			exports.FPS_avg = FPS_avg;
+
+		})(window);
+
+		(function(window, undefined) {
+			var context = canvas.getContext('2d'),
+				w = canvas.width = 800,
+				h = canvas.height = 400,
+				DoublePI = Math.PI * 2;
+			canvas.style.border = '1px solid grey'
+			
+			function rand(s, e) {
+				return Math.random() * (e - s) + s;
+			}
+
+			var painter = {
+				drawCirle: function(pos, r, color) {
+					context.save();
+					context.fillStyle = color;
+					context.beginPath();
+					context.arc(pos.x, pos.y, r, 0, DoublePI, true);
+					context.fill();
+					context.restore();
+				}
+			}
+
+			function Ball(pos, color, r) {
+				this.pos = pos;
+				this.color = color;
+				this.r = r;
+				this.v = new Vector(0, 0);
+				this.dv = new Vector(0, 0);
+			}
+			Ball.prototype = {
+				draw: function() {
+					painter.drawCirle(this.pos, this.r, this.color);
+				},
+				update: function(dt) {
+					this.pos.addSelf(this.v.mul(dt));
+					this.v.addSelf(this.dv.mul(dt));
+				}
+			}
+
+			function Clock(x, y, color, r) {
+				this.x = x;
+				this.y = y;
+				this.r = r || 5;
+				this.color = color;
+				this.arr = [];
+			}
+			Clock.prototype = {
+				show: function(dArray) {
+					for (var i = 0; i < dArray.length; i++) {
+						var flag = false;
+						for (var j = 0; j < this.arr.length; j++) {
+							if (this.arr[j].x == dArray[i].x && this.arr[j].y == dArray[i].y) {
+								this.arr[j].check = true;
+								flag = true;
+							}
+						}
+						if (!flag) {
+							var t = new Ball(new Vector(this.x + dArray[i].x * this.r * 3, this.y + dArray[i].y * this.r * 3), this.color, this.r);
+							this.arr.push({
+								x: dArray[i].x,
+								y: dArray[i].y,
+								elem: t,
+								check: true
+							});
+							ground.addElement(t);
+						}
+					}
+
+					for (var i = 0; i < this.arr.length; i++) {
+						if (this.arr[i].check == false) {
+							this.arr[i].elem.dv.addSelf(new Vector(0, 200));
+							var r = rand(-1, 1);
+							if (r > 0) {
+								this.arr[i].elem.v.addSelf(new Vector(rand(-200, -50), rand(-100, 50)));
+							} else {
+								this.arr[i].elem.v.addSelf(new Vector(rand(50, 200), rand(-100, 50)));
+							}
+
+							this.arr.splice(i, 1);
+							i--;
+						}
+					}
+					for (var i = 0; i < this.arr.length; i++) {
+						this.arr[i].check = false;
+					}
+				}
+			}
+
+			function DigtalClock(x, y, r) {
+				var r = r || 5;
+				this.clock_hour1 = new Clock(x, y, 'red', r);
+				this.clock_hour2 = new Clock(x + 15 * r, y, 'red', r);
+				this.clock_min1 = new Clock(x + 36 * r, y, 'blue', r);
+				this.clock_min2 = new Clock(x + 51 * r, y, 'blue', r);
+				this.clock_sec1 = new Clock(x + 72 * r, y, 'green', r);
+				this.clock_sec2 = new Clock(x + 87 * r, y, 'green', r);
+
+				ground.addElement(new Ball(new Vector(x + 10 * r * 3, y + 2 * r * 3), 'gray', r));
+				ground.addElement(new Ball(new Vector(x + 10 * r * 3, y + 4 * r * 3), 'gray', r));
+
+				ground.addElement(new Ball(new Vector(x + 22 * r * 3, y + 2 * r * 3), 'gray', r));
+				ground.addElement(new Ball(new Vector(x + 22 * r * 3, y + 4 * r * 3), 'gray', r));
+			}
+			DigtalClock.prototype = {
+				cycle: function() {
+					var date = new Date();
+					var sec1 = Math.floor(date.getSeconds() / 10);
+					var sec2 = date.getSeconds() % 10;
+					var min1 = Math.floor(date.getMinutes() / 10);
+					var min2 = date.getMinutes() % 10;
+					var hour1 = Math.floor(date.getHours() / 10);
+					var hour2 = date.getHours() % 10;
+
+					this.clock_min1.show(clockArray['d' + min1]);
+					this.clock_min2.show(clockArray['d' + min2]);
+					this.clock_sec1.show(clockArray['d' + sec1]);
+					this.clock_sec2.show(clockArray['d' + sec2]);
+					this.clock_hour1.show(clockArray['d' + hour1]);
+					this.clock_hour2.show(clockArray['d' + hour2]);
+				}
+			}
+
+			var path, pathState = {
+				left: 300,
+				right: 300
+			};
+
+			function _createPath() {
+				path = new Path();
+				path.moveTo(0, pathState.left);
+				path.lineTo(w, pathState.right);
+				path.draw = function() {
+					context.save()
+					context.strokeStyle = 'black';
+					path.fixup(context);
+					context.stroke();
+					context.restore();
+				}
+			}
+			_createPath();
+
+			function process(balls, dt) {
+				balls.forEach(function(ball) {
+					var flag = false,
+						l,
+						sweptVolume = new LineSegment(ball.pos, ball.pos.add(ball.v.mul(dt)));
+					path.each(function(line) {
+						var ap = ball.pos.sub(line.a),
+							n = ap.shadowToNormal(line.b.sub(line.a)).setLength(ball.r),
+							line = new LineSegment(line.a.add(n), line.b.add(n)),
+							result = line.intersectLineSegments(sweptVolume);
+						if (result) {
+							flag = true;
+							l = line;
+						}
+						return !flag;
+					});
+					if (flag) {
+						var wall = l.b.sub(l.a);
+						ball.v = ball.v.reflexBy(wall);
+						var pa = l.a.sub(ball.pos),
+							offset = pa.shadowToNormal(wall).mul(2);
+						ball.pos.addSelf(offset);
+					}
+					/*						sweptVolume = new LineSegment(ball.pos, ball.pos.add( ball.v.mul(dt) ));
+								balls.every( function( b ){
+									if( ball === b ){
+										return true;
+									} else {
+										var length = sweptVolume.getDist( b.pos );	
+										if( length <= b.r + ball.r ){
+											var afterCollision = ball.pos.sub(b.pos).getNormal();
+											ball.v = afterCollision.mul(ball.v.getLength());
+											b.v = afterCollision.reverse().mul(b.v.getLength());
+										}
+										return true;
+									}
+								});*/
+					ball.update(dt);
+					if (flag) {
+						ball.v.y *= 0.6;
+					}
+
+				})
+			}
+
+			var ground = {
+				elems: [],
+				addElement: function(elem) {
+					this.elems.push(elem);
+				},
+				update: function(dt) {
+					var self = this;
+					process(this.elems, dt);
+					this.elems.forEach(function(elem, index) {
+						if (elem.pos.x < 0 || elem.pos.x > w || elem.pos.y > h) {
+							self.elems.splice(index, 1);
+						}
+					});
+				},
+				draw: function() {
+					context.clearRect(0, 0, w, h);
+					this.elems.forEach(function(elem) {
+						elem.draw();
+					});
+
+					path.draw();
+				}
+			}
+
+			var digtalClock = new DigtalClock(50, 80, 5);
+
+			var a = new Ball(new Vector(50, 50), 'red', 5);
+			a.v = new Vector(20, 20);
+			a.draw();
+
+			var loop = new Loop(function(dt) {//w其实是indow对象的属性
+				ground.update(dt);
+				ground.draw();
+			}).step(function() {
+				digtalClock.cycle();
+			}).start();//这里是启动函数
+
+		})(window);
+	</script>
+</body>
+</html>

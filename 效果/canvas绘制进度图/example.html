@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>RunJS</title>
+		<style>
+			body {
+				background: #333;
+			}
+			/*Centering the gauge*/
+			#canvas {
+				display: block;
+				width: 300px;
+				margin: 100px auto;
+			}
+			/*Custom font for numbers*/
+			@font-face {
+				font-family: "bebas";
+				src: url("http://thecodeplayer.com/uploads/fonts/BebasNeue.otf");
+			}		
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="300" height="300"/>
+		<script>
+			window.onload = function(){
+				//canvas initialization
+				var canvas = document.getElementById("canvas");
+				var ctx = canvas.getContext("2d");
+				//dimensions
+				var W = canvas.width;
+				var H = canvas.height;
+				//Variables
+				var degrees = 0;
+				var new_degrees = 0;
+				var difference = 0;
+				var color = "lightgreen"; //green looks better to me---进度条的颜色
+				var bgcolor = "#222";
+				var text;
+				var animation_loop, redraw_loop;//一个用来画一次的时候，另一个用来循环
+				
+				function init()
+				{
+					//Clear the canvas everytime a chart is drawn--每次都得重新画一遍，因为不是dom，不能操作单个元素。
+					ctx.clearRect(0, 0, W, H);
+					
+					//Background 360 degree arc
+
+					ctx.beginPath();
+					ctx.strokeStyle = bgcolor;
+					ctx.lineWidth = 30;
+					ctx.arc(W/2, H/2, 100, 0, Math.PI*2, false); //you can see the arc now
+					ctx.stroke();
+					
+					//gauge will be a simple arc
+					//Angle in radians = angle in degrees * PI / 180
+					var radians = degrees * Math.PI / 180;//弧度
+					ctx.beginPath();
+					// ctx.moveTo(W/2,H/2-100);
+					ctx.strokeStyle = color;
+					ctx.lineWidth = 30;
+					//The arc starts from the rightmost end. If we deduct 90 degrees from the angles
+					//the arc will start from the topmost end
+					ctx.arc(W/2, H/2, 100, 0 - 90*Math.PI/180, radians - 90*Math.PI/180, false); //让他从上边的店开始绘制，而不是从最水平方向上最右边的点开始绘制
+
+					//you can see the arc now
+					ctx.stroke();
+					
+					//Lets add the text
+					ctx.fillStyle = color;
+					ctx.font = "50px bebas";
+					text = Math.floor(degrees/360*100) + "%";//当前度数占的百分比
+					//Lets center the text
+					//deducting half of text width from position x
+					text_width = ctx.measureText(text).width;//测试宽度
+					//adding manual value to position y since the height of the text cannot
+					//be measured easily. There are hacks but we will keep it manual for now.
+					ctx.fillText(text, W/2 - text_width/2, H/2 + 15);//绘制文本
+				}
+				
+				function draw()
+				{
+					//Cancel any movement animation if a new chart is requested
+					if(typeof animation_loop != undefined) clearInterval(animation_loop);
+					
+					//random degree from 0 to 360
+					new_degrees = Math.round(Math.random()*360);
+					difference = new_degrees - degrees;//新的度数和原来的度数之差，相差越大，则绘制的时间间隔就得越短--负数怎么办
+					//This will animate the gauge to new positions
+					//The animation will take 1 second
+					//time for each frame is 1sec / difference in degrees
+					animation_loop = setInterval(animate_to, 1000/difference);//
+				}
+				
+				//function to make the chart move to new degrees
+				function animate_to()
+				{
+					//clear animation loop if degrees reaches to new_degrees
+					if(degrees == new_degrees) 
+						clearInterval(animation_loop);
+					
+					if(degrees < new_degrees)
+						degrees++;
+					else
+						degrees--;
+						
+					init();
+				}
+				
+				//Lets add some animation for fun
+				draw();
+				redraw_loop = setInterval(draw, 2000); //Draw a new chart every 2 seconds
+				
+				
+				
+				
+			}
+		</script>
+	</body>
+</html>

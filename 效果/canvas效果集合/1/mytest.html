@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		* { 
+			margin: 0; 
+			padding: 0 
+		}
+		body {
+		    background: black;
+		}
+		canvas {
+		    background: black;
+		    display: block;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script>
+		(function () {
+			var secen=function () {
+				var canvas=document.getElementById("canvas"),
+					ctx=canvas.getContext("2d"),
+					boundry=null,
+					vx=0,
+					vy=0;//vx,vy就是速度
+
+				var consts={
+					SPRING:0.05,/*距离系数*/
+					BOUNCE:-0.9,/*撞墙之后减小的速度*/
+					FRICTION:0.95,/*摩擦系数*/
+				};
+				var ball={
+					x:0,
+					y:0,
+					radius:40
+				};
+				var mouse={
+					x:0,
+					y:0
+				}
+
+				function _init () {
+					canvas.height=window.innerHeight;
+					canvas.width=window.innerWidth;
+					boundry={
+						top:0,
+						bottom:canvas.height,
+						left:0,
+						right:canvas.width
+					};
+					canvas.addEventListener("mousemove",function (e) {
+						mouse.x=e.clientX;
+						mouse.y=e.clientY;
+					});
+				}
+				function _update () {//有弹性
+					// var _boundry=boundry,_ball=ball;//作用域问题，提高性能
+					requestAnimationFrame(arguments.callee);
+					// ball.x=Math.max(boundry.left+ball.radius,Math.min(ball.x,right-ball.radius));
+					if (ball.x + ball.radius > boundry.right) {
+					    ball.x = boundry.right - ball.radius;
+					    vx *= consts.BOUNCE;//降低能量
+					} else if (ball.x - ball.radius < boundry.left) {
+					    ball.x = boundry.left + ball.radius;
+					    vx *= consts.BOUNCE;
+					}
+					if (ball.y + ball.radius > boundry.bottom) {
+					    ball.y = boundry.bottom - ball.radius;
+					    vy *= consts.BOUNCE;
+					} else if (ball.y - ball.radius < boundry.top) {
+					    ball.y = boundry.top + ball.radius;
+					    vy *= consts.BOUNCE;
+					}
+
+					/*
+					* 弹性运动距离中心点时速度越来越快，加速度越来越小
+					* 速度公式：v=v+a ,这里的加速度a=(mouse.x - ball.x) * consts.SPRING ,
+					* 位移公式：x=x+v;
+					* 因为两个物体之间的距离很大，如果直接把这么大的值加到速度上去，物体的运动速度会过快，这样视觉效果会很差，所以我们要把距离缩小一定的比例然后再作为加速度使用。
+					* 弹性公式：速度 += (目标位置-当前位置)/距离系数; 速度 *= 摩擦系数;
+					* 距离系数，可以选择比1大的值，但不能太小，摩擦系数一定要选择一个比1小的数字，这样，速度才能越来越小，表现出摩擦的效果。
+					* 弹性运动停止条件：第一，小球已经运动的很慢很慢了;第二，小球和那个钉子的距离，已经很近了
+					* 参考网址：http://hi.baidu.com/desmoss/item/eb216e173a0ab2ec756a849e
+					*/
+					vx += (mouse.x - ball.x) * consts.SPRING,
+					vy += (mouse.y - ball.y) * consts.SPRING;
+					vx *= consts.FRICTION;//让速度不断变小，这样就可以模拟摩擦力的效果
+					vy *= consts.FRICTION;
+
+					ball.x += vx;
+					ball.y += vy;
+
+					_draw();
+				}
+				function _update2 () {//跟随鼠标移动，没有过程
+					requestAnimationFrame(arguments.callee);
+
+					vx = mouse.x-ball.x;
+					vy = mouse.y-ball.y;
+
+					ball.x += vx;
+					ball.y += vy;
+
+					_draw();
+				}
+				function _update3 () {//缓慢移动到目的地，没有弹性
+					requestAnimationFrame(arguments.callee);
+					if (ball.x + ball.radius > boundry.right) {
+					    ball.x = boundry.right - ball.radius;
+					} else if (ball.x - ball.radius < boundry.left) {
+					    ball.x = boundry.left + ball.radius;
+					}
+					if (ball.y + ball.radius > boundry.bottom) {
+					    ball.y = boundry.bottom - ball.radius;
+					} else if (ball.y - ball.radius < boundry.top) {
+					    ball.y = boundry.top + ball.radius;
+					}
+
+					vx = (mouse.x - ball.x) * consts.SPRING,
+					vy = (mouse.y - ball.y) * consts.SPRING;
+					// vx *= consts.FRICTION;//这里加上去是没什么太大影响的
+					// vy *= consts.FRICTION;
+
+					ball.x += vx;
+					ball.y += vy;
+
+					_draw();
+				}
+				function _update4 () {//错误的
+					requestAnimationFrame(arguments.callee);
+					if (ball.x + ball.radius > boundry.right) {
+					    ball.x = boundry.right - ball.radius;
+					    vx *= consts.BOUNCE;
+					} else if (ball.x - ball.radius < boundry.left) {
+					    ball.x = boundry.left + ball.radius;
+					    vx *= consts.BOUNCE;
+					}
+					if (ball.y + ball.radius > boundry.bottom) {
+					    ball.y = boundry.bottom - ball.radius;
+					    vy *= consts.BOUNCE;
+					} else if (ball.y - ball.radius < boundry.top) {
+					    ball.y = boundry.top + ball.radius;
+					    vy *= consts.BOUNCE;
+					}
+
+					vx += (mouse.x - ball.x) * consts.SPRING,
+					vy += (mouse.y - ball.y) * consts.SPRING;
+					// vx *= consts.FRICTION;
+					// vy *= consts.FRICTION;
+
+					ball.x += vx;
+					ball.y += vy;
+
+					_draw();
+				}
+				function _draw () {
+					ctx.clearRect(0,0,canvas.width,canvas.height);
+					//线
+					ctx.beginPath();
+					ctx.strokeStyle="#fff";
+					ctx.moveTo(ball.x,ball.y);
+					ctx.lineTo(mouse.x,mouse.y);
+					ctx.closePath();
+					ctx.stroke();
+					// 球
+					ctx.beginPath();
+					ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, false);
+					ctx.fillStyle = 'red';
+					ctx.fill();
+				}
+
+				return {
+					init:_init,
+					update:_update
+					// update:_update2
+					// update:_update3
+					// update:_update4
+				};
+			}();
+
+			secen.init();
+			secen.update();
+		})();
+	</script>
+</body>
+</html>

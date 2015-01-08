@@ -1,0 +1,175 @@
+<!DOCTYPE>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>2048</title>
+<link rel="stylesheet" type="text/css" href="2048.css" />
+</head>
+
+<body>
+	<div id="div2048">
+        <a id="start">点击开始</a>
+    </div>
+   <!-- <div>游戏规则很简单，每次可以选择上下左右其中一个方向去滑动，每滑动一次，所有的数字方块都会往滑动的方向靠拢外，系统也会在空白的地方乱数出现一个数字方块，相同数字的方块在靠拢、相撞时会相加。系统给予的数字方块不是2就是4，玩家要想办法在这小小的16格范围中凑出“2048”这个数字方块。</div> -->
+    <script>
+        function Game2048 (container) {
+            this.tiles=new Array(16);
+            this.container=container;
+        }
+        Game2048.prototype ={
+            init:function () {
+                for (var i = 0; i < this.tiles.length; i++) {
+                    var ntile=this.getNewTile(0);
+                    this.container.appendChild(ntile);
+                    this.tiles[i]=ntile;
+                };
+                this.randomTile();
+                this.randomTile();
+
+                this.createEvent();
+            },
+            getNewTile:function (val) {
+                var ntile=document.createElement("div");
+                this.setTileValue(ntile,val);
+                return ntile;
+            },
+            setTileValue:function (tile,val) {
+                tile.setAttribute("val",val);
+                tile.className="tile tile"+val;
+                tile.innerHTML=val>0?val:"";
+            },
+            randomTile:function () {
+                var canUseTiles=[];
+                for (var i = 0; i < this.tiles.length; i++) {
+                    if(this.tiles[i].getAttribute("val")==0){
+                        canUseTiles.push(this.tiles[i]);
+                    }
+                };
+                var rnum=Math.floor(Math.random()*canUseTiles.length);
+                var rval=Math.random() < 0.8 ? 2 : 4;
+                this.setTileValue(canUseTiles[rnum],rval);
+            },
+            createEvent:function () {
+                var self=this;
+                document.onkeydown=function (event) {
+                    event=event||window.event;
+                    var keycode=event.keyCode;
+                    var effectKey=[37,38,39,40];//37：左  38：上    39：右    下：40
+                    if(effectKey.indexOf(keycode)>-1){
+                        if(self.ifCanMove()){
+                            self.move(keycode);
+                        }
+                        else{
+                            startbtn.style.display="block";
+                            self.clean();
+                            startbtn.innerHTML="游戏结束了，再来一局？";
+                            return;
+                        }
+                    }
+                }
+            },
+            equal:function (tile1,tile2) {
+                return tile1.getAttribute("val")==tile2.getAttribute("val");
+            },
+            ifCanMove:function () {
+                var len=this.tiles.length;
+
+                //放在一个for循环里就可以了。。！
+                for (var i = 0; i < len; i++) {
+                   if(this.tiles[i].getAttribute("val")==0){//只要有val=0的格子存在就一定是还可以移动的
+                        return true;
+                   }
+
+                   if(i%4!=3){//检测每行是否可以移动--就是检测每行相邻的格子是否存在相等的val
+                        if(this.equal(this.tiles[i],this.tiles[i+1])){
+                            return true;
+                        }
+                   }
+
+                   if(i<12){//检测每行是否可以移动--就是检测每行相邻的格子是否存在相等的val。这里的确是12啊
+                        if(this.equal(this.tiles[i],this.tiles[i+4])){
+                            return true;
+                        }
+                   }
+                };
+
+                return false;
+            },
+            merge:function (prevTile,curTile) {//prevTile:在移动方向上的前面的格子
+                var prevVal=prevTile.getAttribute("val"),
+                    curVal=curTile.getAttribute("val");
+                if(curVal!=0){//如果是0就不用合并
+                    if(prevVal==0){
+                        this.setTileValue(prevTile,curVal);
+                        this.setTileValue(curTile,0);
+                    }else if(prevVal==curVal){
+                        this.setTileValue(prevTile,curVal*2);
+                        this.setTileValue(curTile,0);
+                    }
+                }
+            },
+            move:function (keycode) {
+                switch(keycode){
+                    //怎么才能想出这种写法呢？！！
+                    case 37://左
+                        for(var i = 1, len = this.tiles.length; i < len; i++){
+                            j = i;
+                            while(j % 4 != 0){//主要得关注边界的元素
+                                this.merge(this.tiles[j - 1], this.tiles[j]);
+                                j -= 1;
+                            }
+                        }
+                        break;
+                    case 39://右
+                        for(var i = 14; i >= 0; i--){
+                            j = i;
+                            while(j % 4 != 3){//倒着来，与37相反
+                                this.merge(this.tiles[j + 1], this.tiles[j]);
+                                j += 1;
+                            }
+                        }
+                        break;
+                    case 38://上
+                        for(var i = 4, len = this.tiles.length; i < len; i++){
+                            j = i;
+                            while(j >= 4){
+                                this.merge(this.tiles[j - 4], this.tiles[j]);//上下两行同一列相差4
+                                j -= 4;//从下往上合并
+                            }
+                        }
+                        break;
+                    case 40://下
+                        for (var i = 11; i >= 0; i--) {
+                            j=i;
+                            while(j<=11){
+                                this.merge(this.tiles[j+4],this.tiles[j]);
+                                j += 4;//从上往下
+                            }
+                        };
+                        break;
+                }
+                this.randomTile();
+            },
+            clean:function () {
+                for (var i = 0; i < this.tiles.length; i++) {
+                    this.container.removeChild(this.tiles[i]);
+                };
+                this.tiles=new Array(16);
+            }
+        }
+
+        function $ (elemId) {
+            return document.getElementById(elemId);
+        }
+        var game,startbtn;
+        window.onload=function () {
+            startbtn=$("start");
+            startbtn.onclick=function () {
+                this.style.display="none";
+                game=new Game2048($("div2048"));
+                game.init();
+            }
+        }
+    </script>
+</body>
+</html>

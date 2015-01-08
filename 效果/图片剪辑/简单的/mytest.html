@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>KISSY图片裁剪插件</title>
+	<style>
+		.demo {
+			position: relative;
+			margin: 0 auto;
+			width: 800px;
+			height: 500px;
+			background-color: #000;
+			-moz-user-select: none;
+		}
+
+		.square {
+			filter: none;
+			position: absolute;
+			z-index: 999;
+		}
+
+		.mask {
+			position: absolute;
+			left: 0;
+			top: 0;
+			z-index: 10;
+			background-color: rgba(0,0,0,0.5);
+			height: 100%;
+			width: 100%;
+		}	
+	</style>
+</head>
+<body>
+<div class="demo" id="wrap">
+	<img src="http://sandbox.runjs.cn/uploads/rs/396/x4toiosg/img_01.jpg" width="800" height="500">
+</div>
+<script>
+	(function () {
+		function Kcrop () {
+			this.container={};
+			this.size={};
+		}
+		Kcrop.prototype={
+			init:function (container) {
+				this.container=document.getElementById(container);
+				var h=this.container.clientHeight,
+					w=this.container.clientWidth,
+					l=this.container.offsetLeft,
+					t=this.container.offsetTop;
+				this.size={
+					height:h,
+					width:w,
+					left:l,
+					top:t
+				};
+				var img=this.container.getElementsByTagName('img')[0];
+				with(img.style){
+					mozUserSelect="none";
+					webkitUserSelect="none";
+				}
+				this.render();
+			},
+			createElement:function (option) {
+				var elem=document.createElement(option.tagName);
+				elem.className=option.className;
+				elem.innerHTML=option.text;
+				return elem;
+			},
+			drawSquare:function (start,end) {
+				var self=this;
+				var h=end.y-start.y,
+					w=end.x-start.x;
+				var square=document.getElementById("square"),
+					mask=document.getElementById("mask");
+				if(!square){
+					square=self.createElement({tagName:"div",className:"square",text:""}),
+					mask=self.createElement({tagName:"div",className:"mask",text:""});
+					mask.id="mask";
+					var img=self.container.getElementsByTagName('img')[0];
+					square.style.backgroundImage="url("+img.src+")";
+					square.id="square";
+					self.container.appendChild(square);
+					self.container.appendChild(mask);
+
+					mask.onmousedown=function () {
+						self.container.removeChild(square);
+						self.container.removeChild(mask);
+					}
+				}
+				var l=(start.x-self.size.left),
+					t=(start.y-self.size.top);
+				with(square.style){
+					height=h+"px";
+					width=w+"px";
+					left=l+"px";
+					top=t+"px";
+					backgroundPosition=-l+"px "+-t+"px";
+				}
+			},
+			render:function () {
+				var self=this;
+				var flag=false,start={x:0,y:0};//基于浏览器窗口的坐标
+				self.container.onmousedown=function (event) {
+					flag=true;
+					start.x=event.clientX;
+					start.y=event.clientY;
+				}
+				self.container.onmouseup=function () {
+					flag=false;
+				}
+				self.container.onmousemove=function (event) {
+					event.preventDefault();//阻止默认行为，可以在ie下测试会有什么行为
+					if(flag){
+						event=event||window.event;
+						var end={
+							x:event.clientX,
+							y:event.clientY
+						};
+						if(end.x>start.x&&end.y>start.y){
+							if(end.x>self.size.offsetLeft+self.size.width){
+								end.x=self.size.offsetLeft+self.size.width;
+							}
+							// if(end.x<self.size.offsetLeft){//这里是不可能发生的，因为外层的if做了限制
+							// 	end.x=self.size.offsetLeft;
+							// }
+							if(end.y>self.size.offsetTop+self.size.height){
+								end.y=self.size.offsetTop+self.size.height;
+							}
+							self.drawSquare(start,end);
+						}
+					}
+				}
+			}
+		}
+
+		var kcrop=new Kcrop();
+		kcrop.init("wrap")
+	})();
+</script>
+</body>
+</html>

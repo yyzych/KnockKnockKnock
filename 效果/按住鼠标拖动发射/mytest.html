@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="myVector.js"></script>
+	<style>
+		canvas{
+			background-image: url("http://sandbox.runjs.cn/uploads/rs/60/5l2za5rc/stars-bg.jpg");
+			background-color: transparent;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script>
+		(function () {
+			//全局变量
+			var canvasHei=500,
+				canvasWid=700,
+				ctx=null,
+				playSceen=null,
+				timer=null;
+
+			function $ (id) {
+				return document.getElementById(id);
+			}
+
+			//星球
+			function Circle (posi,radius) {
+				this.posi=new Vector(posi.x,posi.y);
+				this.radius=radius||5;
+			}
+			Circle.prototype={
+				draw:function () {
+					ctx.save();
+					// ctx.strokeStyle="0x6699ff";//要有渐变的效果
+					var gradient=ctx.createRadialGradient(this.posi.x,this.posi.y,this.radius,this.posi.x,this.posi.y,this.radius-15);
+					gradient.addColorStop(0,"rgba(255, 255, 255, 0.7)");
+					gradient.addColorStop(1,"rgba(255, 255, 255, 0.01)");
+					ctx.fillStyle=gradient;
+					ctx.beginPath();
+					ctx.arc(this.posi.x,this.posi.y,this.radius,0,2*Math.PI);
+					ctx.fill();
+					ctx.closePath();
+					ctx.restore();
+				}
+
+			}
+
+			//小鸟
+			function Birds (posi,boundry) {
+				this.posi=new Vector(posi.x,posi.y);//圆心的位置
+				this.speed=new Vector();//有方向有大小
+				this.boundry=boundry||{left:0,top:0,right:0,bottom:0};
+				this.active=true;//false:表示已经移动到外面了
+				this.radius=6;
+
+				this.init();
+			}
+			Birds.prototype={
+				draw:function () {
+					if(!this.active) return;
+					ctx.save();
+					ctx.strokeStyle="black";
+					ctx.beginPath();
+					ctx.arc(this.posi.x-this.radius,this.posi.y-this.radius,this.radius,0,2*Math.PI);
+					ctx.stroke();
+					ctx.closePath();
+					ctx.restore();
+				},
+				update:function () {
+					var temp=this.posi.plusNew(this.speed);
+					if(temp.x<this.boundry.left-this.radius||
+						temp.x>this.boundry.right+this.radius||
+						temp.y<this.boundry.top-this.radius||
+						temp.y>this.boundry.bottom+this.radius){
+						this.active=false;
+						return;
+					}
+					// var len=
+					this.posi.plus(this.speed);
+				},
+				init:function () {
+					//设置一个速度
+					var x=Math.random()-0.5,
+						y=Math.random()-0.5;
+					this.speed.reset(x,y);
+				}
+			}
+
+			//场景
+			function PlaySceen () {
+				this.birds=null;
+				this.planet=[];
+				this.valChange=5;
+				this.openDrawLine=false;
+				this.target=new Vector();
+			}
+			PlaySceen.prototype={
+				update:function () {
+					this.birds.update();
+					//分析受力情况
+					var force=new Vector(),len=0;
+					for (var i = 0; i < this.planet.length; i++) {
+						var thePlanet=this.planet[i];
+						var temp=thePlanet.posi.minusNew(this.birds.posi);
+						if(temp.getLength()>thePlanet.radius) 
+							continue;
+						force.plus(temp);//合力
+					}
+					force.scale(this.valChange/force.getLength());//向量的长度就变成了this.valChange了
+					var angle=force.angleBetween(this.birds.speed);
+					//如何求沿速度方向和垂直速度方向的力（加速度）??
+
+					this.draw();
+				},
+				draw:function () {
+					ctx.clearRect(0,0,canvasWid,canvasHei);
+					for (var i = 0; i < this.planet.length; i++) {
+						this.planet[i].draw();
+					};
+					this.birds.draw();
+					if(this.openDrawLine){
+						this.drawLine();
+					}
+				},
+				drawLine:function () {
+					ctx.save();
+					ctx.strokeStyle="#333";
+					ctx.lineWidth=3;
+					ctx.beginPath();
+					ctx.moveTo(this.birds.posi.x-this.birds.radius,this.birds.posi.y-this.birds.radius);
+					ctx.lineTo(this.target.x,this.target.y);
+					ctx.stroke();
+					ctx.restore();
+				},
+				init:function () {
+					this.boundry={
+						left:0,
+						top:0,
+						right:canvasWid,
+						bottom:canvasHei
+					}
+					this.planet=[
+						new Circle({x:150,y:150},120),
+						new Circle({x:270,y:270},120)
+					];
+					this.birds=new Birds({x:100,y:100},this.boundry);
+					this.draw();
+				},
+				move:function () {
+					
+				}
+			}
+
+			//初始化
+			function init () {
+				var canvas=$("canvas");
+				canvas.height=canvasHei;
+				canvas.width=canvasWid;
+				if(canvas.getContext){
+					ctx=canvas.getContext("2d");
+					playSceen=new PlaySceen();
+					playSceen.init();
+					createEvent(canvas,playSceen);
+					timer=setInterval(function () {
+						playSceen.update();
+					},16);
+				}else{
+					alert("not support");
+				}
+			}
+			function createEvent (elem,playSceen) {
+				var flag=false;
+				elem.onmousedown=function (event) {
+					var event=event||window.event;
+					var x=event.clientX,
+						y=event.clientY;
+					playSceen.birds.posi.reset(x,y);
+					playSceen.birds.active=true;
+					flag=true;
+					playSceen.birds.speed.reset(0,0);
+				};
+				elem.onmousemove=function (event) {
+					var event=event||window.event;
+					if(flag){
+						var x=event.clientX,
+							y=event.clientY;
+						//划线
+						playSceen.openDrawLine=true;
+						playSceen.target.reset(x,y);
+						// playSceen.drawLine(x,y);//每隔一段时间就会画一次，这里又单独画一条线是不行的
+					}
+				};
+				elem.onmouseup=function (event) {
+					var event=event||window.event;
+					playSceen.openDrawLine=false;
+					flag=false;
+
+					//修改birds的速度
+					var spd=new Vector(event.clientX-playSceen.birds.posi.x,event.clientY-playSceen.birds.posi.y);
+					playSceen.birds.speed=spd.clone();
+					playSceen.birds.speed.scale(1/100);
+				}
+			}
+			init();
+		})(window);
+	</script>	
+</body>
+</html>

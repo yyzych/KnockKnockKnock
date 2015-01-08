@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<style>
+		body{
+			margin: 0;
+		}
+		.wrap{
+			position: fixed;
+			height: 100%;
+			width: 100%;
+			top: 0;
+			left: 0;
+			-webkit-transition:left .5s,top .5s;
+		}
+		.road1{
+			position: absolute;
+			width: 2400px;
+			height: 70px;
+			top: 50%;
+			left: -1500px;
+			background: url(http://www.alloyteam.com/wp-content/uploads/2014/02/roadtile70.png) repeat-x;
+		}
+		.road2{
+			position: absolute;
+			width: 480px;
+			height: 750px;
+			top: 50%;
+			left: 900px;
+			background: url(http://www.alloyteam.com/wp-content/uploads/2014/02/roadangle.png) no-repeat;
+		}
+		.road3{
+			position: absolute;
+			width: 2400px;
+			height: 88px;
+			top: 153%;
+			left: 1380px;
+			background: url(http://www.alloyteam.com/wp-content/uploads/2014/02/roadtile92.png) repeat-x;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrap" class="wrap">
+		<div class="road1"></div>
+		<div class="road2"></div>
+		<div class="road3"></div>
+	</div>
+	<script>
+		(function () {
+			var wrap=document.getElementById('wrap');
+			window.addEventListener("mousewheel",mousewheelHandler);
+
+			function mousewheelHandler (e) {
+				e=e||window.event;
+				var delta=Math.max(-1,Math.min(1,e.wheelDelta));
+				var oldLeft=getOldStyle(wrap,"left"),
+					oldTop=getOldStyle(wrap,"top");
+
+				var nTop=0,nLeft=0,range=100;
+				if(oldLeft<0&&oldLeft>-480){
+					//0.64
+					var vt=delta*50;
+					nTop=oldTop+vt;
+					nLeft=oldLeft+vt*0.64;
+				}else{
+					var vt=delta*50;
+					nTop=oldTop;
+					nLeft=oldLeft+vt;
+				}
+				wrap.style.top=nTop+"px";
+				wrap.style.left=nLeft+"px";
+			}
+
+			function getOldStyle (dom,cssName) {
+				var res=(dom.style[cssName]?dom.style[cssName]:getcss(dom,cssName));
+				if(res){
+					return parseInt(res);
+				}
+				return 0;
+			}
+			function getcss(dom,cssname,selectortext){
+				var cssrulelist = window.getMatchedCSSRules(dom); //cssrulelist 类
+				var value = '';
+				for(var i = 0; i<cssrulelist.length; i++){
+					var csslist = cssrulelist[i];
+					if(selectortext){
+						if( selectortext == csslist.selectortext){
+							return csslist.style[cssname];
+						}
+					}else{
+						value = csslist.style[cssname];
+						if(value) return value;
+					}
+				}
+			}
+		})();
+	</script>
+</body>
+</html>

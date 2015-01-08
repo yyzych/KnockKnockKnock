@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{ margin: 0; padding: 0; }
+		.container{ padding: 10px; }
+		#mask{ width: 100%; height: 100%; position: fixed; top: 0; background-color: rgba(0,0,0,0.8); display: none; z-index: 2; }
+		#prevDiv{ display: none; left: 20%; top:15%; z-index: 3; position: fixed;}
+		.left{ width: 300px; float: left; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background: #efefef; font-size: 13px; }
+		.right { margin-left: 25px; min-height: 150px; float: left; }
+		.left input[type=text], .left select.tags, .left input[type=button]{ border-radius: 5px; border: 1px solid #ccc; height: 23px; padding-left: 3px; }
+		.left select.tags{ width: 80px; }
+		.left input[type=button]{ padding-right:3px; width: 80px; height: 30px; }
+		.left ul{ list-style-type: none; }
+		.left ul li{ padding: 8px 0; }
+		.left ul>li{ border-top: 1px solid #ccc; }
+		.left ul>li:first-child{ border-top: none; }
+		.left ul li label{ width: 70px; display: inline-block; }
+		.left ul.tagInfo label{ width: 40px; }
+		.wrap{ position: relative; }
+		.wrap img{ max-width: 800px; }
+		.wrap .tagElem{ position: absolute; width:20px;cursor: move; display: none; height: 20px; border-radius: 10px; background-color: rgba(255,255,255,1); }
+		.active{ display: block!important; }
+
+		.tag{
+			position: absolute;
+			width:20px;
+			height: 20px;
+			border-radius: 10px;
+			background-color: rgba(0,0,0,0.6);
+
+			animation:myAnim 2s ease 0.3s infinite;
+			-webkit-animation:myAnim 2s ease 0.3s infinite;
+			-moz-animation:myAnim 2s ease 0.3s infinite;
+			-o-animation:myAnim 2s ease 0.3s infinite;
+			-ms-animation:myAnim 2s ease 0.3s infinite;
+		}
+		.prevDiv .tagIntro{
+			width: 120px;
+			color: #333;
+			font-size: 12px;
+			padding: 5px;
+			background-color: #fff;
+			border: 1px solid #EAEAEA;
+			position: absolute;
+		}
+		.prevDiv img{
+			max-height: 500px;
+		}
+
+		@keyframes myAnim{
+			0%{transform:scale(1);}
+			50%{transform:scale(1.5);};
+			100%{transform:scale(1);}
+		}
+		@-webkit-keyframes myAnim{
+			0%{-webkit-transform:scale(1);}
+			50%{-webkit-transform:scale(1.5);};
+			100%{-webkit-transform:scale(1);}
+		}
+		@-moz-keyframes myAnim{
+			0%{-moz-transform:scale(1);}
+			50%{-moz-transform:scale(1.5);};
+			100%{-moz-transform:scale(1);}
+		}
+		@-o-keyframes myAnim{
+			0%{-o-transform:scale(1);}
+			50%{-o-transform:scale(1.5);};
+			100%{-o-transform:scale(1);}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="left">
+			<ul>
+				<li>
+					<p style="margin-top:-8px;margin-bottom:8px;">上传图片(850*470)：</p>
+					<input type="file" id="file" name="file">
+				</li>
+				<li>
+					<label for="">选择表签：</label>
+					<select name="" class="tags" id="tags">
+					</select>
+					<a href="javascript:void(0)" id="addTag">添加</a>
+					<a href="javascript:void(0)" id="delTag">删除</a>
+				</li>
+				<li>
+					<ul class="tagInfo">
+						<li>
+							<label for="">介绍：</label><input type="text" name="" id="tagIntro">
+						</li>
+						<li>
+							<label for="">链接：</label><input type="text" name="" id="tagLink">
+						</li>
+						<li>
+							<label for="">X：</label><input style="width:50px;" type="text" name="" id="tagX">
+						</li>
+						<li>
+							<label for="">Y：</label><input style="width:50px;" type="text" name="" id="tagY">
+						</li>
+					</ul>
+				</li>
+				<li>
+					<input type="button" id="prev" value="预览">
+					<input type="button" id="save" value="保存">
+				</li>
+			</ul>
+		</div>
+		<div class="right">
+			<div id="wrap" class="wrap">
+				<img src="placeholder.jpg" id="placeholder" alt="">
+			</div>
+		</div>
+	</div>
+	<div id="mask"></div>
+	<div id="prevDiv" class="prevDiv">
+		<img src="" alt="" id="prevImg">
+	</div>
+	
+	<script src="jquery-2.1.1.js"></script>
+	<script src="move.js"></script>
+	<script>
+		/*
+		* 制作标签
+		*/
+		if(typeof FileReader!=="function"){
+			alert("你的浏览器不支持，请使用谷歌");
+		}else{
+			var tagMaker=function () {
+				var resData={
+					imgurl:"",
+					tags:{},
+					length:0 //表示的是当前最高项是几，不代表多少项数
+				};
+				var filereader=new FileReader();
+				filereader.onload=function (event) {
+					event=event||window.event;
+					$("#placeholder").attr("src",event.target.result);//result是文件的数据，可以直接设置src呢
+				}
+				var curTagElem,prevTagIndex=-1,curTagIndex=-1,allTagElem=[];
+
+				function updateMaker () {
+					var tags=$("#tags")[0];
+					if(tags.selectedIndex<0){
+						alert("请先选择一个标签");
+						return;
+					}
+					var tagIntro=$("#tagIntro"),
+						tagX=$("#tagX"),
+						tagY=$("#tagY");
+					var curTag={
+						intro:tagIntro.val(),
+						x:tagX.val(),
+						y:tagY.val()
+					};
+
+					if(!checkValue(curTag)){
+						return false;
+					}
+
+					if(curTagIndex!==prevTagIndex&&prevTagIndex!==-1){
+						$(allTagElem[prevTagIndex]).removeClass("active");
+					}
+					//设置当前显示的标签的属性
+					$(allTagElem[curTagIndex]).addClass("active");
+					with(allTagElem[curTagIndex].style){
+						left=curTag.x+"px";
+						top=curTag.y+"px";
+					}
+
+					//更新resData.tags
+					return curTag;
+				}
+				function checkValue (curVal) {
+					var regexp={
+						reg1:/^0|[1-9]\d*$/	//匹配正整数
+					};
+					var tips=['x,y只能为正整数'];
+
+					if(!regexp.reg1.test(curVal.x)){
+						alert(tips[0]);
+						node.focus();
+						return false;
+					}
+					if(!regexp.reg1.test(curVal.y)){
+						alert(tips[0]);
+						node.focus();
+						return false;
+					}
+					return true;
+				}
+				function prevShow () {
+					$("#prevDiv").css("display","block");
+					$("#prevImg").attr("src",$("#placeholder").attr("src"));
+					with($("#prevImg")[0].style){
+						mozUserSelect="none";
+						webkitUserSelect="none";
+					}
+					
+					playShow("prevDiv");
+					var mask=$("#mask").css("display","block").click(function () {
+						this.style.display="none";
+						$("#prevDiv").css("display","none").find("div.tag").remove();
+						$("#prevDiv").css("display","none").find("div.tagIntro").remove();
+					})
+				}
+				function playShow (parId) {
+					var par=document.getElementById(parId);
+					for(var name in resData.tags){
+						if(resData.tags.hasOwnProperty(name)){//判断是否来自实例属性
+							if(name.indexOf("tag_")>-1){
+								var pro=resData.tags[name];
+								var ele=createElem({
+									tagName:"div",
+									className:"tag",
+									text:""
+								});
+								ele.style.left=pro.x+"px";
+								ele.style.top=pro.y+"px";
+								ele.onmouseover=function (prop) {
+									return function () {
+										event=event||window.event;
+										var div=createElem({
+											tagName:"div",
+											className:"tagIntro",
+											text:prop.intro
+										})
+										div.style.left=(parseInt(prop.x)+10)+"px";
+										div.style.top=(parseInt(prop.y)+20)+"px";
+										div.onmouseleave=function (event) {
+											this.parentNode.removeChild(this);
+										}
+										par.appendChild(div);
+									}
+								}(pro);
+								par.appendChild(ele);
+							}
+						}
+					}
+				}
+				function saveData () {
+					
+				}
+				function delATag () {
+					var tags=$("#tags")[0];
+					var index=tags.selectedIndex;
+					if(index<0){
+						return;
+					}else{
+						var opt=tags.options[index];
+						tags.options[index]=null;
+
+						delete resData.tags[opt.value];
+
+						var delem=allTagElem[curTagIndex];
+						$(delem).remove();
+						allTagElem.splice(curTagIndex,1);
+
+						index=tags.selectedIndex;
+						if(index>=0){
+							opt=tags.options[index];
+							curTagIndex=index;
+							changeTag(resData.tags[opt.value]);
+							prevTagIndex=index;
+						}
+					}
+				}
+				function createElem (option) {
+					option=option||{tagName:"div",text:"",className:""};
+					var elem=document.createElement(option.tagName);
+					elem.innerHTML=option.text;
+					elem.className=option.className;
+					return elem;
+				}
+				function addATag () {
+					//添加到tags列表
+					var tags=document.getElementById('tags');
+					var len=resData.length;
+					var nopt=new Option("标签"+(len+1),"tag_"+(len+1));
+					tags.appendChild(nopt);
+
+					//添加到resData
+					resData.tags["tag_"+(len+1)]={
+						intro:"请输入介绍",
+						x:"50",
+						y:"50"
+					}
+					resData.length++;
+
+					//添加元素到页面中
+					var nelem=createElem({tagName:"div",className:"tagElem",text:"t"+(len+1)});
+					document.getElementById("wrap").appendChild(nelem);
+					//还要绑定事件
+					var wish={
+						width:20,
+						height:20
+					};
+					var wish=new WishAchieve(document.getElementById("wrap"),wish,"tagElem");
+					wish.drag({
+						boundaryElem:"wrap",
+						dragMove:function () {
+							var x=parseInt(this.style.left);
+							var y=parseInt(this.style.top);
+							var tagX=$("#tagX"),
+								tagY=$("#tagY");
+							tagX.val(x);
+							tagY.val(y);
+						},
+						dragEnd:function () {
+							var option=$("#tags")[0].options[curTagIndex];
+							if(!option){
+								return;
+							}
+							var tagX=$("#tagX"),
+								tagY=$("#tagY");
+							resData.tags[option.value].x=tagX.val();
+							resData.tags[option.value].y=tagY.val();
+						}
+					})
+
+					curTagElem=nelem;
+
+					allTagElem[allTagElem.length]=nelem;
+
+					tags.selectedIndex=tags.options.length-1;//会发生change事件吗？？---好像不会发生
+					curTagIndex=tags.selectedIndex;
+					changeTag(resData.tags["tag_"+(len+1)]);
+					prevTagIndex=tags.selectedIndex; 
+				}
+				function changeTag (curTag) {
+					var tagIntro=$("#tagIntro"),
+						tagX=$("#tagX"),
+						tagY=$("#tagY");
+					tagIntro.val(curTag.intro);
+					tagX.val(curTag.x);
+					tagY.val(curTag.y);
+
+					updateMaker();//----
+				}
+				function clearAll () {
+					var inputs=$(".left input");
+					for (var i = 0,len=inputs.length; i < len; i++) {
+						if(inputs[i].type=="text"){//注意啊：inputs[i]也不是jquery对象
+							inputs[i].value="";
+						}
+					};
+					var tags=$("#tags")[0];
+					with(tags.options){
+						length=0;
+					}
+					resData={
+						imgurl:"",
+						tags:{},
+						length:0
+					};
+					var wrap=document.getElementById("wrap");
+					divs=wrap.getElementsByTagName('div');
+					for (var i = divs.length-1; i >= 0; i--) {
+						wrap.removeChild(divs[i]);
+					};
+
+					allTagElem=[]
+				}
+
+				//绑定事件
+				(function () {
+					var inputs=$(".left input[type=text]");
+					for (var i = 0,len=inputs.length; i < len; i++) {
+						if(inputs[i].type=="text"){
+							inputs[i].onchange=function () {
+								var flag=updateMaker();//false：表示值不正确，否则传回对象
+								if(flag){
+									//更新resData.tags
+									var index=$("#tags")[0].selectedIndex;
+									var option=$("#tags")[0].options[index];
+									resData.tags[option.value]=flag;
+								}
+							};
+						}
+					};
+
+					//绑定两个按钮
+					$("#prev").click(prevShow);
+					$("#save").click(saveData);
+					//添加，删除标签
+					$("#addTag").click(addATag);
+					$("#delTag").click(delATag);
+					//标签改变时
+					$("#tags").change(function () {
+						var index=this.selectedIndex;
+						var option=this.options[index];
+						var curOpt=resData.tags[option.value]
+						curTagIndex=index;
+						changeTag(curOpt);
+						prevTagIndex=index;
+					})
+					//上传文件时
+					$("#file").change(function () {
+						if(this.files.length===0){//注意：this并不是jquery对象
+							alert("请先上传图片");
+							return;
+						}
+						var ofile=this.files[0];
+						var fileFilter=/^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/;
+						if(!fileFilter.test(ofile.type)){
+							alert("只能上传图片格式");
+							return;
+						}
+						clearAll();
+						resData.imgurl=this.value;
+						filereader.readAsDataURL(ofile);
+					})
+				})();
+			}();
+		}
+	</script>
+</body>
+</html>

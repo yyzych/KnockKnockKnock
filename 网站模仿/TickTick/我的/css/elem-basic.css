@@ -1,0 +1,63 @@
+/*
+* elem-basic.css
+* 简单的一份元素的默认样式，适用于小网站
+* 里面的参数可以自己根据需要变化
+* 字体单位为em
+*/
+
+*{
+	margin:0;
+	padding: 0;
+}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section {
+  	display: block;
+}
+audio,canvas,video {
+  	display: inline-block;
+  	*display: inline;
+  	*zoom: 1;
+}
+html,body{
+	height: 100%;
+}
+body{
+	font-size: 62.5%;/*默认大小为16px,设置为62.5%之后就是12px，既1em*/
+	color: rgb(77, 103, 141);
+}
+select,input,textarea,body,button{
+	font-family: arial,"微软雅黑";
+	line-height: 150%;
+	outline: none;
+}
+select,input,textarea,button{
+	border: 1px solid #D8D8D8;
+}
+ul,ol,dl{
+	list-style: none;
+}
+h1,h2,h3,h4,h5{
+	font-family: inherit;
+	font-weight: bold;
+	color: inherit;
+	text-rendering:optimizelegibility;
+}
+h1{
+	font-size: 3.2em;
+}
+h2{
+  	font-size: 2.6em;
+}
+h3{
+  font-size: 2.0em;
+}
+h4{
+  font-size: 1.6em;
+}
+h5{
+  font-size: 1.4em;
+}
+a,a:hover,a:link,a:visited{
+	color: rgb(77, 103, 141);
+	outline: none;
+	text-decoration: none;
+}

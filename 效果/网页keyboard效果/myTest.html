@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		*{
+			margin: 0px;
+			padding: 0px;
+			text-decoration: none;
+			vertical-align: baseline;/*这是默认的啊*/
+		}
+		/*这是为了在最后面清除浮动*/
+		.clearfix:after{
+			content: "";
+			display: block;
+			height: 0px;
+			clear: both;
+			visibly:hidden;
+		}
+		#wrapper{
+			position: relative;
+			width: 500px;
+			margin: 0px auto;
+			font-family: Tahoma;
+			background: rgba(255,255,255,3);
+			border-radius:20px;
+			padding: 50px 0px;
+		}
+		h1,h2,h3{
+			color: rgba(119,115,107,1);
+			text-shadow:1px 1px 1px rgba(59,55,47,0.5);
+		}
+		h1{
+			text-align: center;
+		}
+		h2{
+			display: block;
+			float: left;
+			clear: both;
+			padding: 0 0 0 10px;
+			border-left: 20px solid transparent;
+			margin: 0 0 10px;
+			line-height: 20px;
+			-webkit-transition: border-color .6s linear;
+            -moz-transition: border .6s linear;
+            -o-transition: border .6s linear;
+		}
+		#field{
+			height: 20px;
+			width:320px;
+			padding: 10px;
+			margin: 20px 0 0 76px;
+			text-align: center;
+			font-size: 120%;
+			border: 2px solid rgba(119,115,107,1);
+			border-radius:10px;
+			outline: 0;
+			box-shadow:1px 1px 4px 0px rgba(0,0,0,0.5) inset;
+			-webkit-transition: border-color .6s linear;
+            -moz-transition: border .6s linear;
+            -o-transition: border .6s linear;
+		}
+		#field:focus{
+		    background-color: #A9F174;
+		}
+		#activate{
+			display: block;
+			width: 100px;
+			display: block;
+			width: 100px;
+			margin: 20px auto 0;
+			text-align:center;
+			text-transform: uppercase;
+		}
+		#keyboard{
+			display: none;
+            position: relative;
+            width: 297px;
+            margin: 30px auto 0;
+            padding: 10px;
+            border: 2px solid #555;
+            border-radius: 15px;
+            background: rgba(119,115,107,.2);
+            box-shadow: 0px 0px 5px 0px rgba(0,0,0,.5);
+			opacity: 0;
+		}
+		#keyboard>div{
+			float: left;
+			width: 20px;
+			height: 20px;
+			line-height: 20px;
+			text-align: center;
+			font-size:90%;/* 设置为基于父元素的一个百分比值。*/
+			margin:0 5px 5px 0;
+			border: 1px solid #555;
+			background: rgba(119,115,107,.6);
+			cursor: pointer;
+			border-radius:3px;
+		}
+		#keyboard #q,
+		#keyboard #a,
+		#keyboard #z,
+		#keyboard #shift{
+			clear: left;
+		}
+		#keyboard #shift {
+		width: 65px; 
+		}
+		#keyboard #space {
+		width: 70px; 
+		}
+		#keyboard #bspace {
+		width: 70px; 
+		}
+		#keyboard #clear {
+		width: 64px; 
+		}
+		#keyboard #q {
+		margin-left: 13px;
+		}
+		#keyboard #a {
+		margin-left: 27px; 
+		}
+		#keyboard #z {
+		margin-left: 54px;
+		}
+		#keyboard>div:hover{
+			background: gray;
+		}
+		#keyboard #close{
+			position: absolute;
+			top: -20px;
+			right: -20px;
+			width: 16px;
+			height: 16px;
+			border-radius: 8px;
+			line-height: 14px;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrapper" class="clearfix">
+	    <h1 id="title">我的 keyboard</h1>
+	    <input id="field" type="text" placeholder="请输入">
+	    <div id="keyboard" class="clearfix">
+	        <div class="number" id="1">1</div>
+	        <div class="number" id="2">2</div>
+	        <div class="number" id="3">3</div>
+	        <div class="number" id="4">4</div>
+	        <div class="number" id="5">5</div>
+	        <div class="number" id="6">6</div>
+	        <div class="number" id="7">7</div>
+	        <div class="number" id="8">8</div>
+	        <div class="number" id="9">9</div>
+	        <div class="number" id="0">0</div>
+	        <div class="number" id="-">-</div>
+	        <div class="char" id="q">q</div>
+	        <div class="char" id="w">w</div>
+	        <div class="char" id="e">e</div>
+	        <div class="char" id="r">r</div>
+	        <div class="char" id="t">t</div>
+	        <div class="char" id="y">y</div>
+	        <div class="char" id="u">u</div>
+	        <div class="char" id="i">i</div>
+	        <div class="char" id="o">o</div>
+	        <div class="char" id="p">p</div>
+	        <div class="char" id="a">a</div>
+	        <div class="char" id="s">s</div>
+	        <div class="char" id="d">d</div>
+	        <div class="char" id="f">f</div>
+	        <div class="char" id="g">g</div>
+	        <div class="char" id="h">h</div>
+	        <div class="char" id="j">j</div>
+	        <div class="char" id="k">k</div>
+	        <div class="char" id="l">l</div>
+	        <div class="char" id="z">z</div>
+	        <div class="char" id="x">x</div>
+	        <div class="char" id="c">c</div>
+	        <div class="char" id="v">v</div>
+	        <div class="char" id="b">b</div>
+	        <div class="char" id="n">n</div>
+	        <div class="char" id="m">m</div>
+	        <div id="shift">Shift</div>
+	        <div id="space">Space</div>
+	        <div id="bspace">BSpace</div>
+	        <div id="clear">Clear</div>
+	        <div id="close">x</div>
+	    </div>
+	</div>
+	<script type="text/javascript">
+		window.onload=init;
+		function init () {
+			var isShift=0,
+				clearString="",
+				shift=document.getElementById("shift"), 
+				clear = document.getElementById('clear'),
+				space = document.getElementById('space'),
+				field=document.getElementById("field"),
+				keyboard=document.getElementById("keyboard");
+				_close=document.getElementById("close");//close在ie中有预定义的函数存在
+			_close.onclick=function(){
+				myFadeTo("keyboard","fadeOut",20,0);
+			}
+			space.onclick=function () {
+				field.value+=" ";
+			}
+			field.onclick=function () {
+				keyboard.style.display="block";
+				myFadeTo("keyboard","fadeIn",20,1);
+			};
+			shift.onclick=function () {
+				if(isShift===0){
+					numbersToSymbols();
+					isShift=1;
+					var chars=document.getElementsByClassName("char");
+					for (var i = 0; i <chars.length ; i++) {
+						chars[i].style.textTransform="uppercase";
+					}
+				}
+				else{
+					symbolsToNumbers();
+					isShift=0;
+					var chars=document.getElementsByClassName("char");
+					for (var i = 0; i <chars.length ; i++) {
+						chars[i].style.textTransform="none";
+					}
+				}
+			}
+			clear.onclick=function () {
+				field.value=clearString;
+			}
+			var charsN=keyboard.getElementsByClassName("number");//注意：是object类型，不是数组
+			var charsC=keyboard.getElementsByClassName("char");
+			// alert(typeof chars+"&"+chars.length+"&"+typeof chars[6]);
+			// chars.concat(charsN);
+			var chars=[];
+			for (var i = 0; i < charsN.length; i++) {
+				chars[chars.length]=charsN[i];
+			}
+			for (var i = 0; i < charsC.length; i++) {
+				chars[chars.length]=charsC[i];
+			}
+			for (var i = 0; i <chars.length; i++) {
+				chars[i].onclick=function () {
+					var value=this.lastChild.nodeValue;
+					if(isShift===1){
+						value=value.toUpperCase();
+					}
+					field.value+=value;
+				};
+			}
+		}
+		function charChange (elemID,value) {
+			var elem=document.getElementById(elemID);
+			elem.lastChild.nodeValue=value;
+		}
+		function numbersToSymbols () {
+			charChange("1","!");
+			charChange("2","@");
+			charChange("3","#");
+			charChange("4","$");
+			charChange("5","%");
+			charChange("6","^");
+			charChange("7","&");
+			charChange("8","*");
+			charChange("9","(");
+			charChange("0",")");
+			charChange("-","_");
+		}
+		function symbolsToNumbers () {
+			charChange("1","1");
+			charChange("2","2");
+			charChange("3","3");
+			charChange("4","4");
+			charChange("5","5");
+			charChange("6","6");
+			charChange("7","7");
+			charChange("8","8");
+			charChange("9","9");
+			charChange("0","0");
+			charChange("-","-");
+		}
+		function myFadeTo (elemID,fadeType,time,propValue) {
+			var elem=document.getElementById(elemID);
+			if(!elem)
+				return;
+			else{
+				if(fadeType==="fadeOut"){
+					if(elem.opacityAnimate){
+						clearTimeout(elem.opacityAnimate);
+					}
+					if(!elem.style.opacity){
+						elem.style.opacity="1";
+					}
+					var curOpacity=parseInt(elem.style.opacity*10);
+					if(curOpacity===propValue*10){
+						return;
+					}
+					curOpacity-=1;
+					elem.style.opacity=curOpacity/10;
+					var repeat="myFadeTo('"+elemID+"','"+fadeType+"',"+time+","+propValue+")";
+					elem.opacityAnimate=setTimeout(repeat,time);
+				}
+				else if (fadeType==="fadeIn"){
+					if(elem.opacityAnimate){
+						clearTimeout(elem.opacityAnimate);
+					}
+					if(!elem.style.opacity){
+						elem.style.opacity="0";
+					}
+					var curOpacity=parseInt(elem.style.opacity*10);
+					if(curOpacity===propValue*10){
+						return;
+					}
+					curOpacity+=1;
+					elem.style.opacity=curOpacity/10;
+					var repeat="myFadeTo('"+elemID+"','"+fadeType+"',"+time+","+propValue+")";
+					elem.opacityAnimate=setTimeout(repeat,time);
+				}
+			}
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>js javascript 树形菜单</title>
+<style>
+	.aa{height:500px; width:360px; background-color:#F1F1F1; border:outset 1px #AAA; overflow-y:auto; margin:30px auto; padding:10px;}
+	#menu *{margin:0px; padding:0px; list-style:none; font-size:12px; line-height:14px;}
+	#menu a{color:#333; text-decoration:none;}
+	#menu a:hover{color:#008000;}
+	#menu li ul{background: url("http://sandbox.runjs.cn/uploads/rs/267/g3ugugjp/line_conn.gif") repeat-y scroll 0 0 transparent; padding-left:18px; display:none; overflow:hidden;}
+	#menu li ul.f{background:none;}
+	#menu li button{width:18px; height:18px; background:url("http://sandbox.runjs.cn/uploads/rs/267/g3ugugjp/zTreeStandard.gif") no-repeat; border:none; vertical-align:middle; outline:none 0px; hide-focus:expression(this.hideFocus=true); cursor:pointer;}
+	#menu li button::-moz-focus-inner{border:none;} 
+	#menu li span button{width:16px; height:16px; cursor:default; vertical-align:top;}
+	/*s1 s2,s3 s4,s5 s6是一对，奇数表示折叠状态，偶数表示展开状态,s1表示最上面没有点，s5表示下面没有点*/
+	#menu .s1{background-position:-44px 0;}
+	#menu .s2{background-position:-62px 0;}
+	#menu .s3{background-position:-44px -18px;}
+	#menu .s4{background-position:-62px -18px;}
+	#menu .s5{background-position:-44px -36px;}
+	#menu .s6{background-position:-62px -36px;}
+	#menu .e1{background-position:-26px -18px; cursor:default;}
+	#menu .e3{background-position:-26px -36px; cursor:default;}
+	/*r1,r2表示文件夹图标的打开还是折叠*/
+	#menu .r2{background-position:-80px -16px; margin-right:2px;}
+	#menu .r1{background-position:-80px -0; margin-right:2px;}
+	#menu .m1{background-position:-80px -32px; margin-right:2px;}
+	/*#menu{
+		display: none;
+	}*/
+</style>
+</head>
+
+<body onload="ME.st('menu',dada(0))">
+	<input type="button" value="click" onclick="alert(document.getElementById('menu').offsetHeight);document.getElementById('menu').style.display='block';alert(document.getElementById('menu').offsetHeight);" />
+	<input type="button" value="click" onclick="alert(document.getElementById('menu').offsetHeight);document.getElementById('menu').style.display='none';alert(document.getElementById('menu').offsetHeight);" />
+	<div class="aa" id="menu">
+	</div>
+	<script>
+		// 同一级的一个展开另一个折叠
+		function dada(r){
+			var da=[];
+			for(var i=1;i<8;i++){
+				if(r<2)
+				da.push({'id':i,'ming':'菜单'+r+'_'+i,'link':i,'pid':dada(r+1)});
+				else
+				da.push({'id':i,'ming':'菜单'+r+'_'+i,'link':i,'pid':r});
+			}	
+			return da;
+		}
+		var ME={
+			ini:{i:true,d:{},d1:{},h:0,h1:0,h2:0},
+			html:function(da,f){
+				var s='<ul'+(f?' class="f"':'')+'>';
+				for(var i=0,l=da.length;i<l;i++){
+					if(typeof(da[i].pid)=='object'){
+						s+='<li><button type="button" class="'+(i==0&&this.ini.i?'s1':(i+1==l?'s5':'s3'))+'" onclick="ME.yc(this)"></button><span><button type="button" class="r1"></button><a href="javascript:;">'+da[i].ming+'</a></span>';
+						this.ini.i=false;
+						s+=this.html(da[i].pid,(i+1==l));
+					}else{
+						s+='<li><button type="button" class="'+(i+1==l?'e3':'e1')+'"></button><span><button type="button" class="m1"></button><a href="http://www.onmyfree.sinaapp.com" target="mainFrame">'+da[i].ming+'</a></span>';
+					}
+					s+='</li>';
+				}
+				s+='</ul>';
+				return s;
+			},
+			st:function(id,da){
+				document.getElementById(id).innerHTML=this.html(da);
+			},
+			yc:function(a){
+				var s=a.className.substr(1);
+				if(s%2){
+					this.ini.d=a.parentNode.children[2];
+					this.ini.h1=this.hei(this.ini.d);
+					this.ini.h3=this.ini.h1/10;
+					this.yc1(1);
+					a.className='s'+(parseInt(s)+1);
+					a.parentNode.children[1].children[0].className='r2';
+					var ol=a.parentNode.parentNode._;//表示之前打开的
+					if(typeof(ol)=='object'){
+						this.ini.d1=ol;
+						this.ini.h=ol.offsetHeight;
+						this.ini.h2=this.ini.h/10;
+						this.yc2(1);
+						ol.parentNode.children[0].className='s'+(parseInt(ol.parentNode.children[0].className.substr(1))-1);
+						ol.parentNode.children[1].children[0].className='r1';
+					}
+					a.parentNode.parentNode._=a.parentNode.children[2];
+				}else{
+					this.ini.d1=a.parentNode.children[2];
+					this.ini.h=this.ini.d1.offsetHeight;
+					this.ini.h2=this.ini.h/10;
+					this.yc2(1);
+					a.className='s'+(parseInt(s)-1);
+					a.parentNode.children[1].children[0].className='r1';
+					a.parentNode.parentNode._='';
+				}
+			},
+			//展开
+			yc1:function(b){
+				var h1=ME.ini.h1-(11/(b+1)-1)*ME.ini.h3;
+				with(ME.ini.d.style){
+					height=h1+'px';
+					display='block';
+				}
+				if(b<10){
+					setTimeout('ME.yc1('+(b+1)+')',25);//全局形式调用
+					//或
+					// var that=this;
+					// setTimeout(function(){
+					// 	that.yc1(b+1);
+					// },25);//私有函数调用方式
+				}else{
+					// ME.ini.d.style.display='block';
+					ME.ini.d.style.height='';//就相当于把height属性给清空，没设置这个属性。如果不这么做的话，他的高度酒规定了，展开子层，子层的内容就会被截断
+				}
+				//或
+				// var h1=this.ini.h1-(11/(b+1)-1)*this.ini.h3;
+				// // var _h1=this.ini.h1-(11/(b+1)-1)*this.ini.h3;
+				// with(this.ini.d.style){
+				// 	height=h1+'px';
+				// 	display='block';
+				// }
+				// if(b<10){
+				// 	// setTimeout('ME.yc1('+(b+1)+')',25);
+				// 	var that=this;
+				// 	setTimeout(function(){
+				// 		// var thereThis=this;//window 匿名函数具有全局性
+				// 		that.yc1(b+1);
+				// 	},25);//私有函数调用方式
+				// }else{
+				// 	this.ini.d.style.display='block';
+				// 	this.ini.d.style.height='';
+				// }
+			},
+			//收起
+			yc2:function(b){
+				var h1=(11/(b+1)-1)*ME.ini.h2;
+				with(ME.ini.d1.style){
+					height=h1+'px';
+				}
+				if(b<10){
+					setTimeout('ME.yc2('+(b+1)+')',25);
+				}else{
+					ME.ini.d1.style.display='';//none没有区别
+					ME.ini.d1.style.height='';//如果不清除这个属性，则height=0px，下次展开时，offsetHeight就会由这个height得到，值就是0px;展开时就没有过程了，直接显示了
+				}
+			},
+			// 获得高度
+			hei:function(a){
+				var b=a.cloneNode(true);
+				b.style.position='absolute'; 
+				b.style.display='block'; 
+				b.style.visibility='hidden';
+				a.parentNode.appendChild(b);
+				var h=b.offsetHeight;
+				a.parentNode.removeChild(b);
+				a.style.display="block";
+				var tmp= a.offsetHeight;//当display=none时值为0
+				a.style.display="none";
+				var tmp2=parseInt(a.style.height);//如果没有显示设置style.height则它的值为“”的。不包括内边距
+				return h;
+
+			}
+		}
+	</script>
+</body>
+</html>

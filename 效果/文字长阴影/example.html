@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		span {
+		  display:block;
+		  height:1.1em;
+		  width:1.1em;
+		  border-radius:0.05em;
+		  text-align:center;
+		  background-color: #ff5722;
+		  font-family: 'Lucida Grande';
+		  font-size:18em;
+		  color:#f5f5f5;
+		  /* IGNORE THIS PART
+		  This is just centering the button on the preview of codepen
+		  */
+		  position:absolute;
+		  top:0.2em;
+		  left:1.2em;
+		  overflow:hidden;
+		}
+	</style>
+</head>
+<body>
+	<blockquote>关键是使用textShadow设置文本阴影，然后使用overflow吧超出的部分截掉</blockquote>
+	<span>R</span>
+
+	<!-- 
+	Twitter: https://twitter.com/TimDaub
+
+	The most important thing creating the effect is, using a darker tone of your background color as the text-shadow color. So you wouldn't use a grey tone but a darker orange
+
+	I took the tones from: 配色我是从这个网站上找的
+	http://www.google.com/design/spec/style/color.html
+
+	-->
+	<script>
+		// This method simple creates a string of the form
+		//
+		// 1px 1px 0px #123456, 2px 2px 0px #123456, 3px 3px 0px #123456, ...
+		// 
+
+		var genLongShadow = function(num, color) {
+		  
+		  var value = '';
+		  
+		  for(var i = 1; i < num; i++) {
+		    value += i+'px '+i+'px 0px '+color;
+		    
+		    if(i != num-1) {
+		      value += ', ';
+		    }
+		  }
+		  
+		  
+		  return value;
+		};
+
+		document.querySelector('span').style.textShadow = genLongShadow(180, '#e64a19 ');//textShadow:css3
+	</script></body>
+</html>

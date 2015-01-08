@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta charset="utf-8">
+	<title>Insert title here</title>
+	<style type="text/css">
+		* {
+			margin: 0px;
+			padding: 0px;
+		}
+
+		#thumb {
+			position: absolute;
+			width: 400px;
+			height: 400px;
+			background-image: url('http://sandbox.runjs.cn/uploads/rs/134/cpb1gh8g/Tulips.jpg');
+			background-repeat: no-repeat;
+			background-attachment: fixed;/*定义背景图片随滚动轴的移动方式*/
+			/* Do rounding (native in Safari, Firefox and Chrome) */
+			border-radius: 400px;
+		}
+
+		#main {
+			width: 1100px;
+			height:600px;
+			position: absolute;
+			background: url('http://sandbox.runjs.cn/uploads/rs/134/cpb1gh8g/Tulips.jpg') no-repeat;
+			/* Firefox, Safari(WebKit), Opera */
+			/*filter: alpha(opacity =                             95);*/
+			background: url('http://sandbox.runjs.cn/uploads/rs/134/cpb1gh8g/Tulips.jpg') no-repeat;
+			opacity: 0.2;
+			/* Firefox, Safari(WebKit), Opera */
+			/*filter: alpha(opacity =                             95);*/
+			background: url('http://sandbox.runjs.cn/uploads/rs/134/cpb1gh8g/Tulips.jpg') no-repeat;
+			/*opacity: 0.2;  Firefox, Safari(WebKit), Opera */
+			/*filter: alpha(opacity =                             95);*/
+			/* IE 4-7 */
+		}
+	</style>
+</head>
+<body>
+	<div id="main" onmousemove="mouseOverHandler(event);"></div>
+	<div id="thumb" onmousemove="mouseOverHandler(event);"></div>
+	<p>主要就是：background-attachment: fixed;在起作用</p>
+	<script type="text/javascript">
+		function mouseOverHandler(evt) {
+			var thumb = document.getElementById("thumb");
+			// var clearimg = document.getElementById("clearimg");
+			var thumbWidth = thumb.clientWidth;
+			var thumbHeight = thumb.clientHeight;
+			//var abc = getStyle(thumb, "width");
+			thumb.style.left = (evt.clientX - thumbWidth / 2) + "px";
+			thumb.style.top = (evt.clientY - thumbHeight / 2) + "px";//没有设置好边界问题
+			// thumb.style.positionX = thumb.style.left;
+			// thumb.style.positionY = thumb.style.top;
+
+			//thumb.style.clip = buildClip(evt.clientX ? evt.clientX : evt.x,
+			//		evt.clientY ? evt.clientY : evt.y, thumbWidth, thumbHeight);
+		}
+		// function getStyle(elem, name) {
+		// 	//如果该属性存在于style[]中，则它最近被设置过(且就是当前的) 
+		// 	if (elem.style[name]) {
+		// 		return elem.style[name];
+		// 	}
+		// 	//否则，尝试IE的方式 
+		// 	else if (elem.currentStyle) {
+		// 		return elem.currentStyle[name];
+		// 	}
+		// 	//或者W3C的方法，如果存在的话 
+		// 	else if (document.defaultView && document.defaultView.getComputedStyle) {
+		// 		//它使用传统的"text-Align"风格的规则书写方式，而不是"textAlign" 
+		// 		name = name.replace(/([A-Z])/g, "-$1");
+		// 		name = name.toLowerCase();
+		// 		//获取style对象并取得属性的值(如果存在的话) 
+		// 		var s = document.defaultView.getComputedStyle(elem, "");
+		// 		return s && s.getPropertyValue(name);
+		// 		//否则，就是在使用其它的浏览器 
+		// 	} else {
+		// 		return null;
+		// 	}
+		// }
+		// var clipWidth = 200;
+		// var clipHeight = 200;
+		// function buildClip(x, y, width, height) {
+		// 	var rect = "rect(" + (y - clipHeight / 2 + "px,")
+		// 			+ ((x + clipWidth - clipWidth / 2) + "px,")
+		// 			+ ((y + clipHeight - clipHeight / 2) + "px,")
+		// 			+ (x - clipWidth / 2 + "px") + ")";
+		// 	return rect;
+		// }
+	</script>
+</body>
+</html>

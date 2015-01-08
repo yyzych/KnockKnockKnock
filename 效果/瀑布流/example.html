@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<title>瀑布流布局js分享</title>
+	<style>
+	*{padding:0;margin:0;}
+	#wrap{position:relative;zoom:1;margin:0px auto;}
+	#wrap li{width:250px;float:left;list-style:none;}
+	.boxCont{
+		position:relative;margin:5px;border:1px solid #ccc;background:#eee;
+		-webkit-box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.1) inset;
+		-moz-box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.1) inset;
+		box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.1) inset;
+	}
+</style>
+	<script class="jquery library" src="jquery-2.1.1.js" type="text/javascript"></script>
+</head>
+<body>
+	<ul id="wrap">
+		<li>
+			<div class="boxCont" style="height:95px;">1</div>
+		</li>
+		<li>
+			<div class="boxCont" style="height:58px;">2</div>
+		</li>
+		<li>
+			<div class="boxCont" style="height:90px;">3</div>
+		</li>
+		<li>
+			<div class="boxCont" style="height:68px;">4</div>
+		</li>
+		<li>
+			<div class="boxCont" style="height:69px;">5</div>
+		</li>
+		<li>
+			<div class="boxCont" style="height:62px;">5</div>
+		</li>
+		<li>
+			<div class="boxCont" style="height:38px;">7</div>
+		</li>
+		<li>
+			<div class="boxCont" style="height:44px;">8</div>
+		</li>
+		<li>
+			<div class="boxCont" style="height:99px;">9</div>
+		</li>
+	</ul>
+	<script>
+		// var $id = function(o){ return document.getElementById(o) || o};
+		// function sort(el){
+		// var h = [];
+		// var box = el.getElementsByTagName("li");
+		// var minH = box[0].offsetHeight,
+		// boxW = box[0].offsetWidth,
+		// boxH,
+		// n = document.documentElement.offsetWidth / boxW | 0; //计算页面能排下多少Pin
+		// el.style.width = n * boxW + "px";
+		// for(var i = 0; i < box.length; i++) {
+		// 	boxh = box[i].offsetHeight; //获取每个Pin的高度
+		// 	if(i < n) { //第一行Pin以浮动排列，不需绝对定位
+		// 	h[i] = boxh;
+		// 	box[i].style.position = '';
+		// 	} else {
+		// 		minH = Math.min.apply({},h); //取得各列累计高度最低的一列
+		// 		minKey = getarraykey(h, minH);
+		// 		h[minKey] += boxh ; //加上新高度后更新高度值
+		// 		box[i].style.position = 'absolute';
+		// 		box[i].style.top = minH + 'px';
+		// 		box[i].style.left = (minKey * boxW) + 'px';
+		// 		}
+		// 	}
+		// };
+		// /* 返回数组中某一值的对应项数 */
+		// function getarraykey(s, v) {
+		// 	for(k in s) {
+		// 		if(s[k] == v) {
+		// 		return k;
+		// 		}
+		// 	}
+		// };
+		// //$id("wrap").innerHTML = pin;
+		// window.onload = window.onresize = function() {
+		// sort($id("wrap"));
+		 
+		//  $("#wrap").append($("#wrap").html()) 
+		//    sort($id("wrap"));
+		// };
+	</script>
+</body>
+</html>

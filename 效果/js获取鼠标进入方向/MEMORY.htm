@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)http://www.im050.com/im050/memory/demo/jquery-direction.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<meta charset="UTF-8"> 
+<title>MEMORY</title> 
+</head> 
+<body> 
+<style> 
+html,body{margin:0;padding:0;} 
+#wrap{width:300px;height:200px;background:#33aa00; position: relative; overflow: hidden; margin: 10px; float: left;} 
+.mask {width: 300px;height:200px; background: blue; position: absolute; top:-300px;}
+</style> 
+<div id="wrap"> 
+	<div class="mask" style="left: 0px; top: 200px;"></div> 
+</div> 
+<div id="wrap"> 
+	<div class="mask" style="left: 0px; top: 200px;"></div> 
+</div> 
+<div id="wrap"> 
+	<div class="mask" style="left: 0px; top: 200px;"></div> 
+</div> 
+<div id="wrap"> 
+	<div class="mask" style="left: -300px; top: 0px;"></div> 
+</div> 
+<div id="wrap"> 
+	<div class="mask"></div> 
+</div> 
+<div id="wrap"> 
+	<div class="mask"></div> 
+</div> 
+<script type="text/javascript" src="./MEMORY_files/jquery.js"></script> 
+<script> 
+	$("div[id=wrap]").bind("mouseenter mouseleave", 
+	function(e) { 
+		var w = $(this).width(); 
+		var h = $(this).height(); 
+		var x = (e.pageX - this.offsetLeft - (w / 2)) * (w > h ? (h / w) : 1); 
+		var y = (e.pageY - this.offsetTop - (h / 2)) * (h > w ? (w / h) : 1); 
+		var direction = Math.round((((Math.atan2(y, x) * (180 / Math.PI)) + 180) / 90) + 3) % 4; 
+		var eventType = e.type;
+		var startX = 0;
+		var startY = 0;
+		switch(direction) {
+				case 0:
+					startX = 0
+					startY = h*-1;;
+				break;
+				case 1:
+					startX = w;
+					startY = 0;
+				break;
+				case 2:
+					startX = 0;
+					startY = h;
+				break;
+				case 3:
+					startX = w*-1;
+					startY = 0;
+				break;
+			}
+		if(e.type == 'mouseenter'){ 
+			$(this).children(".mask").css({'left':startX, 'top':startY}).stop().animate({'left':0, top:0}, 300);
+		}else{ 
+			$(this).children(".mask").stop().animate({'left':startX, 'top':startY}, 300);
+		} 
+	}); 
+</script> 
+ 
+ </body></html>

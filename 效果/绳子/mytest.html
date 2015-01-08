@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			background-color: #f9f9f2;
+		}
+		canvas {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script src="jquery-2.1.1.js"></script>
+	<script>
+		/*
+		* Rope类
+		*/
+		var Rope=function () {
+			function _Rope (pointDist,texture) {
+				this.pointDist=pointDist||3;
+				this.points=[];
+				this.rootIndex=0;
+				this.texture=texture||{ color:"#D00000",radius:2 };
+			}
+			_Rope.prototype={
+				getRootIndex:function () {
+					return this.rootIndex;
+				},
+				setRootIndex:function (i) {
+					this.rootIndex=i;
+				},
+				rootPoint:function () {
+					return this.points[this.rootIndex];
+				},
+				addPoint:function (x,y) {
+					this.points.push(new Point(this,x,y,this.points[this.points.length-1]));
+				},
+				removePoint:function () {
+					if(!this.points.length)return;
+					this.points.splice(this.points.length-1,1);
+				},
+				render:function (ctx) {
+					var texture=this.texture,
+						points=this.points,
+						pointDist=this.pointDist;
+					var height=2*texture.radius;
+					var p0,p1,angle;
+
+					this.rootPoint().update();
+
+					ctx.fillStyle=texture.color;
+					for (var i = 0; i < points.length-1; i++) {
+						p0=points[i];
+						p1=points[i+1];
+						angle=Math.atan2(p1.y-p0.y,p1.x-p0.x);
+						ctx.save();
+						ctx.translate(p0.x,p0.y);
+						ctx.rotate(angle);//是为ctx.rect()准备的，圆旋转是没有变化的
+						ctx.beginPath();
+						ctx.arc(0,0,texture.radius,0,2*Math.PI);
+						// ctx.lineTo(p1.x,p1.y);//注意translate()后是以p0为原点了的
+						ctx.rect(0,-texture.radius,pointDist,height);//作用：点之间存在间隙，把pointDist变大就能看出来
+						// ctx.arc(pointDist,0,texture.radius,0,2*Math.PI);//经过rotate变换后这个点应该是和p1点的位置一样,可有可无吧
+						ctx.closePath();
+						ctx.fill();
+						ctx.restore();
+					};
+				}
+			}
+
+			/*
+			* Point类
+			*/
+			function Point (rope,x,y,prev) {
+				this.x=x;
+				this.y=y;
+				this.rope=rope;
+				this.prev=prev||null;
+				if(this.prev){
+					this.prev.next=this;//双向指针
+				}
+			}
+			Point.prototype={
+				update:function () {
+					this.updateNext();
+					this.updatePrev();
+				},
+				updatePrev:function () {
+					if(this.prev){//如果它的前面存在点
+						this._update(this.prev);
+						this.prev.updatePrev();
+					}
+				},
+				updateNext:function () {
+					if(this.next){
+						this._update(this.next);
+						this.next.updateNext();
+					}
+				},
+				_update:function (node) {
+					//求角度
+					var angle=Math.atan2(node.y-this.y,node.x-this.x);
+					//以他的邻点为准
+					node.x=this.x+Math.cos(angle)*this.rope.pointDist;
+					node.y=this.y+Math.sin(angle)*this.rope.pointDist;
+				}
+			}
+
+			return _Rope;
+		}();
+
+		(function () {
+			// 配置参数
+			var POINT_NUM=200;
+			// 全局变量
+			var canvas=$("#canvas").get(0),
+				ctx=canvas.getContext("2d"),
+				rope=null,
+				isDrag=false;
+
+			window.addEventListener("load",function () {
+				canvas.height=window.innerHeight;
+				canvas.width=window.innerWidth;
+				rope=new Rope(3);
+
+				// 添加点
+				for (var i = 0; i < POINT_NUM; i++) {
+					if(i==0){
+						rope.addPoint(300,300);
+					}else{
+						var x=canvas.width*0.5*Math.random(),
+							y=canvas.height*0.5*Math.random();
+						rope.addPoint(x,y);
+					}
+				}
+
+				// 绑定事件
+				document.addEventListener("mousedown",moveDownHanddle,false);
+				document.addEventListener("mousemove",moveMoveHanddle,false);
+				document.addEventListener("mouseup",moveUpHanddle,false);
+
+				rope.render(ctx);
+			},false);
+
+			// 事件处理程序
+			function moveDownHanddle (e) {
+				var points=rope.points,
+					flag=false,
+					hitIndex=rope.getRootIndex(),
+					hitDist=100,
+					mouseX=e.clientX,
+					mouseY=e.clientY;
+				for (var i = 0,len=points.length; i < len; i++) {
+					var p=points[i],
+						distX=mouseX-p.x,
+						distY=mouseY-p.y,
+						distSq=distX*distX+distY*distY;
+					if(distSq<hitDist){
+						flag=true;
+						hitIndex=i;
+						break;
+					}
+				}
+				rope.setRootIndex(hitIndex);
+				isDrag=flag;
+			}
+			function moveMoveHanddle (e) {
+				if(isDrag){
+					var root=rope.rootPoint();
+					root.x=e.clientX;
+					root.y=e.clientY;
+					ctx.clearRect(0,0,canvas.width,canvas.height);
+					rope.render(ctx);
+				}
+			}
+			function moveUpHanddle (e) {
+				isDrag=false;
+			}
+		})();
+	</script>
+</body>
+</html>

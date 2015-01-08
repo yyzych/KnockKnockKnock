@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.container{
+			position: relative;
+			height: 100px;
+			border: 1px dashed #333;
+			padding-top: 20px;
+			padding-left: 20px;	
+		}
+		.box{
+			height: 50px;
+			width: 50px;
+			position: absolute;
+			opacity: 0;
+			animation:myAnim 7.15s infinite;
+			-webkit-animation:myAnim 7.15s infinite;
+			-o-animation:myAnim 7.15s infinite;
+			-moz-animation:myAnim 7.15s infinite;
+			-ms-animation:myAnim 7.15s infinite;
+		}
+		#box1{
+			-moz-animation-delay:1.56s;
+			-webkit-animation-delay:1.56s;
+			-ms-animation-delay:1.56s;
+			-o-animation-delay:1.56s;
+			animation-delay:1.56s;
+
+		}
+		#box2{
+			-moz-animation-delay:0.31s;
+			-webkit-animation-delay:0.31s;
+			-ms-animation-delay:0.31s;
+			-o-animation-delay:0.31s;
+			animation-delay:0.31s;
+
+		}
+		#box3{
+			-moz-animation-delay:0.62s;
+			-webkit-animation-delay:0.62s;
+			-ms-animation-delay:0.62s;
+			-o-animation-delay:0.62s;
+			animation-delay:0.62s;
+
+		}
+		#box4{
+			-moz-animation-delay:0.94s;
+			-webkit-animation-delay:0.94s;
+			-ms-animation-delay:0.94s;
+			-o-animation-delay:0.94s;
+			animation-delay:0.94s;
+		}
+		#box5{
+			-moz-animation-delay:1.25s;
+			-webkit-animation-delay:1.25s;
+			-ms-animation-delay:1.25s;
+			-o-animation-delay:1.25s;
+			animation-delay:1.25s;
+		}
+		.inner{
+			height: 6px;
+			width: 6px;
+			background-color: black;
+			position: absolute;
+			left: 0;
+			top: 0;
+			border-radius: 6px;
+		}
+		@keyframes myAnim{
+			
+		}
+		@-webkit-keyframes myAnim{
+			0% {
+				opacity:1;
+				z-index:99;
+				-webkit-transform:rotate(180deg);
+				-webkit-animation-timing-function:ease-out;
+			}
+			7% {
+				opacity:1;
+				-webkit-transform:rotate(300deg);
+				-webkit-animation-timing-function:linear;
+				-webkit-origin:0%;
+			}
+			30% {
+				opacity:1;
+				-webkit-transform:rotate(410deg);
+				-webkit-animation-timing-function:ease-in-out;
+				-webkit-origin:7%;
+			}
+			39% {
+				opacity:1;
+				-webkit-transform:rotate(645deg);
+				-webkit-animation-timing-function:linear;
+				-webkit-origin:30%;
+			}
+			70% {
+				opacity:1;
+				-webkit-transform:rotate(770deg);
+				-webkit-animation-timing-function:ease-out;
+				-webkit-origin:39%;
+			}
+			75% {
+				opacity:1;
+				-webkit-transform:rotate(900deg);/*900deg刚好回到原点*/
+				-webkit-animation-timing-function:ease-out;
+				-webkit-origin:70%;
+			}
+			76% {
+				opacity:0;
+				-webkit-transform:rotate(900deg);
+			}
+			100% {
+				opacity:0;
+				-webkit-transform:rotate(900deg);
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="box" id="box1">
+			<div class="inner"></div>
+		</div>
+		<div class="box" id="box2">
+			<div class="inner"></div>
+		</div>
+		<div class="box" id="box3">
+			<div class="inner"></div>
+		</div>
+		<div class="box" id="box4">
+			<div class="inner"></div>
+		</div>
+		<div class="box" id="box5">
+			<div class="inner"></div>
+		</div>
+	</div>
+</body>
+</html>

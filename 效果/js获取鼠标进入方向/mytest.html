@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>JS获取鼠标进入指定模块的方向</title>
+	<style>
+		.main {
+			margin: 0 auto;
+			width: 800px;
+		}
+
+		.box1, .box2, .box3 {
+			position: relative;
+			margin: 10px auto 0;
+			background-color: #39f;
+			font-size: 48px;
+			color: #f50;
+			text-align: center;
+			overflow: hidden;
+		}
+
+		.box1 {
+			width: 200px;
+			height: 300px;
+			line-height: 300px;
+		}
+
+		.box2 {
+			width: 300px;
+			height: 100px;
+			line-height: 100px;
+		}
+
+		.box3 {
+			width: 400px;
+			height: 400px;
+			line-height: 400px;
+		}
+
+		.slideInner {
+			position: absolute;
+			left: -999em;
+			top: -999em;
+			width: 100%;
+			height: 100%;
+			background-color: #ccc;
+		}
+	</style>
+</head>
+<body>
+<div class="main" id="main">
+	<div class="slidePar box1">1<div class="slideInner"></div></div>
+	<div class="slidePar box2">2<div class="slideInner"></div></div>
+	<div class="slidePar box3">3<div class="slideInner"></div></div>
+</div>
+<script src="jquery-2.1.1.js"></script>
+<script>
+	(function () {
+		function Slide (pars,inners) {
+			this.pars=pars;
+			this.inners=inners;
+			this.init();
+		}
+		Slide.prototype={
+			init:function () {
+				for (var i = 0; i < this.pars.length; i++) {
+					this.render(this.pars[i]);
+				};
+			},
+			getDir:function (e,data) {
+				var dir="l";
+				//主意要加上滚动条的距离
+				var enterPoint={x:e.clientX+Math.max(document.documentElement.scrollLeft,document.body.scrollLeft),y:e.clientY+Math.max(document.documentElement.scrollTop,document.body.scrollTop)};
+				var cen=Math.atan2(data.center.y-enterPoint.y,enterPoint.x-data.center.x)*(180/Math.PI);
+				//注意cen的正负。主要还是搞清楚atan2这个函数就懂了。
+				if(cen>=data.corner.crb&&cen<data.corner.crt){
+					dir="r";	
+				}else if(cen>=data.corner.crt&&cen<data.corner.clt){
+					dir="t";
+				}else if(cen>=data.corner.clb&&cen<data.corner.crb){
+					dir="b";
+				}
+				return dir;
+			},
+			render:function (node) {
+				var self=this;
+				var data=self.getData(node);//用于判断哪里进来的标准
+				var inner=node.children[0];
+				node.onmouseenter=function (event) {
+					event=event||window.event;
+					var dir=self.getDir(event,data);
+					var left=0,top=0;
+					switch(dir){
+						case "l":
+							$(inner).html("左边进入");
+							left=-data.size.width;
+							top=0;
+							break;
+						case "t":
+							$(inner).html("上边进入");
+							left=0;
+							top=-data.size.height;//动画开始时的位置
+							break;
+						case "r":
+							$(inner).html("右边进入");
+							left=data.size.width;
+							top=0;
+							break;
+						case "b":
+							$(inner).html("下边进入");
+							left=0;
+							top=data.size.height;
+							break;
+					}
+					$(inner).css({"left":left+"px","top":top+"px"});
+					//jquery怎样判断动画正在执行
+					if($(inner).is(":animated")){
+						$(inner).stop();
+					}
+					$(inner).animate({left:'0px',top:"0px"});
+				}
+				node.onmouseleave=function (event) {
+					event=event||window.event;
+					var dir=self.getDir(event,data);
+					var left=0,top=0;
+					switch(dir){
+						case "l":
+							$(inner).html("左边出去");
+							left=-data.size.width;
+							top=0;
+							break;
+						case "t":
+							$(inner).html("上边出去");
+							left=0;
+							top=-data.size.height;//动画开始时的位置
+							break;
+						case "r":
+							$(inner).html("右边出去");
+							left=data.size.width;
+							top=0;
+							break;
+						case "b":
+							$(inner).html("下边出去");
+							left=0;
+							top=data.size.height;
+							break;
+					}
+					// $(inner).css({"left":"0px","top":"0px"});
+					if($(inner).is(":animated")){
+						$(inner).stop();
+					}
+					$(inner).animate({left:left+"px",top:top+"px"});
+				}
+			},
+			getData:function (node) {
+				var pos={
+					left:node.offsetLeft,//有滚动的距离也是包括进去了的
+					top:node.offsetTop
+				};
+				var size={
+					width:node.offsetWidth,
+					height:node.offsetHeight
+				};
+				var point={};
+				point.lt={x:pos.left,y:pos.top};
+				point.rt={x:pos.left+size.width,y:pos.top};
+				point.lb={x:pos.left,y:pos.top+size.height};
+				point.rb={x:pos.left+size.width,y:pos.top+size.height};
+				var center={x:pos.left+size.width/2,y:pos.top+size.height/2};
+				var deg=180/Math.PI,corner={};
+				/*
+				* atan2返回的是弧度值。-PI 到 PI 之间的值，也就是-180到180度。正Y轴上方是从 X 轴正向逆时针旋转到点 (x,y) 时经过的角度（为正），负Y轴下方是从 X 轴正向顺时针旋转到点 (x,y) 时经过的角度（为负）。Y 坐标在 X 坐标之前传递。
+				*/
+				//这里以中心点为原点，分为四个象限。要搞清每个象限的正负，所以哪个先减哪个
+				corner.clt=Math.atan2(center.y-point.lt.y,point.lt.x-center.x)*deg;
+				corner.crt=Math.atan2(center.y-point.rt.y,point.rt.x-center.x)*deg;
+				corner.clb=Math.atan2(center.y-point.lb.y,point.lb.x-center.x)*deg;
+				corner.crb=Math.atan2(center.y-point.rb.y,point.rb.x-center.x)*deg;
+
+				return {corner:corner,center:center,size:size,point:point,pos:pos};
+			}
+		}
+
+		window.onload=function () {
+			var slidePars=$(".slidePar"),
+				slideInners=$(".slideInner");
+			var slide=new Slide(slidePars,slideInners);
+		}
+	})();
+	
+</script>
+</body>
+</html>

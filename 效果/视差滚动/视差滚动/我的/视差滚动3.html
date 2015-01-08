@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		/*关于跳动 bug，chrome 下只要加上 body:before { content: "";position: fixed;} （即加上一个固定定位的元素）就会正常渲染了*/
+		body:before {
+			content: "";
+			position: fixed;
+		}
+		body{
+			margin: 0;
+			font:18px/1.5 '微软雅黑';
+		}
+		.scene{
+			position: absolute;
+			width: 100%;
+			height: 643px;
+		}
+		#pokemon1{
+			width: 150px;
+			top: 200px;
+			left: 50px;
+		}
+		#pokemon2{
+			width: 300px;
+			left: 800px;
+			top: 450px;
+		}
+		#pokemon3{
+			top: 600px;
+			left: 150px;
+		}
+
+		#pokemon4{
+			width: 200px;
+			left: 800px;
+			top: 400px;
+		}
+		#pokemon5{
+			width: 300px;
+			left: 500px;
+			top: 500px;
+		}
+		#pokemon6{
+			top: 1200px;
+		}
+		#pokemon7{
+			width: 150px;
+			left: 250px;
+			top: 550px;
+		}
+		#pokemon8{
+			width: 300px;
+			left: 100px;
+			top: 900px;
+		}
+		#pokemon9{
+			top: 1400px;
+			left: 400px;
+		}
+		img{
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<div id="scene_back" class="scene" style="top: 90px;">
+		<img id="pokemon1" src="./视差滚动原理三_images/001.png">
+		<img id="pokemon4" src="./视差滚动原理三_images/004.png">
+		<img id="pokemon7" src="./视差滚动原理三_images/007.png">
+	</div>
+	<div id="scene_center" class="scene" style="top: 270px;">
+		<img id="pokemon2" src="./视差滚动原理三_images/002.png">
+		<img id="pokemon5" src="./视差滚动原理三_images/005.png">
+		<img id="pokemon8" src="./视差滚动原理三_images/008.png">
+	</div>
+	<div id="scene_front" class="scene" style="top: 730px;">
+		<img id="pokemon3" src="./视差滚动原理三_images/003.png">
+		<img id="pokemon6" src="./视差滚动原理三_images/006.png">
+		<img id="pokemon9" src="./视差滚动原理三_images/009.png">
+	</div>
+	<script>
+	// 这里还有个特殊情况：在Chrome下查看这个Demo请拖动滚动条，而不是滚动鼠标。原因是Chrome浏览器对鼠标的滚动做了优化处理，滚动一个齿轮幅度，其他浏览器是触发十几次scroll事件，而Chrome只会触发一次。
+		(function () {
+			function $ (id) {
+				return document.getElementById(id);
+			}
+			var sceneBack=$("scene_back"),
+				sceneCenter=$("scene_center"),
+				sceneFront=$("scene_front");
+			var old_top1=0,
+				old_top2=200,
+				old_top3=700;
+				
+			window.addEventListener("scroll",scrollHandler);
+
+			function scrollHandler (e) {
+				var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+				sceneBack.style.top=old_top1+scrollTop*0.9+"px";
+				sceneCenter.style.top=old_top2+scrollTop*0.7+"px";
+				sceneFront.style.top=old_top3+scrollTop*0.3+"px";
+			}
+
+		})();
+	</script>
+</body>
+</html>

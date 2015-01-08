@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>RunJS</title>
+    <style>
+        *{
+            /*全部对象过渡方法开启，过程时长，运动曲线*/
+            transition:all 0.5s ease-in-out;
+            -webkit-transition:all 0.5s ease-in-out;
+            -moz-transition:all 0.5s ease-in-out;
+            -o-transition:all 0.5s ease-in-out;
+        }
+        div {
+          float:left;
+            width:50px;
+          height:50px;
+          background:#fff;
+          margin:15px 5px;
+          position:relative;
+          top:0;
+          left:0;
+          overflow:hidden;
+          font-size:0;
+          padding:1px;
+          border:4px solid rgba(0,0,0,0.85);
+          border-radius:15px;
+        }
+        .a:hover{
+            transform:scale(1.5);
+            -webkit-transform:scale(1.5);
+            -o-transform:scale(1.5);
+            -moz-transform:scale(1.5);
+        }
+        .b:hover{
+            transform:rotate(-180deg);
+            -webkit-transform:rotate(-180deg);
+            -o-transform:rotate(-180deg);
+            -moz-transform:rotate(-180deg);
+        }
+        .c:hover{
+            height: 5px;
+            top: 20px;
+        }
+        .d:hover{
+            width: 5px;
+            left: 20px;
+            margin-right: 50px;
+        }
+        .e:hover{
+            transform:scale(0);
+            -webkit-transform:scale(0);
+            -o-transform:scale(0);
+            -moz-transform:scale(0);
+        }
+        .f:hover{
+            transform:scale(1.5) rotate(-180deg);
+            -webkit-transform:scale(1.5) rotate(-180deg);
+            -o-transform:scale(1.5) rotate(-180deg);
+            -moz-transform:scale(1.5) rotate(-180deg);
+        }
+        .g span{
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 10px;
+            background-image: url(back.jpg);
+            background-size: 100% 100%;
+        }
+        .g .g2{
+            height: 0;
+            background-image: url(back2.jpg);
+        }
+        .g:hover .g1{/*伪类包含其他元素*/
+            height: 0;
+        }
+        .g:hover .g2{
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="a"></div>
+
+    <div class="b"></div>
+
+    <div class="c"></div>
+
+    <div class="d"></div>
+
+    <div class="e"></div>
+
+    <div class="f"></div>
+
+    <div class="g">
+        <span class="g1"></span>
+        <span class="g2"></span>
+    </div>
+
+</body>
+</html>

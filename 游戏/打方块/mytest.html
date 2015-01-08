@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{ margin: 0; padding: 0; }
+		.container{ margin: auto; text-align: center; }
+		canvas{ background-color: #8B8B8B; display: none; }
+		div.title{ height: 465px; width: 465px; background-color: #000; margin: auto; }
+		.btn{ display: block; padding: 8px 12px; font-size: 14px; text-decoration: none; color:#fff; background-color: #37B850; width: 120px; margin: 30px auto; }
+		.title>h1{ color: #fff; padding-top: 120px; font-size: 2.8em; }
+	</style>
+	<script src="jquery-2.1.1.js"></script>
+	<script src="Vector.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="wrap">
+			<div class="title">
+				<h1>打方块</h1>
+				<a href="javascript:void(0)" class="btn" id="start">开始</a>
+			</div>
+			<canvas id="canvas"></canvas>
+		</div>
+		<p>分数：<span id="score"></span></p>
+	</div>
+	<script>
+		//游戏，动画的实质就是改变值，然后在非常短的时间内更新重新绘制出来.XNA里面的也是这个意思
+		(function () {
+			//影响全局的变量
+			var ctx=null,
+				playBlock=null,
+				blockSize={height:16,width:32},
+				ballInfo={radius:6,speed:3};
+				canvasSize={height:465,width:465},
+				boundry=null,
+				colors=["#000","#fff"],
+				timer=null;
+			var scoreSpan=$("#score");
+
+			window.onload=function () {
+				var start=$("#start");
+				start.click(run);
+			}
+			function run () {
+				var canvas=$("#canvas");
+				if(!canvas.get(0).getContext){//要改为dom对象
+					alert("该浏览器不支持");
+					return;
+				}
+				canvas.attr("height",canvasSize.height);
+				canvas.attr("width",canvasSize.width);
+				ctx=canvas.get(0).getContext('2d');
+
+				playBlock=new PlayBlock(canvas);
+				playBlock.draw();
+
+				$(".title").hide();
+				canvas.show();
+
+				timer=setInterval(function () {
+					playBlock.update();
+					playBlock.draw();
+				},16);
+			}
+
+			//打在角上的问题没有解决，，坐标位置判断什么的不够精准
+			function PlayBlock (canvas) {
+				this.blocks=[];
+				this.balls=[];
+				this.particles=[];
+				this.paddle=null;//横版
+				this.boundry={top:0,left:0,bottom:canvasSize.height,right:canvasSize.width};
+				this.score=0;
+
+				this.init(canvas);
+			}
+			PlayBlock.prototype={
+				init:function () {
+					var rows=26,cols=12,self=this;
+					var t=(canvasSize.height-rows*blockSize.height-(rows-1)*0.5)/2,
+						l=(canvasSize.width-cols*blockSize.width-(cols-1)*0.5)/2;//0.5的缝隙
+					this.boundry={
+						top:t,
+						left:l,
+						bottom:canvasSize.height-t,
+						right:canvasSize.width-l
+					};
+					boundry=$.extend({},self.boundry);//复制到全局域中，因为其他对象也要用到
+					//i:行，j:列
+					for (var i = 0; i < rows; i++) {
+						for (var j = 0; j < cols; j++) {
+							var x=j*(blockSize.width+0.5)+this.boundry.left,
+								y=i*(blockSize.height+0.5)+this.boundry.top;
+							//按位异或操作符，左右两边返回的是bool值但是会转换为数值0或1的
+							((i<10)^(j<6))?this.blocks.push(new Block(x,y,1)):this.blocks.push(new Block(x,y,0));
+						};
+					};
+
+					this.paddle=new Paddle();
+					var	offsetX=(window.innerWidth-canvas.width)/2;
+					$(canvas).mousemove(function (event) {
+						event.preventDefault();
+						self.paddle.update(event.pageX-offsetX);
+					});
+					// 不需要再绑定事件了，因为update是定期触发的
+					// $(canvas).mousedown(function (event) {
+					// 	for (var i = 0; i < self.balls.length; i++) {
+					// 		self.balls[i].update();
+					// 	};
+					// })
+					
+					this.balls=[
+						new Ball({x:208,y:170},1),
+						new Ball({x:208,y:200},0),
+						new Ball({x:256,y:170},0),
+						new Ball({x:256,y:200},1)
+					];
+				},
+				draw:function () {
+					ctx.fillStyle="#8B8B8B";
+					ctx.fillRect(0,0,canvasSize.width,canvasSize.height);
+					for (var i = 0; i < this.blocks.length; i++) {
+						this.blocks[i].draw();
+					};
+					for (var i = 0; i < this.balls.length; i++) {
+						this.balls[i].draw();
+					};
+					this.paddle.draw();
+					for (var i = 0; i < this.particles.length; i++) {
+						this.particles[i].draw();
+					};
+
+					scoreSpan.html(this.score);
+				},
+				update:function () {
+					for (var i = 0; i < this.balls.length; i++) {
+						this.balls[i].update();
+						//判断与所有方块的情况
+						for (var j = 0; j < this.blocks.length; j++) {
+							var theBlock=this.blocks[j];
+							if(this.balls[i].ifSameColor(this.blocks[j])&&this.balls[i].ifHitOn(this.blocks[j])){
+								this.blocks[j].changeColor();
+								this.score+=10;
+
+								//添加效果
+								var num=0;
+								while(num<10){
+									this.particles.push(new Particle(theBlock));
+									num++;
+								}
+
+								if(this.balls[i].violent){
+									continue;
+								}
+
+								//判断撞击的方向啊
+								var bounceH, bounceV, hitsCorner;
+								if((this.balls[i].oldPosi.x<this.blocks[j].boundry.left||this.balls[i].oldPosi.x>this.blocks[j].boundry.right)&&(this.balls[i].oldPosi.y<this.blocks[j].boundry.top||this.balls[i].oldPosi.y>this.blocks[j].boundry.bottom)){
+									hitsCorner=true;
+									// 还要知道打在哪个角上
+									// var parallel=new Vector(this.blocks[j].boundry.left-this.balls[i].oldPosi.x,this.blocks[j].boundry.top-this.balls[i].oldPosi.y);
+									// this.balls[i].getSymmetry(this.balls[i].vectorChange,parallel);
+								}else if(this.balls[i].oldPosi.x<this.blocks[j].boundry.left||this.balls[i].oldPosi.x>this.blocks[j].boundry.right){
+									bounceV=true;
+									this.balls[i].getSymmetry("x");
+								}else if(this.balls[i].oldPosi.y<this.blocks[j].boundry.top||this.balls[i].oldPosi.y>this.blocks[j].boundry.bottom){
+									bounceH=true;
+									this.balls[i].getSymmetry("y");
+								}
+							}
+						};
+
+						//撞击板上的情况
+						this.paddle.hitPaddle(this.balls[i]);
+					};
+
+					//更新效果
+					var p=null;
+					for (var i = this.particles.length - 1; i >= 0; i--) {
+						p=this.particles[i];
+						p.update();
+						if(!p.exist){
+							this.particles.splice(i,1);
+						}
+					};
+				}
+			}
+
+			//横板
+			function Paddle () {
+				this.x=232;
+				this.y=350;
+				this.width=64;
+				this.height=8;
+			}
+			Paddle.prototype={
+				update:function (curx) {//curx:是鼠标指针当前的位置
+					if(curx<boundry.left+this.width/2){
+						curx=boundry.left+this.width/2;
+					}
+					if(curx>boundry.right-this.width/2){
+						curx=boundry.right-this.width/2;
+					}
+					this.x=curx-this.width/2;
+				},
+				draw:function () {
+					ctx.save();
+					ctx.fillStyle="#FFFF15";
+					ctx.fillRect(this.x,this.y,this.width,this.height);
+					ctx.restore();
+				},
+				hitPaddle:function (ball) {
+					var x0=ball.curPosi.x-ball.radius,
+						y0=ball.curPosi.y-ball.radius;//原心的位置
+
+					// if(ball.vectorChange.y>0){//必须是由上往下,只要判断y就行了
+					// 	if(y0+ball.radius>this.y){//这里有错误，在板的下发向下运动就会出错
+					// 		if(this.x<x0&&x0<this.x+this.width){//直接反弹
+					// 			ball.getSymmetry("y");
+					// 		}else if((x0+ball.radius<this.x)||(x0-ball.radius>this.x+this.width)){
+					// 			// 不做任何事
+					// 		}else{//打在角上
+								
+					// 		}
+					// 	}
+					// }
+
+					//由上往下,只要判断前一个点和后一个点就可以了
+					if(ball.oldPosi.y<this.y&&y0+ball.radius>this.y){
+						if(this.x<x0&&x0<this.x+this.width){//直接反弹
+							ball.getSymmetry("y");
+						}else if((x0+ball.radius<this.x)||(x0-ball.radius>this.x+this.width)){
+							// 不做任何事
+						}else{//打在角上
+							// if(ball.curPosi.x<this.x){
+							// 	var t1=new vector(this.x,this,y);
+							// 	var parallel=t1.minusNew(ball.curPosi);
+							// 	ball.getSymmetry(ball.vectorChange,parallel);
+							// }else{
+							// 	var t1=new Vector(this.x+this.width,this.y);
+							// 	var parallel=t1.minusNew(ball.curPosi);
+							// 	ball.getSymmetry(ball.vectorChange,parallel);
+							// }
+						}
+
+						//如果打在正中心左右5像素则激发暴走模式
+						if(Math.abs(this.x+this.width/2-x0)<5){
+							ball.violent=true;
+							setTimeout(function() {
+								ball.violent=false;
+							}, 3000);
+						}
+					}
+				}
+			}
+
+			//小球
+			function Ball (posi,colorIndex) {
+				// 用向量的形式
+				// this.curPosi=$.extend({},posi);
+				this.curPosi=new Vector(posi.x,posi.y);//圆心的坐标
+				this.oldPosi=$.extend({},posi);
+				this.speed=ballInfo.speed;
+				this.colorIndex=colorIndex;
+				this.radius=ballInfo.radius;
+				this.violent=false;//是否处于暴走模式
+				this.vectorChange=new Vector();
+
+				this.init();
+			}
+			Ball.prototype={
+				draw:function () {
+					ctx.save();
+					ctx.fillStyle=colors[this.colorIndex];
+					var x=this.curPosi.x-this.radius,
+						y=this.curPosi.y-this.radius;
+					ctx.beginPath();
+					ctx.arc(x,y,this.radius,0,Math.PI*2,false);//0:表示什么？
+					ctx.closePath();
+					if(this.violent){
+						ctx.strokeStyle="#F00";
+						ctx.lineWidth=3;
+						ctx.stroke();
+					}
+					ctx.fill();
+					ctx.restore();
+				},
+				getSymmetry:function (str,parallel) {//获得并设置对称的向量，str：关于哪个轴对称
+					if(arguments.length==1){
+						var r = this.vectorChange.symmetryNew(str);
+						this.vectorChange=r;
+					}else if(arguments.length==2){
+						var r = this.vectorChange.symmetryNew(str,parallel);
+						this.vectorChange=r;
+					}
+				},
+				update:function () {
+					var newPosi=this.curPosi.plusNew(this.vectorChange),symmetryVec=null;
+					//为什么第一个也是+号???为什么会突出来一点点？？3是我凑得
+					if((newPosi.x>boundry.right+this.radius-3)||(newPosi.x<boundry.left+this.radius+3)){
+						this.getSymmetry("x");//关于x对称
+					}
+					if((newPosi.y>boundry.bottom+this.radius-3)||(newPosi.y<boundry.top+this.radius+3)){
+						this.getSymmetry("y");//关于y对称
+					}
+					this.oldPosi=this.curPosi.getClone();
+					this.curPosi.plus(this.vectorChange);
+				},
+				init:function () {
+					var changeVal=this.speed;//变化的幅度
+					var x=Math.random()*boundry.right+boundry.left,
+						y=Math.random()*boundry.bottom+boundry.top;
+					var v1=new Vector(x,y);
+					var v2=this.curPosi.minusNew(v1);
+					v2.scale(changeVal/v2.getLength());
+					this.vectorChange=v2.getClone();
+				},
+				ifSameColor:function (block) {
+					return this.colorIndex===block.colorIndex;
+				},
+				ifHitOn:function (block) {
+					var sqDist=0;
+					if(this.curPosi.x<block.boundry.left){
+						sqDist+=(block.boundry.left-this.curPosi.x)*(block.boundry.left-this.curPosi.x);
+					}else if(this.curPosi.x>block.boundry.right){
+						sqDist+=(this.curPosi.x-block.boundry.right)*(this.curPosi.x-block.boundry.right);
+					}
+					if(this.curPosi.y<block.boundry.top){
+						sqDist+=(block.boundry.top-this.curPosi.y)*(block.boundry.top-this.curPosi.y);
+					}else if(this.curPosi.y>block.boundry.bottom){
+						sqDist+=(this.curPosi.y-block.boundry.bottom)*(this.curPosi.y-block.boundry.bottom);
+					}
+					var flag=sqDist<=this.radius*this.radius;
+					return flag;
+				}
+			}
+
+			//黑白方块
+			function Block (x,y,colorIndex) {
+				this.posi={x:x,y:y};
+				this.colorIndex=colorIndex;
+				// this.particles=[];//每个方块被撞击后都有个效果的..这样子做性能太低了。。
+				this.blockSize=blockSize;
+				this.boundry={left:x,top:y,right:x+blockSize.width,bottom:y+blockSize.height};
+			}
+			Block.prototype={
+				draw:function () {
+					ctx.save();
+					ctx.fillStyle=colors[this.colorIndex];
+					ctx.fillRect(this.posi.x,this.posi.y,this.blockSize.width,this.blockSize.height);
+					// ctx.strokeRect(this.posi.x+0.5,this.posi.y+0.5,this.blockSize.width-1,this.blockSize.height-1);
+					ctx.restore();
+					// for (var i = 0; i < this.particles.length; i++) {
+					// 	if(this.particles[i].exist){
+					// 		this.particles[i].draw();
+					// 	}
+					// };
+				},
+				changeColor:function () {
+					this.colorIndex==1?this.colorIndex=0:this.colorIndex=1;
+				}
+			}
+
+			//撞击特效粒子
+			function Particle (theBlock) {
+				var x=(theBlock.boundry.left+theBlock.boundry.right)/2,
+					y=(theBlock.boundry.top+theBlock.boundry.bottom)/2;
+				this.curPosi=new Vector(x,y);
+				this.changeVal={
+					x:Math.random()*6-3,
+					y:Math.random()*6-3,
+					angle:Math.random()*30-15
+				};
+				this.angle=0;
+				this.exist=true;
+				this.scale=Math.random()*2+1;
+				this.colorIndex=theBlock.colorIndex;
+			}
+			Particle.prototype={
+				draw:function () {
+					ctx.save();
+					// ctx.moveTo(this.curPosi.x,this.curPosi.y);//为什么没有用？？
+
+					// ctx.translate(dx,dy)=ctx.transform (1,0,0,1,dx,dy)=ctx.transform(0,1,1,0.dx,dy)代替。
+					//平移：context.translate(dx,dy)可以使用context.transform (1,0,0,1,dx,dy)或者context.transform(0,1,1,0.dx,dy)代替。
+					//旋转：context.rotate(θ)可以使用context.transform(Math.cos(θ*Math.PI/180)，Math.sin(θ*Math.PI/180),-Math.sin(θ*Math.PI/180),Math.cos(θ*Math.PI/180)，0，0)或者context.transform(-Math.sin(θ*Math.PI/180),Math.cos(θ*Math.PI/180)，Math.cos(θ*Math.PI/180)，Math.sin(θ*Math.PI/180), 0，0)代替。
+					//缩放：context.scale(sx, sy)可以使用context.transform(sx,0,0,sy,0,0)或者context.transform(0,sy,sx,0, 0,0)代替。
+					ctx.setTransform(1, 0, 0, 1, this.curPosi.x, this.curPosi.y);//重置当前的变形矩阵为单位矩阵，然后以相同的参数调用transform方法
+					ctx.globalAlpha=0.5;
+					ctx.fillStyle=colors[this.colorIndex];
+					ctx.scale(this.scale,this.scale);
+					ctx.rotate(this.angle*Math.PI/180);//弧度值
+					ctx.fillRect(-8,-8,8,8);
+					ctx.restore();
+				},
+				update:function () {
+					if(this.scale<0.05){
+						this.exist=false;
+						return;
+					}
+
+					this.changeVal.y+=0.3;
+					this.curPosi.y+=this.changeVal.y;
+					this.curPosi.x+=this.changeVal.x;
+
+					this.scale-=0.05;
+					this.angle+=this.changeVal.angle;
+				}
+			}
+		})();
+	</script>
+</body>
+</html>

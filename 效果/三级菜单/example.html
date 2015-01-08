@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>RunJS</title>
+    <style type="text/css">
+            *{ margin:0; padding:0; list-style:none;}
+            .menu_sidenav{}
+            .menu_sidenav dl{ width:150px;font-size:14px;}
+            .menu_sidenav dl dt{ width:100%; cursor:pointer; line-height:30px; background:#000; color:#fff; border-bottom:1px solid #666; display:block;}
+            .menu_sidenav dl dd{}
+            .menu_sidenav dl dd span{ text-indent:1em; line-height:24px; display:block; cursor:pointer; background:#666; color:#FF0; border-bottom:1px solid #ccc;}
+            .menu_sidenav dl dd ul{ padding:5px 0; background:#CCC;}
+            .menu_sidenav dl dd li{ text-indent:2em; width:100%; display:block;}
+            .menu_sidenav dl dd li a{ width:100%;display:block; line-height:22px; text-decoration:none; font-size:12px; color:#000;}
+            .menu_sidenav dl dd li a:hover,.menu_sidenav dl dd li.current a{ color:#fff; background:#F90}
+        </style>
+    <script class="jquery library" src="/js/sandbox/jquery/jquery-2.1.0.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="menu_sidenav" id="sidenav">
+        <dl>
+            <dt>一级菜单</dt>
+            <dd style="display:none;">
+                <span>二级菜单</span>
+                <span>二级菜单</span>
+                <ul style="display:none;">
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li class="current">
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+        <dl>
+            <dt>一级菜单</dt>
+            <dd style="display:none;">
+                <span>二级菜单</span>
+                <ul style="display:none;">
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                </ul>
+                <span>二级菜单</span>
+                <span>二级菜单</span>
+                <ul style="display:none;">
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+        <dl>
+            <dt>一级菜单</dt>
+            <dd style="display:none;">
+                <span>二级菜单</span>
+                <ul style="display:none;">
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">三级菜单</a>
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+        <dl>
+            <dt>一级菜单</dt>
+        </dl>
+    </div>
+    <script type="text/javascript">
+        function menuChange(Id,aClsaaName){
+            var graDl = document.getElementById(Id).getElementsByTagName("dl");
+            for(i=0;i<graDl.length;i++){
+                graDl[i].id = Id + "_gra" + i;
+                var graDt = graDl[i].getElementsByTagName("dt")[0];
+                var fatherDd = graDl[i].getElementsByTagName("dd");
+                graDt.onclick = function(){
+                    
+                    var node=this.nextSibling;
+                    while(node.nodeType!=1){
+                        node=node.nextSibling;
+                        if(!node)
+                            return null;
+                        }
+                    if(node){
+                        if(node.style.display == "none")
+                            node.style.display = "";
+                        else
+                            node.style.display = "none";
+                        }else{
+                            return null;
+                            }
+                    }
+                if(fatherDd.length>0){
+                    var fatherSpan = fatherDd[0].getElementsByTagName("span");
+                    for(k=0;k<fatherSpan.length;k++){
+                        fatherSpan[k].onclick = function(){
+                            var node=this.nextSibling;
+                            while(node.nodeType!=1){
+                                node=node.nextSibling;
+                                if(!node)
+                                    return null;
+                                }
+                            if(node.tagName=="UL"){
+                                //alert("aaa");
+                                if(node.style.display == "none")
+                                    node.style.display = "";
+                                else
+                                    node.style.display = "none";
+                                }else
+                                    return null;
+                            }
+                        }
+                    }
+                }
+
+            var sonLi = document.getElementById(Id).getElementsByTagName("li");
+            for(p=0;p<sonLi.length;p++){
+                sonLi[p].onclick = function(){
+                    if(this.className==aClsaaName)
+                        return;
+                    for(q=0;q<sonLi.length;q++){
+                        sonLi[q].className = "";
+                    }
+                    this.className=aClsaaName;
+                }
+            }
+        }
+        menuChange("sidenav","current");
+    </script>
+</body>
+</html>

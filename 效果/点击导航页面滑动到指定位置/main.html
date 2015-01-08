@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="jquery-2.1.1.js"></script>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		a{
+			text-decoration: none;
+			color:#fff;
+		}
+		.nav li{
+			display: inline-block;
+		}
+		.nav_box{
+			position: fixed;
+			top: 0;
+			height: 50px;
+			line-height: 50px;
+			left: 0;
+			width: 100%;
+			z-index: 2;
+			background-color: #6DDEE4;
+		}
+		.item{
+			height: 500px;
+		}
+		/*.content{
+			position: relative;
+		}*/
+		.content div:nth-of-type(2n){
+			background-color: red;
+		}
+		.content div:nth-of-type(2n+1){
+			background-color: yellow;
+		}
+	</style>
+</head>
+<body>
+	<div class="nav_box">
+		<ul class="nav">
+			<li><a href="javascript:void(0)">导航1</a></li>
+			<li><a href="javascript:void(0)">导航2</a></li>
+			<li><a href="javascript:void(0)">导航3</a></li>
+			<li><a href="javascript:void(0)">导航4</a></li>
+		</ul>
+	</div>
+	<div style="height:50px;background:transparent"><!-- 必须要有 --></div>
+	<div class="content">
+		<div class="item"></div>
+		<div class="item"></div>
+		<div class="item"></div>
+		<div class="item"></div>
+	</div>
+	<div style="height:500px"><!-- 必须要有 --></div>
+	<script>
+		var elems_selector=".nav li>a",
+				slideObj_selector=".content",
+				elems=$(elems_selector),
+				timer=null,
+				par=null,
+				interval=10;
+		function init () {
+			document.body.scrollTop=1;
+			document.body.scrollTop==1?par=document.body:par=document.documentElement;
+			var offsetY_arr=[0,500,1000,1500];
+			for (var i = 0; i < offsetY_arr.length; i++) {
+				addItem(elems[i],offsetY_arr[i]);
+			};
+		}
+		function addItem (elem,value) {
+			$(elem).data({offsetY:value});
+			$(elem).click(function () {
+				//var curValue=slideObj.scrollTop||0;
+				var targetVal=parseInt($(this).data("offsetY"));
+				move(targetVal,interval);
+			})
+		}
+		function move (valueY,interval) {
+			if(timer){
+				clearTimeout(timer);
+				timer=null;
+			}
+			var curValue=parseInt(par.scrollTop)||0;
+			if(curValue==valueY) return;
+			if(curValue>valueY){
+				var dist=curValue-valueY;
+				dist=Math.ceil(dist/10);
+				curValue=curValue-dist;
+			}
+			else if(curValue<valueY){
+				var dist=valueY-curValue;
+				dist=Math.ceil(dist/10);
+				curValue=curValue+dist;
+			}
+			par.scrollTop=curValue;
+			timer=setTimeout(function () {
+				move(valueY,interval);
+			},interval);
+		}
+
+		init();
+	</script>
+</body>
+</html>

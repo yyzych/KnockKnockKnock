@@ -1,0 +1,216 @@
+<!doctype>
+<html>
+<head>
+<title>spece bird</title>
+<script type="text/javascript" src="Vector.js"></script>
+<style>
+	canvas{
+		background-image:url("http://sandbox.runjs.cn/uploads/rs/60/5l2za5rc/stars-bg.jpg")
+	}
+
+	img{
+		position:absolute;
+		display:none;
+	}
+
+	canvas{
+		opacity:1
+	}
+
+	body{
+	background:#aaa;
+	}
+</style>
+</head>
+<body>
+	<img src = "http://sandbox.runjs.cn/uploads/rs/60/5l2za5rc/red-bird.png" id = "bird"/>
+	<img src = "http://sandbox.runjs.cn/uploads/rs/60/5l2za5rc/planet-5-gravity-fi.png" id = "planet"/>
+	<canvas></canvas>
+	<script>
+		var canvas = document.querySelector("canvas");
+			var ctx = canvas.getContext("2d");
+			ctx.globalAlpha = .1;
+			var DEG_TO_RAD = Math.PI/180;
+			var width = canvas.width = 800;
+			var height = canvas.height = 600;
+			var g = 600;
+
+			var log = function()
+			{
+				console.log.apply(console, arguments);
+			}
+
+			var Circle = function(x, y, r)
+			{
+				this.r = r||1;
+				this.pos = new Vector(x||0, y||0);
+			}
+
+			Circle.prototype.hitTest = function(circle)
+			{
+				return this.pos.minusNew(circle.pos).getLength() <= (this.r + circle.r);
+			}
+
+			Circle.prototype.debugDraw = function()
+			{
+				ctx.save();
+				ctx.strokeStyle = "0x6699ff";
+				ctx.beginPath();
+				ctx.arc(this.pos.x, this.pos.y, this.r, 0, 360*DEG_TO_RAD);
+				ctx.stroke();
+				ctx.restore();
+			}
+
+			var GravitationArea = function(x, y, r)
+			{
+				Circle.apply(this, arguments);
+				GravitationArea.pool.push(this);
+			}
+			GravitationArea.prototype = new Circle;
+			GravitationArea.pool = [];
+			GravitationArea.getAllGravitation = function(circle)
+			{
+				var a = new Vector();
+				GravitationArea.pool.forEach(function(area){
+					a.plus(area.getGravitation(circle));
+				});
+				return a;
+			}
+			GravitationArea.debugDraw = function()
+			{
+				GravitationArea.pool.forEach(function(area){
+					//area.debugDraw();
+					GravitationArea.img && ctx.drawImage(GravitationArea.img, 0, 0, 640, 640, area.pos.x-area.r, area.pos.y-area.r, area.r<<1, area.r<<1);
+
+				});
+			}
+			GravitationArea.prototype.getGravitation = function(circle)
+			{
+				if(circle instanceof Circle && circle.hitTest(this))
+				{
+					var a = this.pos.minusNew(circle.pos);
+					var r2 = (a.x*a.x) + (a.y*a.y);
+					a.setLength(g/r2);
+					return a;
+				}
+				return new Vector();
+			}
+
+			var Sprite = function(x, y, r)
+			{
+				this.hitArea = new Circle(x||0, y||0, r||1);
+				this.pos = this.hitArea.pos;
+				this.isDebug = false;
+			}
+
+			Sprite.prototype.setImage = function(img)
+			{
+				this.img = img;
+			}
+
+			Sprite.prototype.hitTest = function(circle)
+			{
+				var circle = circle instanceof Circle?circle:circle instanceof Sprite?circle.hitArea:null;
+				if(circle) return this.hitArea.hitTest(circle);
+				return false;
+			}
+
+			Sprite.prototype.render = function()
+			{
+				if(this.isDebug) this.hitArea.debugDraw();
+				ctx.save();
+				ctx.translate(this.pos.x, this.pos.y);
+				this.img && ctx.drawImage(this.img, 0, 0, 640, 640, -100, -100, 200, 200);
+				ctx.restore();
+			}
+
+			var MoveSprite = function()
+			{
+				Sprite.apply(this, arguments);
+				this.v = new Vector();
+				this.a = new Vector();
+			}
+			MoveSprite.prototype = new Sprite;
+
+			MoveSprite.prototype.preUpdate = function()
+			{
+				this.a = GravitationArea.getAllGravitation(this.hitArea);
+			}
+
+			MoveSprite.prototype.update = function()
+			{
+				this.preUpdate();
+				if(this.a.getLength()>6)
+					this.a.setLength(6);
+				this.v.plus(this.a);
+				if(this.v.getLength() > 9)
+					this.v.setLength(9);
+				this.pos.plus(this.v);
+			}
+
+			new GravitationArea(350, 340, 150);
+			new GravitationArea(240, 150, 150);
+			
+			var bird = new MoveSprite(207, 316, 6);
+			bird.isDebug = true;
+			bird.v = new Vector(.8, -.73);
+
+			function update()
+			{
+				ctx.clearRect(0, 0, width, height);
+				GravitationArea.debugDraw();		
+				
+				if(isDown)
+				{
+					ctx.beginPath();
+					ctx.moveTo(mouse.x, mouse.y);
+					ctx.lineTo(bird.pos.x, bird.pos.y);
+					ctx.stroke()
+				}
+				else
+				{
+					bird.update();
+				}
+				bird.render();
+
+			}
+
+			setInterval(update, 1000/60);
+
+			window.onload = function()
+			{
+				// var birdImg = document.querySelector("#bird");
+				var planetImg = document.querySelector("#planet");
+				GravitationArea.img = planetImg;
+			}
+
+
+			var mouse;
+			var isDown;
+			canvas.addEventListener("mousedown", function(e){
+				mouse = new Vector(e.clientX, e.clientY);
+				bird.v = new Vector();
+				bird.a = new Vector();
+				bird.pos.reset(mouse.x, mouse.y);
+				isDown = true;
+				log(e.clientX, e.clientY)
+
+			});
+
+			canvas.addEventListener("mouseup", function(e){
+				isDown = false;
+				bird.v = mouse.minusNew(bird.pos);
+				bird.v.scale(.01);
+				log(e.clientX, e.clientY)
+			});
+
+			canvas.addEventListener("mousemove", function(e){
+				if(isDown)
+				{
+					mouse.reset(e.clientX, e.clientY);
+					//log(e.clientX, e.clientY)
+				}
+			});
+	</script>
+</body>
+</html>

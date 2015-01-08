@@ -1,0 +1,177 @@
+<!DOCTYPE>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>2048</title>
+<link rel="stylesheet" type="text/css" href="2048.css" />
+</head>
+
+<body>
+	<div id="div2048">
+        <a id="start">tap to start :-)</a>
+    </div>
+   <!-- <div>游戏规则很简单，每次可以选择上下左右其中一个方向去滑动，每滑动一次，所有的数字方块都会往滑动的方向靠拢外，系统也会在空白的地方乱数出现一个数字方块，相同数字的方块在靠拢、相撞时会相加。系统给予的数字方块不是2就是4，玩家要想办法在这小小的16格范围中凑出“2048”这个数字方块。</div> -->
+    <script>
+    	function game2048(container)
+    	{
+    		this.container = container;
+    		this.tiles = new Array(16);
+    	}
+
+    	game2048.prototype = {
+    		init: function(){
+    			for(var i = 0, len = this.tiles.length; i < len; i++){
+    				var tile = this.newTile(0);
+    				tile.setAttribute('index', i);
+    				this.container.appendChild(tile);
+    				this.tiles[i] = tile;
+    			}
+    			this.randomTile();
+    			this.randomTile();
+    		},
+    		newTile: function(val){
+    			var tile = document.createElement('div');
+    			this.setTileVal(tile, val)
+    			return tile;
+    		},
+    		setTileVal: function(tile, val){
+    			tile.className = 'tile tile' + val;
+    			tile.setAttribute('val', val);
+    			tile.innerHTML = val > 0 ? val : '';
+    		},
+    		randomTile: function(){
+    			var zeroTiles = [];
+    			for(var i = 0, len = this.tiles.length; i < len; i++){
+    				if(this.tiles[i].getAttribute('val') == 0){//之后数字会变的，只有为0的格子才能随机一个数字
+    					zeroTiles.push(this.tiles[i]);
+    				}
+    			}
+    			var rTile = zeroTiles[Math.floor(Math.random() * zeroTiles.length)];
+    			this.setTileVal(rTile, Math.random() < 0.8 ? 2 : 4);//随机给的永远只可能是这两个数字
+    		},
+    		move:function(direction){
+    			var j;
+    			switch(direction){
+    				case 'W':
+    					for(var i = 4, len = this.tiles.length; i < len; i++){
+    						j = i;
+    						while(j >= 4){
+    							this.merge(this.tiles[j - 4], this.tiles[j]);//上下两行同一列相差4
+    							j -= 4;
+    						}
+    					}
+    					break;
+    				case 'S':
+    					for(var i = 11; i >= 0; i--){
+    						j = i;
+    						while(j <= 11){
+    							this.merge(this.tiles[j + 4], this.tiles[j]);
+    							j += 4;
+    						}
+    					}
+    					break;
+    				case 'A':
+    					for(var i = 1, len = this.tiles.length; i < len; i++){
+    						j = i;
+    						while(j % 4 != 0){
+    							this.merge(this.tiles[j - 1], this.tiles[j]);
+    							j -= 1;
+    						}
+    					}
+    					break;
+    				case 'D':
+    					for(var i = 14; i >= 0; i--){
+    						j = i;
+    						while(j % 4 != 3){
+    							this.merge(this.tiles[j + 1], this.tiles[j]);
+    							j += 1;
+    						}
+    					}
+    					break;
+    			}
+    			this.randomTile();
+    		},
+    		merge: function(prevTile, currTile){
+    			var prevVal = prevTile.getAttribute('val');
+    			var currVal = currTile.getAttribute('val');
+    			if(currVal != 0){
+    				if(prevVal == 0){
+    					this.setTileVal(prevTile, currVal);
+    					this.setTileVal(currTile, 0);
+    				}
+    				else if(prevVal == currVal){
+    					this.setTileVal(prevTile, prevVal * 2);
+    					this.setTileVal(currTile, 0);
+    				}
+    			}
+    		},
+    		equal: function(tile1, tile2){
+    			return tile1.getAttribute('val') == tile2.getAttribute('val');
+    		},
+    		max: function(){
+    			for(var i = 0, len = this.tiles.length; i < len; i++){
+    				if(this.tiles[i].getAttribute('val') == 2048){
+    					return true;
+    				}
+    			}
+    		},
+    		over: function(){
+    			for(var i = 0, len = this.tiles.length; i < len; i++){
+    				if(this.tiles[i].getAttribute('val') == 0){
+    					return false;
+    				}
+    				if(i % 4 != 3){
+    					if(this.equal(this.tiles[i], this.tiles[i + 1])){//判断每一行相邻的两个格子有没有相等的，相邻的如果不相等就不能移动
+    						return false;
+    					}
+    				}
+    				if(i < 12){
+    					if(this.equal(this.tiles[i], this.tiles[i + 4])){//判断每一列相邻的两个格子有没有相等的
+    						return false;
+    					}
+    				}
+    			}
+    			return true;
+    		},
+    		clean: function(){
+    			for(var i = 0, len = this.tiles.length; i < len; i++){
+    				this.container.removeChild(this.tiles[i]);
+    			}
+    			this.tiles = new Array(16);
+    		}
+    	}
+
+    	var game, startBtn;
+
+    	window.onload = function(){
+    		var container = document.getElementById('div2048');
+    		startBtn = document.getElementById('start');
+    		startBtn.onclick = function(){
+    			this.style.display = 'none';
+    			game = game || new game2048(container);
+    			game.init();
+    		}
+    	}
+
+    	window.onkeydown = function(e){
+    		var keynum, keychar;
+    		if(window.event){		// IE
+    			keynum = e.keyCode;
+    		}
+    		else if(e.which){		// Netscape/Firefox/Opera中不支持 window.event.keyCode,需要用event.which代替
+    			keynum = e.which;
+    		}
+    		keychar = String.fromCharCode(keynum);//这个大写字母的键码和acsii表的编码是一样的
+    		if(['W', 'S', 'A', 'D'].indexOf(keychar) > -1){
+    			if(game.over()){
+    				game.clean();
+    				startBtn.style.display = 'block';
+    				startBtn.innerHTML = 'game over, replay?';
+    				return;
+    			}
+    			game.move(keychar);
+    		}
+    	}
+    </script>
+</body>
+</html>

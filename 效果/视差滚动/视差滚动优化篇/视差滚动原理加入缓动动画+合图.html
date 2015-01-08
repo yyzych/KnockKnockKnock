@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!-- saved from url=(0077)http://www.alloyteam.com/wp-content/uploads/2014/02/v_demo4_sprite_tween.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>视差滚动原理儿</title>
+<style>
+.article{
+	width: 960px;
+	margin: 0 auto;
+	height: 800px;
+	padding: 40px;
+	font: 18px/1.5 'Microsoft YaHei';
+	overflow: hidden;
+	position: relative;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center center;
+	background-size: cover;
+}
+.section1{
+	background-image: url( http://www.alloyteam.com/wp-content/uploads/2014/01/section01.jpg);
+}
+.section2{
+	background-image: url( http://www.alloyteam.com/wp-content/uploads/2014/01/section02.jpg);
+}
+.section3{
+	background-image: url( http://www.alloyteam.com/wp-content/uploads/2014/01/section03.jpg);
+}
+.title{
+	font: 32px/1.5 '微软雅黑';
+	position: relative;
+	top: -100px;
+}
+.content{
+	position: relative;
+	top: 380px;
+	left: 1024px;
+	color: #777;
+}
+.section1 .title{
+	color: white;
+}
+.section2 .title{
+	color: #FF8500;
+}
+.section3 .title{
+	opacity: 0;
+	top: 360px;
+	color: #747474;
+}
+.title-anim{
+	top: 360px;
+	-webkit-transition : all 1s;
+	-moz-transition : all 1s;
+	-ms-transition : all 1s;
+	transition : all 1s;
+}
+.title-anim2{
+	opacity: 1!important;
+	-webkit-transition : all 2s;
+	-moz-transition : all 2s;
+	-ms-transition : all 2s;
+	transition : all 2s;
+}
+.content-anim{
+	left: 0px;
+	-webkit-transition : all 1s;
+	-moz-transition : all 1s;
+	-ms-transition : all 1s;
+	transition : all 1s;
+}
+
+.dots{
+	width: 100%;
+	height: 480px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	-webkit-transition: all .5s;
+}
+.dots-type1{
+	background-image: url(http://www.alloyteam.com/wp-content/uploads/2014/02/dots1.png); 
+}
+.dots-type2{
+	background-image: url(http://www.alloyteam.com/wp-content/uploads/2014/02/dots2.png); 
+
+}
+.dots-type3{
+	background-image: url(http://www.alloyteam.com/wp-content/uploads/2014/02/dots3.png); 
+}
+.dots-type4{
+	background-image: url(http://www.alloyteam.com/wp-content/uploads/2014/02/dots4.png);
+}
+
+</style></head>
+
+<body>
+<div id="articles">
+	<div id="article1" class="article section1">
+		<div id="title1" class="title">
+			章节·一  每当我加班凌晨，独自一人走在黑暗的回家路上
+		</div>
+		<div id="content1" class="content">
+			我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+			我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+			我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+		</div>
+		<div class="dots dots-type3" data-orient="down" data-origintop="300" style="top: 300px;"></div>
+		<div class="dots dots-type4" data-orient="up" data-origintop="200" style="top: 200px;"></div>
+	</div>
+	<div class="article section2">
+		<div id="title2" class="title">
+			章节·二  我会想起那天夕阳下的奔跑
+		</div>
+		<div id="content2" class="content">
+			我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+			我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+			我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+		</div>
+		<div class="dots dots-type3" data-orient="up" data-origintop="600" style="top: 600px;"></div>
+	</div>
+	<div class="article section3">
+		<div id="title3" class="title">
+			章节·三  那是我逝去的，青春
+		</div>
+		<div id="content3" class="content">
+			我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你
+			我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你
+			我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你我喜欢你
+		</div>
+	</div>
+	
+	
+
+	<div class="dots dots-type2" data-orient="up" data-origintop="700" style="top: 700px;"></div>
+	<div class="dots dots-type4" data-orient="up" data-origintop="1100" style="top: 1100px;"></div>
+
+	<div class="dots dots-type3" data-orient="down" data-origintop="1500" style="top: 1500px;"></div>
+	
+	<div class="dots dots-type3" data-orient="up" data-origintop="2000" style="top: 2000px;"></div>
+</div>
+
+<script>
+	var articleHeight = document.getElementById('article1').clientHeight;
+	var title1 = document.getElementById('title1'),
+		title2 = document.getElementById('title2'),
+		title3 = document.getElementById('title3');
+	var content1 = document.getElementById('content1'),
+		content2 = document.getElementById('content2'),
+		content3 = document.getElementById('content3');
+	var dots1 = document.getElementById('dots1'),
+		dots2 = document.getElementById('dots2'),
+		dots3 = document.getElementById('dots3');
+	var dots = document.getElementsByClassName('dots');
+
+	window.addEventListener('scroll',scrollHandler);
+	scrollHandler();
+	function scrollHandler(e){
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		//for wording anim
+		if(scrollTop > 0 && scrollTop < articleHeight){
+			title1.classList.add('title-anim');
+			content1.classList.add('content-anim');
+		}
+		if(scrollTop >= (articleHeight - articleHeight/4) && scrollTop < articleHeight*2){
+			title2.classList.add('title-anim');
+			content2.classList.add('content-anim');
+		} 
+		if(scrollTop >= (articleHeight*2 - articleHeight/4) && scrollTop < articleHeight*3){
+			title3.classList.add('title-anim2');
+			content3.classList.add('content-anim');
+		}
+		//for wording anim
+		// dots1.style.top = 0+scrollTop*.2+'px';
+		// dots2.style.top = 480-scrollTop*.2+'px';
+		// dots3.style.top = 720+scrollTop*.1+'px';
+
+		for(var i = 0; i<dots.length; i++){
+			var dot = dots[i];
+			if(dot.getAttribute('data-orient') == 'up'){
+				dot.style.top = dot.getAttribute('data-originTop')*1-scrollTop*.3+'px';
+			}else{
+				dot.style.top = dot.getAttribute('data-originTop')*1+scrollTop*.3+'px';
+			}
+		}
+	}
+
+</script>
+
+
+</body></html>
