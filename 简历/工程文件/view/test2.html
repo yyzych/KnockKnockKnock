@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../css/main.css">
+	<script src="../js/jquery-2.1.0.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="item scene-1">
+			<div class="wrap">
+				<span class="logo"></span>
+				<span class="scroll-down"></span>
+				<div class="road-box">
+					<ul class="inline road-process">
+						<li>
+							<span class="road1"></span>
+						</li>
+						<li>
+							<div class="road-connect"></div>
+							<span class="road2"></span>
+						</li>
+						<li>
+							<div class="road-connect"></div>
+							<span class="road3"></span>
+						</li>
+						<li>
+							<div class="road-connect"></div>
+							<span class="road4"></span>
+						</li>
+						<li>
+							<div class="road-connect"></div>
+							<span class="road5"></span>
+						</li>
+						<li>
+							<div class="road-connect"></div>
+							<span class="road6"></span>
+						</li>
+						<li>
+							<div class="road-connect"></div>
+							<span class="road7"></span>
+						</li>
+						<li>
+							<div class="road-connect"></div>
+							<span class="road8"></span>
+						</li>
+						<li>
+							<div class="road-connect"></div>
+							<span class="road9"></span>
+						</li>
+					</ul>
+					<div class="me"></div>
+				</div>
+				<div class="backBox">
+					<div class="buildings-row-far"></div>
+				</div>
+			</div>
+		</div>
+		<div class="item scene-2">
+			<div class="wrap">
+				<div class="ability-box">
+					<div class="circle javascript">Javascript</div>
+					<div class="circle css">CSS/CSS3</div>
+					<div class="circle html">HTML/HTML5</div>
+					<div class="circle framework">Jquery,<br>Seajs等库</div>
+					<div class="circle net">.NET</div>
+					<div class="circle c">C#</div>
+					<div class="circle sqlserver">SQL<br>Server</div>
+					<div class="circle ps">PS</div>
+					<div class="circle handsome">长得帅</div>
+				</div>
+				<h2 class="item-header">技能</h2>
+			</div>
+			<div class="slide-bg"></div>
+		</div>
+		<div class="item scene-3">
+			<div class="wrap">
+				<h2 class="item-header">作品</h2>
+				<p class="description">有些是帮着老师做的网站，其他则是自己想做的小东西</p>
+				<div class="show-box">
+					<div class="show-box-inner">
+						<ul class="inline works">
+							<li>
+								<a href="">
+									<img src="../image/works1.jpg" alt="">
+									<p>有奖啊</p>
+								</a>
+							</li>
+							<li>
+								<a href="">
+									<img src="../image/works1.jpg" alt="">
+									<p></p>
+								</a>
+							</li>
+							<li>
+								<a href="">
+									<img src="../image/works1.jpg" alt="">
+									<p></p>
+								</a>
+							</li>
+							<li>
+								<a href="">
+									<img src="../image/works1.jpg" alt="">
+									<p></p>
+								</a>
+							</li>
+							<li>
+								<a href="">
+									<img src="../image/works1.jpg" alt="">
+									<p></p>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<i class="show-prev">
+						<img src="../image/prev.png" alt="">
+					</i>
+					<i class="show-next">
+						<img src="../image/next.png" alt="">
+					</i>
+				</div>
+			</div>
+			<div class="slide-bg"></div>
+		</div>
+		<div class="item scene-4">
+			<div class="wrap">
+				<div class="orther">
+					<h2 class="item-header">关于其他</h2>
+					<p>	今年大三，这学期因为课比较少，所以想出来实习下，找一份前端方面的工作锻炼锻炼。虽然之前暑期
+已经实习过一次，但做的还是比较浅显的事情，所以！又要出来实习我还是很紧张啊啊啊！！！</p>
+					<p>	热爱前端，好好学习，天天向上！</p>
+				</div>
+				<div class="contact">
+					<div class="blog-box">
+						<p>博客：</p>
+						<ul class="inline blog">
+							<li>
+								<img src="../image/csdn.png" alt=""><p>CSDN</p>
+							</li>
+							<li>
+								<img src="../image/github.png" alt=""><p>GitHub</p>
+							</li>
+						</ul>
+					</div>
+					<div>
+						<table>
+							<tbody>
+								<tr>
+									<td align="right">手机：</td>
+									<td>13777404213</td>
+								</tr>
+								<tr>
+									<td align="right">QQ：</td>
+									<td>932241741</td>
+								</tr>
+								<tr>
+									<td align="right">邮箱：</td>
+									<td>m13777404213@163.com</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="slide-bg"></div>
+		</div>
+	</div>
+	<script>
+		(function () {
+			//通用函数
+			var util={
+				getCss:function (elem,cssName,selectorText) {
+					var res="";
+					if(window.getComputedStyle){
+						var cssRule=window.getComputedStyle(elem,null);
+						res=cssRule[cssName];
+						if(res){
+							return res;
+						}
+					}else if(window.getMatchedCSSRules){
+						var cssRuleList=getMatchedCSSRules(elem);
+						for (var i = 0; i < cssRuleList.length; i++) {
+							var cssList=cssRuleList[i];//一条样式规则
+							if(selectorText){
+								if(selectorText==cssList.selectorText){
+									return cssList.style[cssName];
+								}
+							}else{
+								return cssList.style[cssName];
+							}
+						};
+					}
+				}
+			}
+
+			var App=function () {
+				// 配置参数
+				var CONFIG={
+					ROAD_SPACING:140,
+					ROAD_NUM:9-1,
+					ME_SPACING:113,
+					ME_NUM:6-1,
+					PAGE_NUM:4
+				};
+
+				// 全局变量
+				var winHeight=window.innerHeight,
+					me=$(".me").get(0),
+					isInScene1=true,
+					isFinish=true,
+					pageIndex=0,
+					pageTagArr=[],
+					container=$(".container").get(0),
+					road=$(".road-process"),
+					roadProcesses=road.children("li");
+
+
+				function _init () {
+					// 高度初始化
+					var items=document.getElementsByClassName("item");
+					var len=items.length;
+					for (var i = 0; i < len; i++) {
+						items[i].style.height=winHeight+"px";
+						pageTagArr[i]=-i*winHeight;
+					};
+
+					// 事件绑定
+					createEvent ();
+				}
+				function createEvent () {
+					$(".logo").click(function (e) {
+						$(this).addClass("logo-anim");
+						$(".scroll-down").hide();
+
+						// 显示一个圆圈
+						$(roadProcesses[0]).addClass("on");
+						$(road).data("roadIndex",0);
+						// 显示人物
+						// setTimeout(function () {
+							$(me).addClass("show-me-backBox");
+							var bb=$(".backBox");
+							bb.addClass("show-me-backBox");
+							if(/WebKit/.test(navigator.userAgent)){
+								bb.children("div").css("zoom","0.65");
+							}
+						// },200);
+					});
+
+					window.addEventListener("mousewheel",mousewheelHandler);
+					window.addEventListener("DOMMouseScroll",mousewheelHandler);
+				}
+				// 滚轮事件处理程序
+				function mousewheelHandler (e) {
+					if(isFinish){
+						isFinish=false;
+						var detla=Math.max(-1,Math.min(1,e.wheelDelta||-e.detail));//-1:下滚	1：上滚
+						if(isInScene1){
+							var roadIndex=$(road).data("roadIndex");
+							if(detla==-1&&roadIndex<8){
+								roadIndex=parseInt(roadIndex)+1;
+								$(roadProcesses[roadIndex]).addClass("on");
+								$(road).data("roadIndex",roadIndex);
+								walk(me,CONFIG.ROAD_SPACING);
+							}else if(detla==-1&&roadIndex==8){
+								$(me).css({
+									backgroundImage:"url(../image/me2.png)"
+								});
+								$(".scroll-down").show();
+								isInScene1=false;
+								isFinish=true;
+							}else{
+								isFinish=true;
+							}
+						}else{
+							pageIndex+=detla==1?-1:1;
+							if(pageIndex<0||pageIndex>CONFIG.PAGE_NUM-1){
+								pageIndex-=detla==1?-1:1;
+								isFinish=true;
+								return;
+							}
+							pageScroll(pageIndex);
+							if(pageIndex==1){
+								setTimeout(function () {
+									$(".ability-box").addClass("show-ability-box");
+								},250);
+							}else if(pageIndex==2){
+
+							}else if(pageIndex==3){
+
+							}
+						}
+					}
+				}
+				function walk (elem,vx) {
+					var curPosiX=elem.style.left||util.getCss(elem,"left");
+					curPosiX=parseInt(curPosiX);
+					if(curPosiX>=(CONFIG.ROAD_NUM*CONFIG.ROAD_SPACING+62)){//50是padding
+						return;
+					}
+					curPosiX+=vx;
+
+					$(elem).animate({
+						left:curPosiX
+					},450,function () {
+						if(elem.timer){
+							clearTimeout(elem.timer);
+							elem.timer=null;
+							elem.style.backgroundPositionX=0+"px";
+						}
+						isFinish=true;
+					});
+
+					elem.timer=setInterval(function () {
+						var backPosiX=elem.style.backgroundPositionX||util.getCss(elem,"backgroundPositionX");
+						backPosiX=parseInt(backPosiX);
+						if(backPosiX>-CONFIG.ME_SPACING*CONFIG.ME_NUM){
+							backPosiX+=-CONFIG.ME_SPACING;//人物进行了缩放，不是原来的150宽了
+							backPosiX=backPosiX>0?0:backPosiX;
+						}else{
+							backPosiX=0;
+						}
+						elem.style.backgroundPositionX=backPosiX+"px";
+					},40);
+				}
+				function pageScroll (index,callback) {
+					var val=pageTagArr[index];
+					if(typeof callback !=="undefined"){
+						$(container).animate({
+							top:val
+						},"slow",callback);
+					}else{
+						$(container).animate({
+							top:val
+						},"500",function () {
+							isFinish=true;
+						});
+					}
+				}
+
+				// 接口
+				return {
+					init:_init
+				}
+			}();
+
+			
+			App.init();
+		})();
+	</script>
+</body>
+</html>
