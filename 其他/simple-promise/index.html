@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button>确定</button>
+    <script src="./zepto.js"></script>
+    <script src="./promise.js"></script>
+    <script>
+        $('button').click(function () {
+            // usage
+            promisify($.ajax, {
+                url: './data.json',
+                data: {name: 'ych'},
+                dataType: 'json'
+            }).success(function() {
+                console.log('success 1');
+            }).success(function () {
+                console.log('success 2')
+            }).complete(function() {
+                console.log('complete 1');
+            }).complete(function () {
+                console.log('complete 2')
+            }).error(function() {
+                console.log('error');
+            });
+        });
+    </script>
+</body>
+</html>

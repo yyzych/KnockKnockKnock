@@ -1,0 +1,546 @@
+/*
+* 网站整体色系：绿色：#76ba41
+* 字体：黑体 14px
+* 字体颜色：#999，#666，#333，#e12d2d(红色),#76ba41(绿色)，#3c82d2（蓝色）
+* border-color：#f0f0f0
+*/
+
+/* ==================== global begins ==================== */
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, input, button, select, textarea {
+  font-family: "Microsoft YaHei";
+}
+
+html, body, .content {
+  background-color: #F9F9F9;
+}
+/* ==================== global ends ==================== */
+
+/* ==================== icons begins ==================== */
+.icon-status-success:after,
+.icon-status-warn:after,
+.icon-status-error:after,
+.icon-status-error:before{
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.icon-status-success{
+  background-color: #76ba41;
+  border-radius: 50%;
+}
+
+.icon-status-success:after{
+  width: 14px;
+  height: 7px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  content: "";
+  -webkit-transform: translate(-50%,-70%) rotate(-45deg);
+  transform: translate(-50%,-70%) rotate(-45deg);
+}
+
+.icon-status-warn{
+  background-color: #3c82d2;
+  border-radius: 50%;
+}
+
+.icon-status-warn:after{
+  content: "!";
+  font-style: normal;
+  color: #fff;
+  font-size: 18px;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+}
+
+.icon-status-error{
+  background-color: #e12d2d;
+  border-radius: 50%;
+}
+
+.icon-status-error:after,
+.icon-status-error:before{
+  height: 2px;
+  width:15px;
+  background: #fff;
+  content: "";
+}
+
+.icon-status-error:after{
+  -webkit-transform: translate(-50%,-50%) rotate(-45deg);
+  transform: translate(-50%,-50%) rotate(-45deg);
+}
+
+.icon-status-error:before{
+  -webkit-transform: translate(-50%,-50%) rotate(45deg);
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+
+.icon-bank,
+.icon-phone,
+.icon-no-coupons,
+.icon-calculator,
+.icon-search,
+.icon-carmer{
+  background-image: url(/luna/static/images/icons.png);
+  background-repeat: no-repeat;
+  background-size: 300px 300px;
+}
+
+.icon-no-coupons{
+  height: 72px;
+  width: 72px;
+  background-position: -230px -67px;
+}
+
+.icon-phone{
+  background-position: -40px -59px;
+}
+
+.icon-gongshang{
+  height: 23px;
+  width: 20px;
+  background-position: -7px -2px;
+  margin-right: 8px;
+}
+
+.icon-calculator{
+  height: 23px;
+  width: 20px;
+  background-position: -39px -88px;
+  margin-left: 15px;
+}
+
+.icon-carmer{
+  height: 60px;
+  width: 60px;
+  background-position: -240px 0;
+}
+
+.icon-search{
+  background-position: -37px -111px;
+}
+/* ==================== icons ends ==================== */
+
+
+/* ==================== utility begins ==================== */
+.wrapper{
+  padding-top: 44px;
+}
+
+.bg-transparent{
+  background-color: transparent;
+}
+
+.no-content{
+  height: 0;
+  min-height: 0;
+}
+
+.list-btm-tip{
+  margin-top: -15px;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  font-size: 12px;
+  color: #999;
+}
+
+.list-btm-tip > a{
+  color: #42a3ed;
+}
+
+.list-btm-tip input[type=checkbox]{
+  border: 1px solid gray;
+}
+
+.prefix-icon{
+  padding-left: 30px;
+}
+
+.prefix-icon.val{
+  width: auto!important;
+  text-align: left!important;
+}
+
+.prefix-icon i:first-child{
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.prefix-icon p{
+  margin-bottom: 0;
+}
+
+.suffix-icon > .icon{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.suffix-icon{
+  padding-right: 55px;
+}
+
+.indicate-txt{
+  margin: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.list-inline > li{
+  float: left;
+}
+
+.list-inline:after{
+  clear: both;
+  display: block;
+  content: "";
+  height: 0;
+}
+
+/*重置部分fancy的样式*/
+html,
+body,
+.content{
+  background-color: #f0f0f0;
+  font-family: 黑体;
+}
+
+.list .field-row{
+  background-color: #fff;
+  border-color: #f0f0f0;
+}
+
+.field-row label{
+  font-size: 14px;
+  color: #333;
+}
+
+.list .field-row .form-control{
+  height: 27px;
+}
+
+.item{
+  border-color: #f0f0f0;
+}
+
+.item > div{
+  position: relative;
+}
+
+.item.chevron-right:after{
+  height: 10px;
+  width: 10px;
+  border-right-width: 2px;
+  border-bottom-width: 2px;
+}
+
+.item p,
+.item.item-value{
+  color: #333;
+  font-size: 14px;
+}
+
+.item.item-value .val,
+.item.item-value.chevron-right .val{
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+  color: #666;
+  right: 10px;
+}
+
+.item.item-value div .val{
+  /*div是relative的*/
+  right: 0;
+}
+
+.item.item-value .val{
+   display: inline-block;
+   width: 215px;
+   text-align: right;
+   overflow: hidden;
+   white-space: nowrap;
+   text-overflow: ellipsis;
+}
+
+.item.item-value.chevron-right .val,
+.item.item-value.item-ceiling-pad-left .val{
+ right: 30px;
+}
+
+.item.item-value .add-tip{
+  color: #c7c7cc;
+  margin-left: 6px;
+}
+
+.font-color-red{
+  color: #e12d2d!important;
+}
+
+.font-color-green,
+.val.font-color-green .add-tip{
+  color: #76ba41!important;
+}
+
+.item-divider.floor{
+  color: #999;
+  font-size: 12px;
+  padding-bottom: 5px;
+  font-weight: normal;
+}
+
+.button.button-success{
+  background-color: #76ba41;
+}
+
+.checkbox,
+.checkbox input[type=checkbox]{
+  width: 24px;
+  height: 24px;
+}
+
+.has-sub-title.item p:last-child{
+  font-size: 12px;
+  color: #999;
+}
+
+.item-noboder.item{
+  border: none;
+}
+
+/*头部*/
+.bar.header.fixed-top{
+  background-color: #3c82d2;
+  border-bottom: none;
+}
+
+.bar.header .title{
+  font-size: 18px;
+  color: #fff;
+}
+
+.header.fixed-top .back,
+.header.fixed-top .message{
+  background-size: cover;
+}
+
+.header.fixed-top .back{
+  background-image: url(../images/back.png);
+  left: 10px;
+  height: 22px;
+  width: 22px;
+}
+
+/*搜索框*/
+.search-box{
+  padding: 8px 10px;
+  background-color: #fff;
+  margin-bottom: 15px;
+  border-top: none;
+}
+
+.search-box .input-group{
+  margin-bottom: 0;
+}
+
+.search-box .input-group-addon{
+  border: none;
+}
+
+.search-box .input-group input{
+  padding-left: 35px;
+  font-size: 14px;
+  color: #999;
+  border: 1px solid #f0f0f0;
+}
+.search-cancel{
+  color: #666;
+}
+
+/*方形checkbox*/
+.checkbox-square{
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 0;
+  background: transparent;
+  vertical-align: -2px;
+}
+
+.checkbox-square input[type="checkbox"]{
+  position: relative;
+  display: block;
+  width: 13px;
+  height: 13px;
+  border: 1px solid #aaa;
+  background-color: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.checkbox-square input[type="checkbox"]:after{
+  position: absolute;
+  content: " ";
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 4px;
+  border-left: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  -webkit-transform: translate(-50%, -65%) rotate(-45deg);
+  -ms-transform: translate(-50%, -65%) rotate(-45deg);
+      transform: translate(-50%, -65%) rotate(-45deg);
+}
+
+.checkbox-square.success input[type="checkbox"]:checked:after{
+  border-color: #76ba41;
+}
+
+/*短信验证码*/
+.verify-msg-code.field-row .button {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.verify-msg-code.field-row .form-control {
+  padding-right: 114px;
+}
+/* ==================== utility ends ==================== */
+
+
+
+/* ==================== node部分的实现主要看这里，主要是高度的自适应，用了before和after伪元素 ==================== */
+.transaction-process .item{
+  background-color: transparent;
+  border-color: #E0DFDF;
+  overflow: visible;
+  z-index: initial;
+  min-height: 60px;
+  padding-left: 37px;
+  padding-right: 10px;
+}
+
+.transaction-process .title{
+  font-size: 15px;
+  color: #c2c2c2;
+}
+
+.transaction-process .z-done .title{
+  color: #76ba41;
+}
+
+.transaction-process p{
+  font-size: 12px;
+  color: #c2c2c2;
+  margin-bottom: 0;
+}
+
+.transaction-process .node{
+  position: absolute;
+  left: 12px;
+  top: 15px;
+  height: 100%;
+  width: 10px;
+  z-index: 9;
+}
+
+.transaction-process .node:before{
+  display: block;
+  content: "";
+  height: 10px;
+  width: 10px;
+  background-color: #c2c2c2;
+  border-radius: 50%;
+  position: relative;
+  z-index: 9;
+}
+
+.transaction-process .node:after{
+  display: block;
+  content: "";
+  position: absolute;
+  height: 100%;/*这里要设置为100%，所以node本身的高度也要100%！所以原点用before实现，node本身用来设置高度*/
+  top: 2px;
+  margin-left: -1px;
+  width: 2px;
+  background-color: #c2c2c2;
+  left: 50%;
+}
+
+.transaction-process .item:last-child .node:after{
+  content: none;
+  display: none;
+}
+
+.transaction-process .z-done .node:before,
+.transaction-process .z-done .node:after{
+  background-color: #76ba41;
+}
+
+.transaction-process .z-done.last-done .node:after{
+  background-color: #c2c2c2;
+}
+
+.transaction-process .icon-status-warn{
+  background-color: transparent;
+  border: 1px solid #3c82d2;
+  right: 20px;
+  top: 15px;
+  transform: translateY(0);
+  -webkit-transform:translateY(0);
+}
+
+.transaction-process .icon-status-warn:after{
+  color: #3c82d2;
+  content: "i";
+}
+
+.transaction-process .pay-info{
+  background-color: #fff;
+  padding: 10px;
+  color: #c2c2c2;
+  font-size: 12px;
+  margin-top: 8px;
+  position: relative;
+  border-radius:5px;
+}
+
+.transaction-process .pay-info:before{
+  content: "";
+  display: block;
+  position: absolute;
+  right: 12px;
+  border-width: 15px 10px;
+  border-style: solid;
+  border-color: transparent transparent #fff transparent;
+  top: -27px;
+}
+
+.transaction-process .pay-info .name,
+.transaction-process .pay-info .money{
+  display: inline-block;
+  color: #666;
+  vertical-align: top;
+}
+
+.transaction-process .pay-info .name{
+  white-space: normal;
+  width: 25%;
+  margin-right: 5px;
+}
+
+.transaction-process .pay-info .time{
+  float: right;
+}

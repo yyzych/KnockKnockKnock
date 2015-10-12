@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		html,
+		body{
+			height: 100%;/*以浏览器窗口的高度为准*/
+			overflow: hidden;
+		}
+		body{
+			margin: 0;
+			overflow: hidden;/*body的overflow即使是设置了hidden也不会起作用。只是把浏览器滚动条给隐藏了*/
+			height: 100%;
+			font: 12px/1.5 '微软雅黑';
+			color: #333;
+		}
+		.wrap{
+			position:absolute;
+			width: 100%;
+			top: 0;
+			left: 0;
+		}
+		.item{
+			position: relative;
+			padding-left: 40px;
+			padding-right: 40px;
+			overflow: hidden;
+		}
+		.item:nth-of-type(1){
+			background-color: rgba(36, 255, 253, 1);
+		}
+		.item:nth-of-type(2){
+			background-color: rgba(255,0,0,0.5);
+		}
+		.item:nth-of-type(3){
+			background-color: rgba(0,255,0,0.5);
+		}
+		.item:nth-of-type(4){
+			background-color: rgba(0,0,255,0.5);
+		}
+		.item header{
+			font-size: 24px;
+			text-shadow:1px 1px rgba(0,0,0,.2);
+			top: -100px;
+		}
+		.left-anim header{
+			top: 100px;
+			left: 1366px;
+		}
+		.item acticle{
+			top: -120px;
+		}
+		.left-anim acticle{
+			top: 120px;
+			left: 1366px;
+		}
+		.item header,
+		.item acticle{
+			position: relative;
+			-webkit-transition:all .8s;
+				-ms-transition:all .8s;
+			   -moz-transition:all .8s;
+				 -o-transition:all .8s;
+					transition:all .8s;
+		}
+		.item .header-anim1{
+			top: 100px;
+		}
+		.item .acticle-anim1{
+			top: 120px;
+		}
+		.left-anim .header-anim2{
+			left: 0px;
+		}
+		.left-anim .acticle-anim2{
+			left: 0px;
+		}
+		.scene-1{
+			text-align: center;
+		}
+		.me-box{
+			background-image: url(../image/me.png);
+			background-position: 0 center;
+			background-repeat: no-repeat;
+			width: 150px;
+			height: 381px;
+			margin: 100px 100px;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrap" style="top:0" id="wrap">
+		<div class="item scene-1">
+			<div class="me-box"></div>
+		</div>
+		<div class="item left-anim">
+			<header>
+				章节·四  每当我加班凌晨，独自一人走在黑暗的回家路上
+			</header>
+			<acticle>
+				我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+			</acticle>
+		</div>
+		<div class="item">
+			<header>
+				章节·二  每当我加班凌晨，独自一人走在黑暗的回家路上
+			</header>
+			<acticle>
+				我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+			</acticle>
+		</div>
+		<div class="item left-anim">
+			<header>
+				章节·三  每当我加班凌晨，独自一人走在黑暗的回家路上
+			</header>
+			<acticle>
+				我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+			</acticle>
+		</div>
+	</div>
+	<script>
+		(function () {
+			// 全局变量
+			var winHeight=window.innerHeight,
+				len=0,
+				index=0,
+				isScene_1=true,
+				tagArr=[],// 节点数组
+				wrap=document.getElementById('wrap'),
+				meBox=document.getElementsByClassName('me-box')[0],
+				items=document.getElementsByClassName("item");
+
+
+			// 工具函数
+			function getOldTop (dom) {
+				var value = dom.style.top ? dom.style.top : getCss(dom,'top');
+				return value.replace('px','')*1;
+			}
+			function getCss (dom,cssName,selectorText) {
+				var cssRuleList = getMatchedCSSRules(dom); //CSSRuleList 类
+				var value = '';
+				for(var i = 0; i<cssRuleList.length; i++){
+					var csslist = cssRuleList[i];
+					if(selectorText){
+						if( selectorText == csslist.selectorText){
+							return csslist.style[cssName];
+						}
+					}else{
+						value = csslist.style[cssName];
+
+						if(value) return value;
+					}
+				}
+			}
+			function animate (dom,cssName,value,interval,callback) {
+				var oldVal=parseInt(dom.style[cssName]||getCss(dom,cssName));
+				if(oldVal==value){
+					(typeof callback=="function")&&callback();
+					return;
+				}
+				if(dom.timer){
+					clearTimeout(dom.timer);
+					dom.timer=null;
+				}
+				var newVal=oldVal,
+					vy=0;
+				if(oldVal<value){
+					vy=Math.ceil((value-oldVal)/10);
+				}else if(oldVal>value){
+					vy=Math.floor((value-oldVal)/10);
+				}
+				newVal+=vy;
+				dom.style[cssName]=newVal+"px";
+				dom.timer=setTimeout(function () {
+					animate(dom,cssName,value,interval,callback);
+				},interval);
+			}
+			function createEvent (dom,type,handler) {
+				if(window.addEventListener){
+					dom.addEventListener(type,handler,false);
+				}else{
+					dom["on"+type]=handler;
+				}
+			}
+
+			// 事件处理程序
+			function mousewheelHandler (e) {
+				var delta=Math.max(-1,Math.min(1,e.wheelDelta||-e.delta));//1:上滚	-1：下滚
+				if(isScene_1){
+					// meBox.timer&&clearTimeout(meBox.timer);
+					// for (var i = 0; i < 6; i++) {
+						// meBox.timer=setTimeout(function () {
+							var posiX=meBox.style.backgroundPositionX||getCss(meBox,"backgroundPositionX");
+							posiX=parseInt(posiX);
+							if(posiX>-750){
+								posiX+=delta*150;
+								posiX=posiX>0?0:posiX;
+							}else{
+								posiX=0;
+							}
+							meBox.style.backgroundPositionX=posiX+"px";
+						// },400*i);
+					// };
+					
+					return;
+				}
+
+
+				index+=delta==1?-1:1;
+				if(index<0||index>len-1){
+					index-=delta==1?-1:1;
+					return;
+				}
+				
+
+				animate(wrap,"top",tagArr[index],16.7,function () {
+					if(index%2!=0){
+						items[index].getElementsByTagName('header')[0].classList.add("header-anim2");
+						items[index].getElementsByTagName('acticle')[0].classList.add("acticle-anim2");
+					}else{
+						items[index].getElementsByTagName('header')[0].classList.add("header-anim1");
+						items[index].getElementsByTagName('acticle')[0].classList.add("acticle-anim1");
+					}
+				});
+			}
+
+			// 入口，初始化函数
+			(function init () {
+				len=items.length;
+				for (var i = 0; i < len; i++) {
+					items[i].style.height=winHeight+"px";
+					tagArr[i]=-i*winHeight;
+				};
+				// document.body.style.height=winHeight+"px";
+
+				//给window设置mousewheel，并且overflow：hidden之后页面不能滚动
+				createEvent(window,"mousewheel",mousewheelHandler);
+				createEvent(window,"DOMMousewheel",mousewheelHandler);
+
+				// setTimeout(function () {
+				// 	items[0].getElementsByTagName('header')[0].classList.add("header-anim1");
+				// 	items[0].getElementsByTagName('acticle')[0].classList.add("acticle-anim1");
+				// },400);
+			})();
+		})();
+	</script>
+</body>
+</html>

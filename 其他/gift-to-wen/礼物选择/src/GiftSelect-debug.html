@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			font-size: 14px;
+			color: #333;
+			outline: none;
+			line-height: 150%;
+			background-color: #E8754F;
+			font-family: 微软雅黑;
+		}
+		a,a:hover,a:link,a:visited{
+			color: inherit;
+			text-decoration: none;
+			cursor: pointer;
+		}
+		.wrap{
+			position: fixed;
+			left: 0;
+			right: 0;
+			margin: auto;
+			top: 50%;
+			color: #fff;
+			margin-top: -180px;
+		}
+		.gift-list{
+			list-style: none;
+			width: 300px;
+			margin: 40px auto;
+		}
+		.gift-list li{
+			position: relative;
+			line-height: 45px;
+			height: 45px;
+		}
+		.gift-list label.btn{
+			display: block;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 9;
+			font-size: 24px;
+			font-family: cursive,serif;
+			padding-left: 50px;
+			cursor: pointer;
+			box-sizing:border-box;
+		}
+		.title{
+			text-align: center;
+			color: #fff;
+			font-size: 28px;
+			font-weight: normal;
+			font-family: 幼圆;
+			line-height: normal;
+		}
+		.sel-radio{
+			position: absolute;
+			left: -1000px;
+			top: 0;
+		}
+		.sel-radio:checked + label.btn span:first-child{
+			color: yellow;
+		}
+		label.btn span{
+			float: left;
+			-webkit-transition: all .5s ease;
+			transition: all .5s ease;
+		}
+		.description{
+			font-size: 17px;
+			padding-left: 20px;
+			white-space: nowrap;
+			width: 0px;
+			overflow: hidden;
+			font-family: 微软雅黑;
+		}
+		label.z-active .description{
+			width: 170px;
+		}
+		.save-btn{
+			display: inline-block;
+			text-align: center;
+			padding: 4px 20px;
+			margin-left: -36px;
+			color: #fff;
+			border-radius: 8px;
+			position: relative;
+			left: 50%;
+			font-size: 16px;
+			letter-spacing: 1px;
+			opacity: 0;
+			border: 1px solid #CE5026;
+			-webkit-transition: opacity .6s;
+			transition: opacity .6s;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<h3 class="title">做出一个选择</h3>
+		<ul class="gift-list">
+			<li>
+				<input type="radio" class="sel-radio" name="if-checked" id="if-checked-A">
+				<label for="if-checked-A" class="btn">
+					<span>A</span>
+					<span class="description">------------</span>
+				</label>
+			</li>
+			<li>
+				<input type="radio" class="sel-radio" name="if-checked" id="if-checked-B">
+				<label for="if-checked-B" class="btn">
+					<span>B</span>
+					<span class="description">------------</span>
+				</label>
+			</li>
+			<li>
+				<input type="radio" class="sel-radio" name="if-checked" id="if-checked-C">
+				<label for="if-checked-C" class="btn">
+					<span>C</span>
+					<span class="description">------------</span>
+				</label>
+			</li>
+			<li>
+				<input type="radio" class="sel-radio" name="if-checked" id="if-checked-D">
+				<label for="if-checked-D" class="btn">
+					<span>D</span>
+					<span class="description">------------</span>
+				</label>
+			</li>
+		</ul>
+	</div>
+	<script>
+		(function () {
+			var slice=Array.prototype.slice;
+			var labelList=document.querySelectorAll("label.btn"),
+				desList=document.querySelectorAll(".description"),
+				saveBtn=null,
+				conArr=["撕逼专用表情包一套","66块毛爷爷","个人营销页","一个承诺，不限时间"];
+			labelList=slice.apply(labelList);
+			desList=slice.apply(desList);
+			labelList.forEach(function (item,index,arr) {
+				item.addEventListener("click",function (e) {
+					if(!saveBtn){
+						saveBtn=document.createElement("a");
+						saveBtn.id="save";
+						saveBtn.appendChild(document.createTextNode("确定"));
+						saveBtn.classList.add("save-btn");
+						saveBtn.addEventListener("click",function (e) {
+							var radios=document.querySelectorAll(".sel-radio");
+							var index=-1;
+							for (var i = 0; i < radios.length; i++) {
+								radios[i].checked?index=i:radios[i].disabled="disabled";
+							}
+							if(index===-1) return;
+							var nextSilbing=radios[index].nextElementSibling;
+							nextSilbing.classList.add("z-active");
+						});
+						document.getElementsByClassName("wrap")[0].appendChild(saveBtn);
+						setTimeout(function () {
+							saveBtn.style.opacity=1;
+						},200);
+					}
+				})
+			});
+			// 随机排序
+			(function () {
+				var len=4,
+					i,
+					elem,
+					content;
+				while(len--){
+					i=Math.floor(Math.random()*(desList.length));
+					elem=desList.splice(i,1);
+					i=Math.floor(Math.random()*(conArr.length));
+					content=conArr.splice(i,1);
+					elem[0].innerHTML=content[0];
+				}
+			})();
+		})();
+	</script>
+</body>
+</html>

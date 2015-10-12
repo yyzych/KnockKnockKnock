@@ -1,0 +1,237 @@
+/*
+* main-responsive.css
+* xs：手机,<=767px
+* sm：平板,768px<= && <=991px
+* lg：电脑,>=992px
+*/
+
+
+/*功能样式*/
+.visible-xs,
+.visible-sm,
+.visible-lg {
+	display: none!important;
+}
+@media (max-width: 767px) {
+	.visible-xs{
+		display: block!important;
+	}
+	.hidden-xs{
+		display: none!important;
+	}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+	.visible-sm{
+		display: block!important;
+	}
+	.hidden-sm{
+		display: none!important;
+	}
+}
+@media (min-width: 992px) {
+	.visible-lg{
+		display: block!important;
+	}
+	.hidden-lg{
+		display: none!important;
+	}
+}
+
+
+/*页面具体样式*/
+@media (max-width: 767px) {
+	/*html,
+	body{
+		height: auto;
+		overflow: auto;
+	}*/
+	.scene-2 .wrap,
+	.scene-3 .wrap,
+	.scene-4 .wrap{
+		width: auto;
+	}
+
+	.logo{
+		font-size: 6.5em;
+	}
+	.fix-height{
+		height: 80px;
+	}
+	.scroll-down{
+		margin-top: 300px;
+	}
+	.front-road{
+		top:10px;
+	}
+	.road-box{
+		bottom: -5px;
+	}
+	.road-process{
+		margin-top: 0;
+		position: relative;
+	}
+	.me{
+		left: 50%;
+		margin-left: -50px;
+	}
+	.road-sm-mask{
+		width: 100px;
+		overflow-x: hidden;
+		margin: auto;
+	}
+	.prev-img,
+	.next-img{
+		position: absolute;
+		top: 50%;
+		left: 0;
+		margin-top: -6px;
+		opacity: 0.4;
+		animation:prev-arrow-anim 1.2s ease infinite;
+		-webkit-animation:prev-arrow-anim 1.2s ease infinite;
+		-moz-animation:prev-arrow-anim 1.2s ease infinite;
+		-ms-animation:prev-arrow-anim 1.2s ease infinite;
+		-o-animation:prev-arrow-anim 1.2s ease infinite;
+	}
+	@keyframes prev-arrow-anim{
+		0%{ left: 0 }
+		50%{ left: 20px }
+		0%{ left: 0 }
+	}
+	@-webkit-keyframes prev-arrow-anim{
+		0%{ left: 0 }
+		50%{ left: 20px }
+		0%{ left: 0 }
+	}
+	@-o-keyframes prev-arrow-anim{
+		0%{ left: 0 }
+		50%{ left: 20px }
+		0%{ left: 0 }
+	}
+	@keyframes next-arrow-anim{
+		0%{ right: 0 }
+		50%{ right: 20px }
+		0%{ right: 0 }
+	}
+	@-webkit-keyframes next-arrow-anim{
+		0%{ right: 0 }
+		50%{ right: 20px }
+		0%{ right: 0 }
+	}
+	@-o-keyframes next-arrow-anim{
+		0%{ right: 0 }
+		50%{ right: 20px }
+		0%{ right: 0 }
+	}
+	.next-img{
+		right: 0;
+		left: auto;
+		animation:next-arrow-anim 1.2s ease infinite;
+		-webkit-animation:next-arrow-anim 1.2s ease infinite;
+		-moz-animation:next-arrow-anim 1.2s ease infinite;
+		-ms-animation:next-arrow-anim 1.2s ease infinite;
+		-o-animation:next-arrow-anim 1.2s ease infinite;
+	}
+	
+	.ability-box .circle{
+		position: relative;
+		border-radius: 0px 5px 5px 0;
+		opacity: 0.9;
+		height: auto;
+		line-height: normal;
+		top: 0;
+		left: 0;
+		font-size: 26px;
+		padding: 5px;
+		right: auto;
+	}
+	.javascript{
+		width: 275px;
+	}
+	.css{
+		width: 250px;
+	}
+	.html{
+		width: 270px;
+	}
+	.sqlserver{
+		width: 107px;
+	}
+	.framework{
+		width: 190px
+	}
+	.handsome{
+		width: 170px;
+	}
+	.item-header{
+		top: 10px;
+		bottom:auto;
+	}
+	.ability-box{
+		top: 70px;
+		width: 100%;
+		overflow: hidden;
+	}
+	.show-ability-box{
+		width: 100%;
+		top: 70px;
+	}
+
+	.scene-3 .item-header{
+		padding-top: 10px
+	}
+	.scene-3 .wrap{
+		padding: 0 10px;
+	}
+	.show-box-inner{
+		margin: auto;
+		width: 290px;
+	}
+	.show-box{
+		margin-top: 55px;
+	}
+	.works.inline li{
+		width: 290px;
+		height: 225px;
+		margin: 0;
+	}
+	.show-prev, .show-next{
+		height: 0;
+		padding: 0;
+		margin-top: -5px;
+		opacity: 0.4;
+		animation:prev-arrow-anim 1.2s ease infinite;
+		-webkit-animation:prev-arrow-anim 1.2s ease infinite;
+		-moz-animation:prev-arrow-anim 1.2s ease infinite;
+		-ms-animation:prev-arrow-anim 1.2s ease infinite;
+		-o-animation:prev-arrow-anim 1.2s ease infinite;
+	}
+	.show-next{
+		/*right: 0;*/
+		/*left: auto;*/
+		animation:next-arrow-anim 1.2s ease infinite;
+		-webkit-animation:next-arrow-anim 1.2s ease infinite;
+		-moz-animation:next-arrow-anim 1.2s ease infinite;
+		-ms-animation:next-arrow-anim 1.2s ease infinite;
+		-o-animation:next-arrow-anim 1.2s ease infinite;
+	}
+	
+	.orther{
+		margin-top: 10px;
+		padding: 0 10px;
+	}
+	.contact{
+		margin-top: 20px;
+	}
+	.scene-4 .item-header{
+		margin-bottom: 10px
+	}
+	.item{
+    	height:510px!important;
+	}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+	
+}
+@media (min-width: 992px) {
+	
+}

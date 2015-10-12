@@ -5,6 +5,7 @@
 * a:window.height
 * n:"image",
 * i:640,
+* 移动的时候其实也是是在画点
 */
 
 function Lottery(t, e, n, i, a, o) {

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="./_util.js"></script>
+</head>
+<body>
+    <div class="wrap"></div>
+    <script>
+
+        $(document).on("ajaxBeforeSend", function (e) {
+            console.log("ajaxBeforeSend");
+        })
+
+        $(".wrap").load("./data.html", ".active");
+    </script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+/*
+*	main.css
+*/
+#index #header .top{
+	height: 60px;
+	overflow: hidden;
+}
+#index .banner{
+	height: 260px;
+	position: relative;
+	background-color: #fff;
+}
+#index .banner>div{
+	position: relative;
+	overflow: hidden;
+	top: 0;
+	height: 100%;
+}
+#index .banner .left{
+	left: 0;
+	padding-right: 17px;
+	position: absolute;
+	height: 100%;
+	max-width: 890px;
+	overflow: hidden;
+}
+#index .banner .left .item{
+	width: 890px;
+	height: 100%;
+	overflow: hidden;
+}
+#index .banner .left .item .intro{
+	float: right;
+	height: 100%;
+	padding: 0 14px;
+	width: 382px;
+	position: relative;
+}
+#index .banner .left .item .intro .bottom{
+	height: 20px;
+	line-height: 20px;
+	text-align: right;
+	position: absolute;
+	bottom: 10px;
+	right: 0px;
+}
+#index .banner .left .item .intro .bottom>span{
+	padding-right: 6px;
+	color: #aaa;
+}
+#index .banner .left .item>a{
+	display: block;
+	float: left;
+}
+#index .banner .left .item h3{
+	color: #7ABBFC;
+}
+#index .banner .left .item h5{
+	color: rgb(100, 100, 100);
+}
+#index .banner .left .item p{
+	color: #aaa;
+	max-height: 100px;
+	overflow: hidden;
+}
+#index .banner .right{
+	right: 0;
+	width: 90px;
+	border-left: 1px solid #dedede;
+	position: absolute;
+	height: 100%;
+}
+#index .banner img{
+	height: 260px;
+}
+#index .banner .list-block{
+	height: 100%;
+}
+#index .banner .list-block>li{
+	padding: 0;
+	height: 20%;
+	width: 78px;
+	border-left: 2px solid #fff;
+	line-height: 52px;
+	padding-left: 12px;
+}
+#index .banner .list-block>li:hover{
+	border-color: #7ABBFC;
+}
+#index .banner .list-block>li>a:hover{
+	color: #7ABBFC;
+}
+#index .banner .list-block>li>a{
+	font-size: 15px;
+	font-weight: 400;
+	color: rgb(100, 100, 100);
+}
+
+#activity .main .left-side, #activity .main .right-side,#detailInfo .main .left-side,#detailInfo .main .right-side{
+	margin-top: 0px;
+}
+#detailInfo .main .left-side .content-card{
+	width: 710px;
+	position: relative;
+	border: 0;
+}
+#detailInfo .main .left-side .content-card img{
+	width: 710px;
+	max-height: 420px;
+}
+#detailInfo .content-card .wrap{
+	height: auto;
+	min-height: 200px;
+	padding: 15px 25px 20px;
+}
+#detailInfo .content-card .wrap h2{
+	letter-spacing: 1px;
+	font-weight: 700;
+}
+#detailInfo .content-card .wrap .card-textintro{
+	margin-bottom: 14px;
+}
+#detailInfo .content-card .wrap a.link-out{
+	text-decoration: underline;
+	color: #FC7272;
+}
+#detailInfo .content-card .card-info{
+	position: initial;
+	bottom: 0;
+	right: 0;
+}
+#detailInfo .main .right-side .content-info h3{
+	margin-top: 0px;
+	font-size: 16px
+}
+#detailInfo .left-side .comment-area{
+	width: 710px;
+}
+#detailInfo .left-side .comment-area .wrap{
+	position: relative;
+	padding: 15px;
+}
+#detailInfo .left-side .comment-area .comment textarea,.left-side .comment-area .comment input{
+	box-shadow: none;
+	font-size: 12px;
+}
+#detailInfo .left-side .comment-area .comment textarea{
+	width: 590px;
+	height: 90px;
+	resize: none;
+	font-family: 微软雅黑,Arial;
+	color: #818181;
+}
+#detailInfo .left-side .comment-area .comment{
+	margin-bottom: 14px;
+}
+#detailInfo .left-side .comment-area .comment>img{
+	height: 60px;
+	width:60px;
+	vertical-align: top;
+	position: absolute;
+	top: 15px;
+	left: 15px;
+}
+#detailInfo .left-side .comment-area .comment>div{
+	padding-left: 75px;
+	position: relative;
+}
+#detailInfo .left-side .comment-area .comment>div:after{
+	display: block;
+	content: "";
+	height: 0;
+	clear: both;
+}
+#detailInfo .left-side .comment-area .comment>div a{
+	display: block;
+	width: 100px;
+	border: 0px;
+	background-color: #D6D6D6;
+	background-image: none;
+	float: right;
+}
+
+#detailInfo .left-side .comment-area .comment>div a:hover{
+	background-color: #70ca10;
+	color: #fff;
+}
+#detailInfo .left-side .comment-area .comments .a-comment>div:first-child{
+	height: 30px;
+	line-height: 30px;
+	position: relative;
+}
+#detailInfo .left-side .comment-area .comments .a-comment>div:first-child img{
+	height: 30px;
+	width: 30px;
+	border-radius: 15px;
+	vertical-align: middle;
+	margin-right: 10px;
+}
+#detailInfo .left-side .comment-area .comments .a-comment>div:first-child .comment-date{
+	float: right;
+	color: #929292;
+}
+#detailInfo .left-side .comment-area .comments .a-comment .comment-content p{
+	padding-left: 45px;
+}
+#detailInfo .left-side .comment-area .comments>div:first-child{
+	border-top: none;
+	padding-top: 0;
+}
+#detailInfo .left-side .comment-area .comments .a-comment{
+	border-top: 1px solid #dedede;
+	padding: 10px 0;
+}
+#detailInfo .left-side .comment-area .morecomment{
+	display: block;
+	text-align: center;
+	margin: 15px auto auto 0;
+	border: 0px;
+	background-color: #D6D6D6;
+	background-image: none;
+	padding: 8px 12px;
+}
+#detailInfo .right-side .content-info .wrap ul li{
+	padding: 0;
+	margin-bottom: 3px;
+}
+#detailInfo .right-side .content-info .wrap ul li span{
+	/*color: #7C7C7C;*/
+	font-weight: normal;
+	font-size: 13px;
+}
+#detailInfo .right-side .content-info .wrap ul li span:first-child{
+	color: #7C7C7C;
+	font-weight: normal;
+}
+#detailInfo .right-side .content-info .wrap .progress{
+	background-color: rgba(0,0,0,0.15);
+}
+#detailInfo .right-side .content-info .wrap .graph{
+	margin-top: 10px;
+}
+#detailInfo .right-side .content-info .wrap .graph h5{
+	font-size: 13px;
+	margin: 0;
+	padding: 0;
+}
+#detailInfo .right-side #evaluate{
+	font-size: 13px;
+	color: #A3A3A3;
+}
+#detailInfo .right-side #evaluate:hover{
+	color: rgb(100, 100, 100);
+}
+#detailInfo .left-side .card-textintro *{
+	line-height: 24px;
+}
+#activity .content-card{
+	margin-bottom: 14px;
+	border:0;
+}
+
+#publish .accordion-group .caret{
+	margin-top: 10px;
+}
+#publish .accordion-group a.accordion-toggle{
+	font-weight: 500;
+}
+#publish .accordion-group a.accordion-toggle:hover{
+	color: rgb(100, 100, 100);
+}
+#publish .accordion-group .accordion-inner ul{
+	list-style-type: decimal;
+	padding-left: 0px;
+	margin-left: 19px;
+	font-size: 12px;
+}
+.form{
+	margin-top: 14px;
+	position: relative;
+}
+.form #activityIntro{
+	vertical-align: top;
+	width: 400px;
+	height: 90px;
+}
+#publish .my-btn{
+	background-color: #3BA1E4;
+	margin-left: 0px;
+	color: white;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+#publish #rewardIntro{
+	margin-left: 10px;
+}
+#publish #beginTime,#publish #endTime{
+	width: 80px;
+}
+#publish .special{
+	position: absolute;
+	right: 90px;
+	top: 14px;
+}
+#publish .uploadImg{
+	width: 180px;
+	height: 120px;
+	background-color: #D6D6D6;
+	text-align: center;
+}
+
+.datePicker select{
+	height: auto;
+	width: auto;
+	margin-bottom: 0;
+}
+.datePicker{
+	position: fixed;
+	display: none;
+}
+.datePicker table{
+	width: 200px;
+	background-color: rgb(167, 219, 248);
+	border-radius:2px;
+}
+.datePicker table tbody td,.datePicker table tbody th{
+	border: 0;
+}
+.datePicker table tbody td{
+	background-color: #CECEF0;
+	cursor: pointer;
+}
+.datePicker table tbody td:hover{
+	background-color: #E4E4E4;
+}
+tbody{
+	background-color: #EEEEEE!important;
+	text-align: center;
+}
+
+#webInfo #header .navbar{
+	background-color: rgb(50, 53, 57)
+}
+/*#webInfo #header #logo{
+	color: #848484;
+	text-shadow:none;
+	font-family: arial, 微软雅黑, 'Microsoft YaHei';
+	font-size: 14px;
+}*/
+body#webInfo{
+	background-color: #fff;
+	font-family: arial, 微软雅黑, 'Microsoft YaHei';
+}
+#webInfo #header #logo{
+	font-size: 24px;
+	color: #fff;
+}
+#webInfo #header .navbar a{
+	font-family: arial, 微软雅黑, 'Microsoft YaHei';
+	font-size: 14px;
+	color: #848484;
+	text-shadow:none;
+}
+#webInfo #header .navbar a:hover{
+	color: #fff;
+}
+#webInfo #header .navbar{
+	box-shadow: none;
+}
+#webInfo #header #navbar-inner{
+	height: auto;
+}
+#webInfo .main{
+	min-height: 550px;
+}

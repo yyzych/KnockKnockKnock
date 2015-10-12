@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #ccc;
+            height: 2000px;
+        }
+        .icon { display: inline-block; background: url(./img/icon.png) left top no-repeat; }
+        .icon.add { background-position: -90px -150px; height: 45px; width: 35px; }
+        .icon.equal { background-position: -90px -190px; height: 40px; width: 40px; }
+        .icon.arrow { background-position: -90px -230px; height: 60px; width: 47px; }
+        .icon.wx,
+        .icon.phone,
+        .icon.service,
+        .icon.to-top {
+            height: 52px;
+            width: 53px;
+        }
+        .icon.wx {
+            background-position: -7px -48px;
+        }
+        .icon.phone {
+            background-position: -7px -117px;
+        }
+        .icon.service {
+            background-position: -8px -185px;
+        }
+        .icon.to-top {
+            background-position: -7px -246px;
+        }
+
+        .aside-nav {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            z-index: 999;
+        }
+        .aside-nav .nav-item {
+            background-color: #59a1f5;
+            border-radius: 8px;
+            margin: 0 10px 15px;
+            position: relative;
+            width: 53px;
+        }
+        .aside-nav .inner {
+            position: absolute;
+            right: 60px;
+            top: 0;
+            width: 0;
+            overflow: hidden;
+            color: #fff;
+        }
+        .aside-nav .qr-code-area {
+            border: none;
+            font-size: 12px;
+        }
+        .aside-nav .qr-code-area p{
+            padding: 5px 0 0;
+            color: #fff;
+        }
+        .aside-nav .qr-code-area img {
+            height: 100px;
+            width: 100px;
+        }
+        .aside-nav .inner-c {
+            width: 100px;
+            background-color: #d33737;
+            position: absolute;
+            right: -112px;
+            -webkit-transition: right .5s;
+            -o-transition: right .5s;
+            transition: right .5s;
+        }
+        .aside-nav .totop-nav .inner-c {
+            text-align: center;
+            line-height: 55px;
+            padding: 0 5px;
+            font-size: 13px;
+        }
+        .aside-nav .service-nav .inner-c {
+            text-align: left;
+            height: 43px;
+            padding: 6px 5px;
+            font-size: 12px;
+        }
+        .aside-nav .nav-item:hover {
+            background-color: #d33737;
+            border-radius: 0 8px 8px 0;
+            border-left: 10px solid #d33737;
+            margin: 0 0 15px;
+        }
+        .aside-nav .nav-item:hover .inner {
+            /*overflow: 得hidden，否则超出边界的会显示出来，可以取消注释看效果*/
+            /*overflow: initial;*/
+            width: 112px;
+            height: 145px;
+        }
+        .aside-nav .nav-item:hover .inner-c {
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="aside-nav">
+        <div class="nav-item wx-nav">
+            <a href="" class="icon wx"></a>
+            <div class="inner">
+                <div class="inner-c qr-code-area">
+                    <img src="http://res2.zufangbao.cn/images/www/new-webindex/qr-code.jpg" alt="">
+                    <p>
+                        租房宝微信公众号
+                        <br>
+                        <small>zufangbaov</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="nav-item phone-nav">
+            <a href="" class="icon phone"></a>
+            <div class="inner">
+                <div class="inner-c qr-code-area">
+                    <img src="./img/mweb-qr-code.jpg" alt="">
+                    <p>
+                        APP下载
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="nav-item service-nav">
+            <a href="" class="icon service"></a>
+            <div class="inner">
+                <div class="inner-c">
+                    在线客服：<br><small>工作日：9:00－17:30(节假日照常)</small>                     
+                </div>
+            </div>
+        </div>
+        <div class="nav-item totop-nav" id="toTop" style="display: none;">
+            <a href="#" class="icon to-top"></a>
+            <div class="inner">
+                <div class="inner-c">
+                    返回顶部
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var parEl,
+                limmet=200,
+                toTopEl=document.getElementById('toTop');
+
+            window.onscroll=function () {
+                if(!parEl) {
+                    document.body.scrollTop > 0 ? (parEl=document.body) : (parEl=document.documentElement);
+                }
+
+                var curScrollTop=parEl.scrollTop;
+                if(curScrollTop>limmet) {
+                    toTopEl.style.display="block";
+                }else{
+                    toTopEl.style.display="none";
+                }
+            };
+        })();
+    </script>
+</body>
+</html>

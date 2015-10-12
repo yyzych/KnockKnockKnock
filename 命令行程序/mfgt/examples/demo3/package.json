@@ -1,0 +1,15 @@
+{
+    "name": "build",
+    "version": "0.0.1",
+    "description": "build my program",
+    "dependencies": {
+        "gulp-minify-css": "*",
+        "gulp-uglify": "*",
+        "gulp-concat": "*",
+        "gulp-rename": "*",
+        "gulp-clean": "*",
+        "gulp": "^3.9.0",
+        "gulp-less": "*",
+        "gulp-seajs-combo": "*"
+    }
+}

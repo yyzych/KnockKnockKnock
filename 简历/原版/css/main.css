@@ -1,0 +1,582 @@
+/*主样式*/
+
+/*默认样式，功能模块样式*/
+*{
+	margin: 0;
+	padding: 0;
+}
+html,
+body{
+	height: 100%;/*以浏览器窗口的高度为准*/
+	overflow: hidden;
+}
+body{
+	margin: 0;
+	overflow: hidden;/*body的overflow即使是设置了hidden也不会起作用。只是把浏览器滚动条给隐藏了*/
+	height: 100%;
+	font: 12px/1.5 微软雅黑;
+	color: #333;
+}
+ul,ol{
+	list-style: none;
+}
+ul.inline>li{
+	float: left;
+}
+ul.inline:after{
+	clear: both;
+	height: 0px;
+	display: block;
+	content: "";
+}
+.hide{
+	display: none
+}
+a,
+a:hover,
+a:link,
+a:visited{
+	text-decoration: none;
+	color: inherit;
+}
+
+
+/*通用样式 Begin*/
+.item{
+	position: relative;
+	overflow: hidden;
+	/*padding: 15px;*/
+	box-sizing:border-box;
+}
+.container{
+	position:absolute;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+.wrap{
+	margin: auto;
+	height: 100%;
+	position: relative;
+}
+.slide-bg{
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0px;
+	-webkit-animation: scene-anim 120s linear infinite;
+	animation: scene-anim 120s linear infinite;
+}
+@keyframes scene-anim{
+	0%{
+		transform:scale(1) rotate(0deg);
+	}
+	50%{
+		transform:scale(1.4) rotate(0.3deg);
+	}
+	100%{
+		transform:scale(1) rotate(0deg);
+	}
+}
+@-webkit-keyframes scene-anim{
+	0%{
+		-webkit-transform:scale(1) rotate(0deg);
+	}
+	50%{
+		-webkit-transform:scale(1.4) rotate(0.3deg);
+	}
+	100%{
+		-webkit-transform:scale(1) rotate(0deg);
+	}
+}
+/*通用样式 End*/
+
+
+/*第一屏样式 Begin*/
+.scene-1{
+	background-color: #ef6a49;
+	padding: 15px;
+}
+.logo{
+	height: 100%;
+	position: fixed;
+	top: 0;
+	background-color: #454536;
+	left: 0;
+	width: 100%;
+	transition: all 0.7s;
+	cursor: pointer;
+	z-index: 3;
+	line-height: normal;
+	text-align: center;
+	color: #fff;
+	font-size: 10em;
+}
+.logo-anim{
+	/*font-size: 26px;*/
+	overflow: hidden;
+	height: 0;
+}
+.front-road{
+	font-size: 40px;
+	text-align: center;
+	top: 80px;
+	position: relative;
+	color: #FFF;
+	font-family: 宋体;
+	font-weight: bold;
+}
+.scroll-down{
+	transform: rotateZ(180deg);
+	height: 51px;
+	width: 53px;
+	display: block;
+	position: absolute;
+	z-index: 3;
+	left: 50%;
+	margin-left: -26px;
+	top: 400px;
+	background-image: url(../image/scrollDown.png);
+	-webkit-animation: scroll-down-anim 1.5s ease infinite;
+	-o-animation: scroll-down-anim 1.5s ease infinite;
+	animation: scroll-down-anim 1.5s ease infinite;
+}
+.scroll-down.scroll-down2{
+	transform: none;
+}
+@keyframes scroll-down-anim{
+	0%   {top: 450px;}
+	50%  {top: 470px;}
+	100%  {top: 450px;}
+}
+@-webkit-keyframes scroll-down-anim{
+	0%   {top: 450px;}
+	50%  {top: 470px;}
+	100%  {top: 450px;}
+}
+@-o-keyframes scroll-down-anim{
+	0%   {top: 450px;}
+	50%  {top: 470px;}
+	100%  {top: 450px;}
+}
+.backBox{
+	width: 105%;
+	margin: -15px;
+	margin-top: 0px;
+	position: absolute;
+	bottom: -500px;
+	left: 0px;
+}
+.me{
+	height: 286px;
+	width: 100px;
+	position: absolute;
+	left: 62px;
+	bottom: -500px;
+	background-image: url(../image/me.png);
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-size: cover;
+}
+.show-me-backBox{
+	bottom: 0px;
+	transition:bottom 0.5s ease , background-image 0.5s;
+}
+.buildings-row-far{
+	background-image: url(../image/buildings-row-far.svg);
+	background-repeat: repeat-x;
+	background-position: center bottom;
+	width:100%;
+	height: 425px;
+	zoom: 1;/*设置或检索对象的缩放比例>和scale是不一样的.ie下有bug*/
+}
+/*路样式*/
+.road-box{
+	padding: 0 62px;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 2;
+	width: 100%;
+	height: 401px;
+	box-sizing: border-box;
+}
+.road-process{
+	/*margin: auto;*/
+	margin-top: -15px;
+	width: 1212px;
+}
+.road-process>li{
+	width: 0px;
+	height: 100px;
+	line-height: 100px;
+	position: relative;
+	overflow: hidden;
+	transition:width 0.8s;
+	margin-left: -1px;
+}
+.road-process>li.on{
+	width: 140px;
+}
+.road-process>li:first-child.on{
+	width: 100px;
+	margin-left: 0px;
+}
+.road-process>li span:first-child{
+	left: 0px;
+}
+.road-process>li span{
+	height: 100%;
+	width: 100px;
+	display: inline-block;
+	background-image: url(../image/road.png);
+	background-size: cover;
+	position: absolute;
+	left: 40px;
+}
+.road1{
+	background-position: 0 0;
+}
+.road2{
+	background-position: -100px 0;
+}
+.road3{
+	background-position: -200px 0;
+}
+.road4{
+	background-position: -300px 0;
+}
+.road5{
+	background-position: -400px 0;
+}
+.road6{
+	background-position: -500px 0;
+}
+.road7{
+	background-position: -600px 0;
+}
+.road8{
+	background-position: -700px 0;
+}
+.road9{
+	background-position: -800px 0;
+}
+.road-connect{
+	height: 10px;
+	display: inline-block;
+	width: 41px;
+	background-color: #f5eb8b;
+	position: absolute;
+	left: -1px;
+	top: 50px;
+	margin-top: -5px;
+}
+/*第一屏样式 End*/
+
+
+/*第二屏样式 Begin*/
+.scene-2 .slide-bg{
+	background-color: #ebebec;
+	background-image: -webkit-radial-gradient(#fff 0%,#ebebec 100%);
+	background-image: -o-radial-gradient(#fff 0%,#ebebec 100%);
+	background-image: -moz-radial-gradient(#fff 0%,#ebebec 100%);
+	background-image: -ms-radial-gradient(#fff 0%,#ebebec 100%);
+}
+.scene-2 .wrap{
+	width: 1024px;
+	z-index: 2;
+}
+.item-header{
+	position: absolute;
+	color: #5F5F5F;
+	/* text-shadow: 1px 1px 2px rgba(0,0,0,0.35); */
+	left: 0;
+	bottom: 30px;
+	text-align: center;
+	width: 100%;
+	font-size: 32px;
+	letter-spacing: 5px;
+	/* font-family: 幼圆; */
+	font-weight: normal;
+}
+.item-header span{
+	text-shadow:none;
+	font-size: 14px;
+	margin-left: 10px;
+	letter-spacing: 1px;
+}
+.ability-box .circle{
+	position: absolute;
+	border-radius: 50%;
+	color: #fff;
+	text-shadow: 5px 5px 5px rgba(0,0,0,0.19);
+	text-align: center;
+	font-family: sans-serif;
+	transition:transform 0.8s;
+}
+.ability-box .circle:hover{
+	transform:scale(1.1);
+}
+.javascript{
+	height: 220px;
+	line-height: 220px;
+	left: 0;
+	top: 115px;
+	width: 220px;
+	background-color: rgba(0,0,0,0.48);
+	font-size: 36px;
+}
+.css{
+	height: 170px;
+	line-height: 170px;
+	left: 300px;
+	top: 55px;
+	width: 170px;
+	background-color: rgba(255,0,0,0.68);
+	font-size: 30px;
+}
+.html{
+	height: 190px;
+	line-height: 190px;
+	left: 200px;
+	top: 320px;
+	width: 190px;
+	background-color: rgba(0,255,0,0.55);
+	font-size: 26px;
+}
+.framework{
+	/* height: 150px; */
+	/* line-height: 150px; */
+	left: 468px;
+	top: 240px;
+	/* width: 150px; */
+	background-color: rgba(0,0,255,0.57);
+	font-size: 24px;
+	/* vertical-align: top; */
+	padding: 38px 20px;
+}
+.net{
+	height: 130px;
+	line-height: 130px;
+	left: 650px;
+	top: 100px;
+	width: 130px;
+	font-size: 30px;
+	background-color: rgba(255,0,255,0.69);
+}
+.sqlserver{
+	/* height: 100px; */
+	line-height: 23px;
+	left: 770px;
+	top: 335px;
+	/* width: 100px; */
+	background-color: rgba(0,255,255,0.60);
+	font-size: 20px;
+	padding: 17px 10px;
+}
+.c{
+	height: 115px;
+	line-height: 115px;
+	left: 610px;
+	top: 420px;
+	width: 115px;
+	background-color: rgba(255,255,0,0.80);
+	font-size: 30px;
+}
+.ps{
+	height: 80px;
+	line-height: 80px;
+	top: 190px;
+	width: 80px;
+	background-color: rgba(137,199,19,0.60);
+	right: 100px;
+	font-size: 30px;
+}
+.handsome{
+	height: 42px;
+	line-height: 42px;
+	/* left: 980px; */
+	top: 320px;
+	width: 42px;
+	background-color: rgba(136,93,11,0.60);
+	right: 5px;
+	font-size: 10px;
+}
+.ability-box{
+	position: relative;
+	top: -1000px;
+	transition:top 0.7s;
+}
+.show-ability-box{
+	top: 0px;
+}
+/*第三屏样式 End*/
+
+
+/*第三屏样式 Begin*/
+.scene-3 .wrap{
+	width: 1190px;
+	z-index: 2;
+}
+.scene-3 .slide-bg{
+	background-color: #212325;
+	background-image: none;
+}
+.scene-3 .item-header{
+	position: relative;
+	color: #169bdb;
+	text-shadow: none;
+	left: auto;
+	bottom: auto;
+	padding-top: 70px;
+}
+.show-prev,
+.show-next{
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	margin-top: -22px;
+	background-color: rgba(0,0,0,0.5);
+	padding: 13px 18px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+.show-prev{
+	left: 0px;
+}
+.show-prev:hover,
+.show-next:hover{
+	background-color: #169bdb;
+}
+.show-next{
+	right: 0px;
+}
+.description{
+	color: #868585;
+	width: 100%;
+	text-align: center;
+	margin-top:30px;
+	font-size: 14px;
+}
+.show-box{
+	margin-top: 70px;
+	position: relative;
+}
+.show-box-inner{
+	margin: 0 48px;
+	overflow: hidden;
+	position: relative;
+	height: 240px;
+}
+.works{
+	text-align: center;
+	width: 2000px;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.works.inline li{
+	width: 345px;
+	height: 240px;
+	margin: 0 10px;
+	border-radius: 10px;
+	position: relative;
+	overflow: hidden;
+}
+.works li:hover p{
+	height: 40px;
+}
+.works li:hover img{
+	top: -40px;
+}
+.works img{
+	width: 100%;
+	height: 100%;
+	position: relative;
+	top: 0;
+	left: 0;
+	transition:top 0.5s;
+}
+.works p{
+	position: absolute;
+	width: 100%;
+	left: 0;
+	font-size: 15px;
+	color: #fff;
+	bottom: 0;
+	height: 0;
+	text-align: center;
+	line-height: 40px;
+	transition:height 0.5s;
+	background-color: #41b1e7;
+}
+.works.on p{
+	height: 40px;
+}
+.works.on img{
+	top:-40px;
+}
+/*第三屏样式 End*/
+
+
+/*第四屏样式 Begin*/
+.scene-4 .slide-bg{
+	background-image: url(../image/scene-4.jpg);
+}
+.scene-4 .wrap{
+	width: 600px;
+	font-size: 14px;
+	z-index: 2;
+	color: #fff;
+	text-shadow: 1px 1px 4px rgba(0,0,0,0.55);
+}
+.orther{
+	margin-top: 70px;
+}
+.orther .info{
+	margin-top: 25px;
+}
+.orther p{
+	text-indent: 2em;
+}
+.contact{
+	width: 190px;
+	/* margin: auto; */
+	margin-top: 100px;
+	position: relative;
+	left: 50%;
+	margin-left: -75px;
+}
+.blog-box{
+	margin-bottom: 30px;
+}
+.blog.inline>li{
+	text-align: center;
+	margin-right: 50px;
+	margin-top: 20px;
+	transition:all 0.4s;
+}
+.blog.inline>li:hover{
+	color: #F7E339;
+	margin-top: 10px;
+}
+.scene-4 .item-header{
+	position: relative;
+	color: #fff;
+	text-shadow: 1px 1px 4px rgba(0,0,0,0.55);
+	left: auto;
+	bottom: auto;
+	margin-bottom: 25px;
+}
+.scene-4 tr td:last-child{
+	padding-left: 10px;
+	transition:all 0.4s;
+}
+.scene-4 tr td:last-child:hover{
+	color: #F7E339;
+	padding-left: 20px;
+}
+/*第四屏样式 End*/

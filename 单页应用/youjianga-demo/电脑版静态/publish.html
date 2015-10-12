@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>publish</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/public.css">
+	<link rel="stylesheet" href="css/main.css">
+	<!--[if lt IE 9]>
+	  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<script src="js/libs/jquery-2.0.2.min.js"></script>
+	<script src="js/bootstrap/bootstrap.min.js"></script>
+</head>
+<body id="publish">
+	<div id="header">
+		<!-- <div class="top">
+			<img src="img/topbanner.png" alt="">
+		</div> -->
+		<div class="navbar">
+			<div id="navbar-inner">
+				<div class="container">
+					<a href="" class="brand" id="logo">有奖网</a>
+					<ul class="nav">
+						<li><a href="index.html">每日推荐</a></li>
+						<!-- <li>
+							<a href="#">发现</a>
+						</li> -->
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">发现 <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">有奖活动</a></li>
+								<li><a href="#">技能比赛</a></li>
+								<li><a href="#">个人发起</a></li>
+							</ul>
+						</li>
+					</ul>
+					<form action="" class="navbar-search pull-right hidden-xs hidden-sm">
+						<!-- <input type="text" class="search-query"> -->
+						<div class="input-append">
+							<input type="text" class="search-query" name="" id=""><a href="" class="add-on"></a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="main" id="main">
+		<div class="content">
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<!-- <a class="accordion-toggle" href="#collapse1" data-toggle="collapse">请查看说明 <span class="caret"></span></a> -->
+					<a class="accordion-toggle">请查看说明 <span class="caret"></span></a>
+				</div>
+				<div class="collapse in" id="collapse1">
+					<div class="accordion-inner">
+						<ul class="list-block">
+							<li>
+								你可以使用此平台为你的活动打广告，当然，你的活动没有钱没有意思，那就对不起了
+							</li>
+							<li>
+								你也可以将你发现的有意思的活动，比赛发布于此，我们会感谢你的分享
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="wrap form">
+				<form action="">
+					<div class="control-group">
+						<div class="control-label">
+							<label class="input" for="">邮箱： <input type="text" name="" placeholder="标题小于16个字" ><p class="help-inline">请输入正确的邮箱地址</p></label>
+						</div>
+						<div class="control-label">
+							<label class="input" for="">标题： <input type="text" name="" placeholder="标题小于16个字" ><p class="help-inline">不能为空</p></label>
+						</div>
+						<div class="control-label">
+							<label class="input" for="">类别：
+								<select name="" id="tagSelect">
+									<option value="">设计</option>
+									<option value="">算法</option>
+									<option value="">大炮</option>
+								</select>
+							</label>
+						</div>
+						
+						<div class="control-label">
+							<label class="input" for="">是否有奖励： <input type="checkbox" name="" id=""> <input type="text" name="" placeholder="用一句话说明最好的奖励是什么" id="rewardIntro"></label>
+						</div>
+						
+						<div style="margin-top:3px;" class="control-label">
+							<label class="input" for="">简要介绍： <textarea name="" id="activityIntro" cols="30" rows="10"></textarea></label>
+						</div>
+						<div class="special">
+							<div class="control-label">
+								<label class="input" for="">关键字： <input type="text" name="" placeholder="关键字" ><p class="help-inline">不能为空</p></label>
+							</div>
+							<div class="control-label">
+								<label class="input" for="">时间范围： <input type="text" id="beginTime" name="" placeholder="开始时间" > - <input type="text" id="endTime" name="" placeholder="结束时间" ></label>
+							</div>
+							<div style="margin-top:3px;" class="control-label">
+								<label class="input" for="">外链：  <input type="text" name="" ></label>
+							</div>
+							<div style="margin-top:3px;" class="control-label">
+								<div class="uploadImg">
+									上传相关图片
+								</div>
+								<!-- <label class="input" for="">活动图片： <a href="" class="my-btn">上传</a></label> -->
+							</div>
+						</div>
+					</div>
+					<div class="form-actions">
+						<input type="button" class="my-btn" value="发布">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="footer">
+		<div>
+			<ul class="list-inline">
+				<li><a href="">关于有奖</a></li>
+				<li><a href="">加入我们</a></li>
+				<li><a href="">意见反馈</a></li>
+			</ul>
+			<p>©2014 最美应用 京ICP备11031713号-2</p>
+		</div>
+	</div>
+	<div class="datePicker">
+		<table border="0" id="datePicker" cellpadding="3" cellspacing="3">
+			<thead>
+				<th colspan="7">
+					<div>
+						<select name="" id="selectYear">
+						</select>
+						<select name="" id="selectMonth">
+						</select>
+					</div>
+				</th>
+			</thead>
+			<tbody>
+				<tr>
+					<th>日</th>
+					<th>一</th>
+					<th>二</th>
+					<th>三</th>
+					<th>四</th>
+					<th>五</th>
+					<th>六</th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<script type="text/javascript" src="js/subject/modules/datePicker.js"></script>
+	<script>
+		$(document).ready(function (argument) {
+			function initDatePicker () {
+				var $datePicker=$("#datePicker");
+				var beginText=$("#beginTime"),
+					endText=$("#endTime");
+				beginText.click(function (event) {
+					var x=event.clientX;
+					var y=event.clientY;
+					$datePicker.parent().css({left:x-15,top:y+15,display:"block"});
+					$datePicker.picker({
+						beginYear:1994,
+						endYear:2020,
+						datePickerId:"datePicker",
+						inputTextId:beginText.attr("id")
+					});
+					event.stopPropagation();
+				});
+				endText.click(function (event) {
+					var x=event.clientX;
+					var y=event.clientY;
+					$datePicker.parent().css({left:x-15,top:y+15,display:"block"});
+					$datePicker.picker({
+						beginYear:1994,
+						endYear:2020,
+						datePickerId:"datePicker",
+						inputTextId:endText.attr("id")
+					});
+					event.stopPropagation();
+				});
+
+				$(document).click(function (event) {
+					var datePicker=document.getElementById('datePicker');
+					if(datePicker){
+						$(datePicker).parent().css("display","none");
+					}
+				})
+			}
+
+			initDatePicker();
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "family": "ych",
+  "name": "h5ads",
+  "version": "1.0.0",
+  "author":"yyzych <932241741@qq.com>",
+  "spm": {
+    "output": ["201501301628.js","app.css"]
+  }
+}

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!-- body的高度是：(640/device-width)*device-height    (640/device-width)级dpi-->
+	<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">
+	<title>Marisfrolg 伦敦时装周</title>
+	<link rel="stylesheet" href="../../css/app.css">
+	<style>
+		.app{
+			background-image: url(../../file/201501301628/img/appBg1.jpg);
+		}
+		/*第一屏样式*/
+		.cloud-bg{
+			background-image: url(../../file/201501301628/img/bg.jpg);
+			height: 100%;
+		}
+		.cloud-bg i{
+			width: 640px;
+			height: 300px;
+			display: block;
+			position: absolute;
+			opacity: 0;
+		}
+		/*动画是通过transform实现的，所以可以使用同一套，不用每个设置位置*/
+		.cloud-bg i:nth-child(1){
+			background-image: url(../../file/201501301628/img/cloud1.png);
+			-webkit-animation: anim-cloud-bg 4s linear 0s infinite;
+			-o-animation: anim-cloud-bg 4s linear 0s infinite;
+			animation: anim-cloud-bg 4s linear 0s infinite;
+			top: 50px;
+			left: -100px;
+		}
+		.cloud-bg i:nth-child(2){
+			background-image: url(../../file/201501301628/img/cloud2.png);
+			-webkit-animation: anim-cloud-bg 4s linear 0s infinite;
+			-o-animation: anim-cloud-bg 4s linear 0s infinite;
+			animation: anim-cloud-bg 4s linear 0s infinite;
+			top: 80px;
+			left: -110px;
+		}
+		.cloud-bg i:nth-child(3){
+			background-image: url(../../file/201501301628/img/cloud3.png);
+			-webkit-animation: anim-cloud-bg 4s linear .3s infinite;
+			-o-animation: anim-cloud-bg 4s linear .3s infinite;
+			animation: anim-cloud-bg 4s linear .3s infinite;
+			top: 50px;
+			left: -50px;
+		}
+		.cloud-bg i:nth-child(4){
+			background-image: url(../../file/201501301628/img/cloud4.png);
+			-webkit-animation: anim-cloud-bg 4s linear .6s infinite;
+			-o-animation: anim-cloud-bg 4s linear .6s infinite;
+			animation: anim-cloud-bg 4s linear .6s infinite;
+			top: 150px;
+			left: 0px;
+		}
+		.cloud-bg i:nth-child(5){
+			background-image: url(../../file/201501301628/img/cloud5.png);
+			-webkit-animation: anim-cloud-bg 4s linear 2s infinite;
+			-o-animation: anim-cloud-bg 4s linear 2s infinite;
+			animation: anim-cloud-bg 4s linear 2s infinite;
+			top: 300px;
+			left: 50px;
+		}
+		.cloud-bg i:nth-child(6){
+			background-image: url(../../file/201501301628/img/cloud1.png);
+			-webkit-animation: anim-cloud-bg 4s linear 2s infinite;
+			-o-animation: anim-cloud-bg 4s linear 2s infinite;
+			animation: anim-cloud-bg 4s linear 2s infinite;
+			top: 300px;
+			left: 50px;
+		}
+		.cloud-bg i:nth-child(7){
+			background-image: url(../../file/201501301628/img/cloud2.png);
+			-webkit-animation: anim-cloud-bg 4s linear 2s infinite;
+			-o-animation: anim-cloud-bg 4s linear 2s infinite;
+			animation: anim-cloud-bg 4s linear 2s infinite;
+			top: 50px;
+			left: 150px;
+		}
+		.cloud-bg i:nth-child(8){
+			background-image: url(../../file/201501301628/img/cloud3.png);
+			-webkit-animation: anim-cloud-bg 4s linear .9s infinite;
+			-o-animation: anim-cloud-bg 4s linear .9s infinite;
+			animation: anim-cloud-bg 4s linear .9s infinite;
+			top: 80px;
+			left: 20px;
+		}
+		.cloud-bg i:nth-child(9){
+			background-image: url(../../file/201501301628/img/cloud4.png);
+			-webkit-animation: anim-cloud-bg 4s linear 2s infinite;
+			-o-animation: anim-cloud-bg 4s linear 2s infinite;
+			animation: anim-cloud-bg 4s linear 2s infinite;
+			top: 280px;
+			left: 10px;
+		}
+		.cloud-bg i:nth-child(10){
+			background-image: url(../../file/201501301628/img/cloud5.png);
+			-webkit-animation: anim-cloud-bg 4s linear 0 infinite;
+			-o-animation: anim-cloud-bg 4s linear 0 infinite;
+			animation: anim-cloud-bg 4s linear 0 infinite;
+			top: 280px;
+			left: 50px;
+		}
+		@-webkit-keyframes anim-cloud-bg {
+			/*就是左下角到右上角*/
+			0%{
+				-webkit-transform:scale(0.5) translate(-300px,300px) rotateX(0deg) rotateY(0deg);
+				opacity:0
+			}
+			33%{
+				-webkit-transform:scale(1) translate(-80px,80px) rotateX(20deg) rotateY(-20deg);
+				opacity:1
+			}
+			66%{
+				-webkit-transform:scale(1.5) translate(100px,-100px) rotateX(30deg) rotateY(-10deg);
+				opacity:.8
+			}
+			100%{
+				-webkit-transform:scale(1.8) translate(300px,-300px) rotateX(0deg) rotateY(0deg);
+				opacity:.6
+			}
+		}
+		@-o-keyframes anim-cloud-bg {
+			0%{
+				-o-transform:scale(0.5) translate(-300px,300px) rotateX(0deg) rotateY(0deg);
+				opacity:0
+			}
+			33%{
+				-o-transform:scale(1) translate(-80px,80px) rotateX(20deg) rotateY(-20deg);
+				opacity:1
+			}
+			66%{
+				-o-transform:scale(1.5) translate(100px,-100px) rotateX(30deg) rotateY(-10deg);
+				opacity:.8
+			}
+			100%{
+				-o-transform:scale(1.8) translate(300px,-300px) rotateX(0deg) rotateY(0deg);
+				opacity:.6
+			}
+		}
+		@keyframes anim-cloud-bg {
+			0%{
+				transform:scale(0.5) translate(-300px,300px) rotateX(0deg) rotateY(0deg);
+				opacity:0
+			}
+			33%{
+				transform:scale(1) translate(-80px,80px) rotateX(20deg) rotateY(-20deg);
+				opacity:1
+			}
+			66%{
+				transform:scale(1.5) translate(100px,-100px) rotateX(30deg) rotateY(-10deg);
+				opacity:.8
+			}
+			100%{
+				transform:scale(1.8) translate(300px,-300px) rotateX(0deg) rotateY(0deg);
+				opacity:.6
+			}
+		}
+		.page:nth-child(1) .page-back-img{
+			z-index: 3;
+			background-image: url(../../file/201501301628/img/53a93a5e17d79_c42828117176.png);
+		}
+		.page:nth-child(2) .page-back-img{
+			background-image: url(../../file/201501301628/img/appBg1.jpg);
+		}
+		.page:nth-child(3) .page-back-img{
+			background-image: url(../../file/201501301628/img/53a9385d0894742830117178.jpg);
+		}
+		.page:nth-child(4) .page-back-img{
+			background-image: url(../../file/201501301628/img/53b51d842899b42837117179.jpg);
+		}
+		.page:nth-child(5) .page-back-img{
+			background-image: url(../../file/201501301628/img/53b53170a164a42835117180.jpg);
+		}
+		.page:nth-child(6) .page-back-img{
+			background-image: url(../../file/201501301628/img/53b53170a164a42835117180.jpg);
+		}
+		.page:nth-child(7) .page-back-img{
+			background-image: url(../../file/201501301628/img/53b53170a164a42835117180.jpg);
+		}
+		.page:nth-child(8) .page-back-img{
+			background-image: url(../../file/201501301628/img/53a971f82ad6d42831117183.jpg);
+		}
+		.page:nth-child(9) .page-back-img{
+			background-image: url(../../file/201501301628/img/53a97da63ba9842833117184.jpg);
+		}
+		/*end*/
+	</style>
+</head>
+<body class="app">
+	<div class="app-mask">
+		<div id="loading">
+			<span class="wrap3"></span><span class="inner3"></span>
+		</div>
+	</div>
+	<header class="app-header">
+		<a href="javascript:void(0)" class="u-global-audio"> <i class="music-icon"></i>
+			<audio autoplay="autoplay" autoplay="autoplay" src="../../file/201501301628/info/53b503d06eea042828117176.mp3" data-src="../../file/201501301628/info/53b503d06eea042828117176.mp3"  loop="loop"></audio>
+			<span>关闭</span>
+		</a>
+	</header>
+	<section class="app-content">
+		<section class="page z-current">
+			<section class="page-content">
+				<!-- 在page-content内自定义内容 -->
+				<div class="cloud-bg"> <i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+				</div>
+			</section>
+			<div src="../../file/201501301628/img/53a93a5e17d79_c42828117176.png" alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content">
+				<ul class="m-cascadingTeletext">
+					<li>
+						<img src="../../file/201501301628/img/53b5100d79b6542829117177.jpg" alt=""></li>
+					<li>
+						<img src="../../file/201501301628/img/53b5101cdc64f42829117177.jpg" alt=""></li>
+					<li>
+						<img src="../../file/201501301628/img/53b510319b83d42829117177.jpg" alt=""></li>
+					<li>
+						<img src="../../file/201501301628/img/53b5102728df142829117177.jpg" alt=""></li>
+				</ul>
+				<a href="javascript:void(0)" class="u-guidePrev"></a>
+				<a href="javascript:void(0)" class="u-guideNext"></a>
+			</section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page page-video">
+			<section class="page-content">
+				<a href="javascript:void(0)" class="btn-play">
+					<i></i>
+					<div></div>
+				</a>
+				<div class="mask-layer z-hide">
+					<div class="video-box" data-src="../../file/201501301628/info/flowers.mp4"></div>
+					<a href="javascript:void(0);" class="maskLayer-close">X</a>
+				</div>
+			</section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content"></section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content"></section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content"></section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content"></section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content"></section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content"></section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+	</section>
+	<footer class="app-footer"></footer>
+	<!-- ver表示对应的该页的js文件 -->
+	<script src="../../js/init.js?ver=201501301628"></script>
+</body>
+</html>

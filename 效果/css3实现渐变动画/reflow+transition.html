@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+  <style>
+    .tip{
+      background-color:rgba(0,0,0,0.5);
+      color:#fff;
+      padding:8px 15px;
+      border-radius:3px;
+      opacity: 0;
+    }
+    .fade {
+      -webkit-transition: opacity 1s;
+      -o-transition: opacity 1s;
+      transition: opacity 1s;
+    }
+    .fade.in {
+      opacity: 1;
+    }
+    .show{
+      display:block;
+    }
+  </style>
+</head>
+<body>
+  <h3>css3动画:元素在隐藏后再显示出来（dispaly:none -> display:block），css3动画会在次执行</h3>
+  <button>test</button>
+  <p class="tip fade">提示</p>
+
+  <script>
+    // display:block后要触发reflow才有效果
+    // 设置的顺序：
+    // 注意：1. display -> reflow -> opacity
+    var btn=document.getElementsByTagName("button")[0];
+    var tip=document.getElementsByTagName("p")[0];
+
+    btn.onclick=function(e){
+      tip.classList.toggle("show");
+      // trigger page reflow so new elements can animate !!!
+      tip.clientLeft;
+      tip.classList.toggle("in");
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ActivityMDModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="ActivityMDModelStoreContainer">
+          <EntitySet Name="tbActivity" EntityType="ActivityMDModel.Store.tbActivity" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tbComment" EntityType="ActivityMDModel.Store.tbComment" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tbManager" EntityType="ActivityMDModel.Store.tbManager" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tbStatistics" EntityType="ActivityMDModel.Store.tbStatistics" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tbSubscribe" EntityType="ActivityMDModel.Store.tbSubscribe" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tbTag" EntityType="ActivityMDModel.Store.tbTag" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tbVisitedInfo" EntityType="ActivityMDModel.Store.tbVisitedInfo" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="viSubscribe" EntityType="ActivityMDModel.Store.viSubscribe" store:Type="Views" store:Schema="dbo" store:Name="viSubscribe">
+            <DefiningQuery>SELECT 
+      [viSubscribe].[ActivityID] AS [ActivityID], 
+      [viSubscribe].[Expr1] AS [Expr1], 
+      [viSubscribe].[BeginTime] AS [BeginTime], 
+      [viSubscribe].[UserEmail] AS [UserEmail], 
+      [viSubscribe].[SubscribeID] AS [SubscribeID], 
+      [viSubscribe].[Status] AS [Status]
+      FROM [dbo].[viSubscribe] AS [viSubscribe]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+        <EntityType Name="tbActivity">
+          <Key>
+            <PropertyRef Name="ActivityID" />
+          </Key>
+          <Property Name="ActivityID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="TagID" Type="int" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="RewardIntro" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActivityIntro" Type="nvarchar" Nullable="false" MaxLength="512" />
+          <Property Name="Header" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Seetimes" Type="int" Nullable="false" />
+          <Property Name="ActivityImg" Type="nvarchar" MaxLength="512" />
+          <Property Name="OutLink" Type="nvarchar" MaxLength="512" />
+          <Property Name="Keyword" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="BeginTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="EndTime" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbComment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ActivityID" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="CommentContent" Type="nvarchar" Nullable="false" MaxLength="160" />
+          <Property Name="CommentDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="UserAvatar" Type="nvarchar" Nullable="false" MaxLength="512" />
+        </EntityType>
+        <EntityType Name="tbManager">
+          <Key>
+            <PropertyRef Name="ManagerID" />
+          </Key>
+          <Property Name="ManagerID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ManagerUserName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="ManagerName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="ManagerPwd" Type="char" Nullable="false" MaxLength="16" />
+          <Property Name="ManagerEmail" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ManagerTel" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ManagerStatus" Type="int" Nullable="false" />
+          <Property Name="RegisterTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="LastLoginTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="Authority" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbStatistics">
+          <Key>
+            <PropertyRef Name="StatisticsID" />
+          </Key>
+          <Property Name="StatisticsID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ActivityID" Type="int" Nullable="false" />
+          <Property Name="Haowan" Type="int" Nullable="false" />
+          <Property Name="Jiazhi" Type="int" Nullable="false" />
+          <Property Name="Tuhao" Type="int" Nullable="false" />
+          <Property Name="Meijin" Type="int" Nullable="false" />
+          <Property Name="Chedan" Type="int" Nullable="false" />
+          <Property Name="_Haowan" Type="int" Nullable="false" />
+          <Property Name="_Jiazhi" Type="int" Nullable="false" />
+          <Property Name="_Tuhao" Type="int" Nullable="false" />
+          <Property Name="_Meijin" Type="int" Nullable="false" />
+          <Property Name="_Chedan" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbSubscribe">
+          <Key>
+            <PropertyRef Name="SubscribeID" />
+          </Key>
+          <Property Name="SubscribeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ActivityID" Type="int" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbTag">
+          <Key>
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Name="TagID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TagName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="Type" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbVisitedInfo">
+          <Key>
+            <PropertyRef Name="IP_Address" />
+          </Key>
+          <Property Name="IP_Address" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IP_Src" Type="varchar" MaxLength="512" />
+          <Property Name="IP_DateTime" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
+      警告 6002: 表/视图“C:\USERS\叶陈辉\DESKTOP\新建文件夹\有奖\DEMO\APP_DATA\ACTIVITYMD.MDF.dbo.viSubscribe”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
+      -->
+        <EntityType Name="viSubscribe">
+          <Key>
+            <PropertyRef Name="ActivityID" />
+            <PropertyRef Name="Expr1" />
+            <PropertyRef Name="BeginTime" />
+            <PropertyRef Name="UserEmail" />
+            <PropertyRef Name="SubscribeID" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="ActivityID" Type="int" Nullable="false" />
+          <Property Name="Expr1" Type="int" Nullable="false" />
+          <Property Name="BeginTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="SubscribeID" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ActivityMDModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="ActivityMDEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbComment" EntityType="ActivityMDModel.tbComment" />
+          <EntitySet Name="tbStatistics" EntityType="ActivityMDModel.tbStatistics" />
+          <EntitySet Name="tbTag" EntityType="ActivityMDModel.tbTag" />
+          <EntitySet Name="tbManager" EntityType="ActivityMDModel.tbManager" />
+          <EntitySet Name="tbSubscribe" EntityType="ActivityMDModel.tbSubscribe" />
+          <EntitySet Name="viSubscribe" EntityType="ActivityMDModel.viSubscribe" />
+          <EntitySet Name="tbActivity" EntityType="ActivityMDModel.tbActivity" />
+          <EntitySet Name="tbVisitedInfo" EntityType="ActivityMDModel.tbVisitedInfo" />
+        </EntityContainer>
+        <EntityType Name="tbComment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActivityID" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="CommentContent" Type="String" Nullable="false" MaxLength="160" Unicode="true" FixedLength="false" />
+          <Property Name="CommentDate" Type="DateTime" Nullable="false" />
+          <Property Name="UserAvatar" Type="String" Nullable="false" MaxLength="512" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tbStatistics">
+          <Key>
+            <PropertyRef Name="StatisticsID" />
+          </Key>
+          <Property Type="Int32" Name="StatisticsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ActivityID" Nullable="false" />
+          <Property Type="Int32" Name="Haowan" Nullable="false" />
+          <Property Type="Int32" Name="Jiazhi" Nullable="false" />
+          <Property Type="Int32" Name="Tuhao" Nullable="false" />
+          <Property Type="Int32" Name="Meijin" Nullable="false" />
+          <Property Type="Int32" Name="Chedan" Nullable="false" />
+          <Property Type="Int32" Name="C_Haowan" Nullable="false" />
+          <Property Type="Int32" Name="C_Jiazhi" Nullable="false" />
+          <Property Type="Int32" Name="C_Tuhao" Nullable="false" />
+          <Property Type="Int32" Name="C_Meijin" Nullable="false" />
+          <Property Type="Int32" Name="C_Chedan" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbTag">
+          <Key>
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Type="Int32" Name="TagID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="TagName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Type" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbManager">
+          <Key>
+            <PropertyRef Name="ManagerID" />
+          </Key>
+          <Property Type="Int32" Name="ManagerID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="ManagerUserName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ManagerName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ManagerPwd" Nullable="false" MaxLength="16" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="ManagerEmail" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ManagerTel" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ManagerStatus" Nullable="false" />
+          <Property Type="DateTime" Name="RegisterTime" Nullable="false" />
+          <Property Type="DateTime" Name="LastLoginTime" Nullable="false" />
+          <Property Type="Int32" Name="Authority" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbSubscribe">
+          <Key>
+            <PropertyRef Name="SubscribeID" />
+          </Key>
+          <Property Type="Int32" Name="SubscribeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ActivityID" Nullable="false" />
+          <Property Type="String" Name="UserEmail" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+        </EntityType>
+        <EntityType Name="viSubscribe">
+          <Key>
+            <PropertyRef Name="ActivityID" />
+            <PropertyRef Name="Expr1" />
+            <PropertyRef Name="BeginTime" />
+            <PropertyRef Name="UserEmail" />
+            <PropertyRef Name="SubscribeID" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Type="Int32" Name="ActivityID" Nullable="false" />
+          <Property Type="Int32" Name="Expr1" Nullable="false" />
+          <Property Type="DateTime" Name="BeginTime" Nullable="false" />
+          <Property Type="String" Name="UserEmail" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SubscribeID" Nullable="false" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbActivity">
+          <Key>
+            <PropertyRef Name="ActivityID" />
+          </Key>
+          <Property Type="Int32" Name="ActivityID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Type" Nullable="false" />
+          <Property Type="Int32" Name="TagID" Nullable="false" />
+          <Property Type="String" Name="UserEmail" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RewardIntro" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ActivityIntro" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Header" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Seetimes" Nullable="false" />
+          <Property Type="String" Name="ActivityImg" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OutLink" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Keyword" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="BeginTime" Nullable="false" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbVisitedInfo">
+          <Key>
+            <PropertyRef Name="IP_Address" />
+          </Key>
+          <Property Type="String" Name="IP_Address" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="IP_Src" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="IP_DateTime" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ActivityMDModelStoreContainer" CdmEntityContainer="ActivityMDEntities2">
+          <EntitySetMapping Name="tbComment">
+            <EntityTypeMapping TypeName="ActivityMDModel.tbComment">
+              <MappingFragment StoreEntitySet="tbComment">
+                <ScalarProperty Name="CommentID" ColumnName="CommentID" />
+                <ScalarProperty Name="ActivityID" ColumnName="ActivityID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="CommentContent" ColumnName="CommentContent" />
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+                <ScalarProperty Name="UserAvatar" ColumnName="UserAvatar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbStatistics">
+            <EntityTypeMapping TypeName="ActivityMDModel.tbStatistics">
+              <MappingFragment StoreEntitySet="tbStatistics">
+                <ScalarProperty Name="C_Chedan" ColumnName="_Chedan" />
+                <ScalarProperty Name="C_Meijin" ColumnName="_Meijin" />
+                <ScalarProperty Name="C_Tuhao" ColumnName="_Tuhao" />
+                <ScalarProperty Name="C_Jiazhi" ColumnName="_Jiazhi" />
+                <ScalarProperty Name="C_Haowan" ColumnName="_Haowan" />
+                <ScalarProperty Name="Chedan" ColumnName="Chedan" />
+                <ScalarProperty Name="Meijin" ColumnName="Meijin" />
+                <ScalarProperty Name="Tuhao" ColumnName="Tuhao" />
+                <ScalarProperty Name="Jiazhi" ColumnName="Jiazhi" />
+                <ScalarProperty Name="Haowan" ColumnName="Haowan" />
+                <ScalarProperty Name="ActivityID" ColumnName="ActivityID" />
+                <ScalarProperty Name="StatisticsID" ColumnName="StatisticsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbTag">
+            <EntityTypeMapping TypeName="ActivityMDModel.tbTag">
+              <MappingFragment StoreEntitySet="tbTag">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="TagName" ColumnName="TagName" />
+                <ScalarProperty Name="TagID" ColumnName="TagID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbManager">
+            <EntityTypeMapping TypeName="ActivityMDModel.tbManager">
+              <MappingFragment StoreEntitySet="tbManager">
+                <ScalarProperty Name="Authority" ColumnName="Authority" />
+                <ScalarProperty Name="LastLoginTime" ColumnName="LastLoginTime" />
+                <ScalarProperty Name="RegisterTime" ColumnName="RegisterTime" />
+                <ScalarProperty Name="ManagerStatus" ColumnName="ManagerStatus" />
+                <ScalarProperty Name="ManagerTel" ColumnName="ManagerTel" />
+                <ScalarProperty Name="ManagerEmail" ColumnName="ManagerEmail" />
+                <ScalarProperty Name="ManagerPwd" ColumnName="ManagerPwd" />
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+                <ScalarProperty Name="ManagerUserName" ColumnName="ManagerUserName" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbSubscribe">
+            <EntityTypeMapping TypeName="ActivityMDModel.tbSubscribe">
+              <MappingFragment StoreEntitySet="tbSubscribe">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="ActivityID" ColumnName="ActivityID" />
+                <ScalarProperty Name="SubscribeID" ColumnName="SubscribeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="viSubscribe">
+            <EntityTypeMapping TypeName="ActivityMDModel.viSubscribe">
+              <MappingFragment StoreEntitySet="viSubscribe">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="SubscribeID" ColumnName="SubscribeID" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
+                <ScalarProperty Name="ActivityID" ColumnName="ActivityID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbActivity">
+            <EntityTypeMapping TypeName="ActivityMDModel.tbActivity">
+              <MappingFragment StoreEntitySet="tbActivity">
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+                <ScalarProperty Name="Keyword" ColumnName="Keyword" />
+                <ScalarProperty Name="OutLink" ColumnName="OutLink" />
+                <ScalarProperty Name="ActivityImg" ColumnName="ActivityImg" />
+                <ScalarProperty Name="Seetimes" ColumnName="Seetimes" />
+                <ScalarProperty Name="Header" ColumnName="Header" />
+                <ScalarProperty Name="ActivityIntro" ColumnName="ActivityIntro" />
+                <ScalarProperty Name="RewardIntro" ColumnName="RewardIntro" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="TagID" ColumnName="TagID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ActivityID" ColumnName="ActivityID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbVisitedInfo">
+            <EntityTypeMapping TypeName="ActivityMDModel.tbVisitedInfo">
+              <MappingFragment StoreEntitySet="tbVisitedInfo">
+                <ScalarProperty Name="IP_DateTime" ColumnName="IP_DateTime" />
+                <ScalarProperty Name="IP_Src" ColumnName="IP_Src" />
+                <ScalarProperty Name="IP_Address" ColumnName="IP_Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="ActivityModel">
+        <EntityTypeShape EntityType="ActivityMDModel.tbComment" Width="1.5" PointX="2.75" PointY="1.125" Height="2.1050219726562496" IsExpanded="true" />
+        <EntityTypeShape EntityType="ActivityMDModel.tbStatistics" Width="1.5" PointX="4.75" PointY="1.125" Height="3.2137866210937496" />
+        <EntityTypeShape EntityType="ActivityMDModel.tbTag" Width="1.5" PointX="6.625" PointY="1" Height="1.5506396484374996" />
+        <EntityTypeShape EntityType="ActivityMDModel.tbManager" Width="1.5" PointX="8.625" PointY="1" Height="2.8441984049479174" />
+        <EntityTypeShape EntityType="ActivityMDModel.tbSubscribe" Width="1.5" PointX="6.75" PointY="3.25" Height="1.7354337565104174" />
+        <EntityTypeShape EntityType="ActivityMDModel.viSubscribe" Width="1.5" PointX="0.625" PointY="5" Height="2.1050219726562496" />
+        <EntityTypeShape EntityType="ActivityMDModel.tbActivity" Width="1.5" PointX="0.5" PointY="1.25" Height="3.3985807291666674" />
+        <EntityTypeShape EntityType="ActivityMDModel.tbVisitedInfo" Width="1.5" PointX="2.75" PointY="3.625" Height="1.5506396484374996" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

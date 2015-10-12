@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <input type="button" value="event-test" id="testBtn">
+    <input type="button" value="del-test" id="delEve">
+    <input type="button" value="one-test" id="oneEve">
+    <script src="./_util.js"></script>
+    <script>
+        var func=function () {
+            alert("niaho");
+        };
+        var testBtn=$("#testBtn").on("click", func);
+        $("#delEve").on("click", function () {
+            testBtn.off("click", func);
+        });
+
+        $("#oneEve").one("click", function (e) {
+           alert("one event handler");
+        });
+    </script>
+</body>
+</html>

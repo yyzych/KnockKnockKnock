@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2015 by anonymous (http://jsbin.com/lecepivaqo/2/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+<style id="jsbin-css">
+body{
+  background:#36465d;
+}
+.nav-icon,
+.nav-icon:before,
+.nav-icon:after{
+  height:2px;
+  width:20px;
+  border-radius:1px;
+  background:#fff;
+  transition:all .2s;
+  -webkit-transition:all .2s;
+  -webkit-transition-timing-function: cubic-bezier(.175,.885,.32,1.275);
+  -moz-transition-timing-function: cubic-bezier(.175,.885,.32,1.275);
+  transition-timing-function: cubic-bezier(.175,.885,.32,1.275);
+}
+.nav-icon{
+  display:inline-block;
+  position:relative;
+  vertical-align:middle;
+}
+.nav-icon:before,
+.nav-icon:after{
+  display:blcok;
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+}
+.nav-icon:before{
+  transform:rotate(0deg) translate3d(0,-6px,0);
+  -webkit-transform:rotate(0deg)) translate3d(0,-6px,0);
+}
+.nav-icon:after{
+  transform:rotate(0deg) translate3d(0,6px,0);
+  -webkit-transform:rotate(0deg)) translate3d(0,6px,0);
+}
+
+.nav-btn{
+  display:inline-block;
+  height:23px;
+}
+.nav-btn.z-active .nav-icon{
+  height:0;
+}
+.nav-btn.z-active .nav-icon:after{
+  transform:rotate(-45deg);
+  -webkit-transform:rotate(-45deg);
+
+}
+.nav-btn.z-active .nav-icon:before{
+  transform:rotate(45deg);
+  -webkit-transform:rotate(45deg);
+}
+</style>
+</head>
+<body>
+  <a href="javascript:void(0);" class="nav-btn">
+    <span class="nav-icon"></span>
+  </a>
+  
+<script id="jsbin-javascript">
+var navBtn=document.querySelector(".nav-btn");
+
+navBtn.addEventListener("click",function(){
+  this.classList.toggle("z-active");
+});
+</script>
+</body>
+</html>

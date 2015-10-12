@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			overflow-x: hidden;
+			width: 100%;
+			font-size: 12px;
+			font-family: "微软雅黑","宋体"
+		}
+		.aside-nav{
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 80%;
+			height: 100%;
+			z-index: 1;
+			background: green;
+		}
+		.main-body{
+			position: relative;
+			z-index: 2;
+			background: #E0E0E0;
+			height: 568px;
+			-webkit-transition:-webkit-transform .4s;
+		}
+		.main-body.z-hide{
+			-webkit-transform:translateX(80%);
+		}
+		.open-aise-nav{
+			display: inline-block;
+			height: 5px;
+			width: 30px;
+			background-color: rgb(159, 159, 249);
+			position: relative;
+			vertical-align: 2px;
+		}
+		.open-aise-nav:before,
+		.open-aise-nav:after{
+			position: absolute;
+			left: 0;
+			background-color: rgb(159, 159, 249);
+			height: 5px;
+			width: 30px;
+			content: "";
+			display: block;
+		}
+		.open-aise-nav:before{
+			top: -10px;
+		}
+		.open-aise-nav:after{
+			bottom: -10px;
+		}
+		.main-body>header{
+			line-height: 45px;
+			padding: 0 10px;
+			background: #036bc4;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+		}
+		.aside-nav>header{
+			line-height: 40px;
+			padding: 0 10px;
+			color: #fff;
+			font-size: 16px;
+			font-weight: normal;
+		}
+		.wraper{
+			height: 100%;
+			overflow-y:auto;
+		}
+		label.input{
+			border: 1px solid #ccc;
+			padding: 3px 5px;
+			border-radius: 2px;
+		}
+		input,select,textarea{
+			border: none;
+		}
+		.search{
+			background: transparent;
+			height: 20px;
+		}
+		.search-box{
+			padding: 0 10px;
+		}
+	</style>
+</head>
+<body>
+	<section class="aside-nav">
+		<header><strong>租房宝</strong>
+		</header>
+		<section class="search-box">
+			<label for="" class="input">
+				<input type="text" class="search" name="search" placeholder="搜索" id="">
+			</label>
+		</section>
+	</section>
+	<section class="main-body">
+		<header>
+			<a class="open-aise-nav" href="javascript:void(0);"></a>
+		</header>
+		<section class="wraper">
+			<section style="height:45px;"></section>
+			<article>
+				<p style="font-size:12px;color:#333;text-indent:2em;line-height:1.5;padding:10px;">
+				一个专栏。
+
+				​现在世界回望2003-08那段，连续六年进东部决赛的底特律活塞，会相信最初的根基是拉里-布朗教练打下的。他老人家无论走到哪里，都要复印他的体系。在活塞，他将步行者和76人的格式又套了一遍：一个古朴稳定的后卫，冷血坚韧的昌西-比卢普斯），一个不知疲倦的得分后卫（联盟第一无球走位中投手汉密尔顿）；一个高大擅防守的小前锋（普林斯），一个全能的大前锋（拉希德-华莱士），以及一个篮板王、盖帽王级别的内线怪物（本-华莱士）。你无法说出这五个人哪个更重要。
+
+				就形象上而言，本-华莱士，握着四座年度防守球员冠冕的铁汉，是这个军团的形象代表：世界谈论科比、艾佛森、纳什这1996年黄金一代时，很少注意到，他也是1996年入行的。一个选秀大会上无人问津的蓝领，一个号称206公分，靠扫帚头发支撑形象的钢铁男人。拉希德则是球队的氛围之王。他负责高傲的蔑视对手、带领球队在暂停间隙唱歌、去盯防对手的王牌。比卢普斯是2004年总决赛MVP。
+
+				没人会提起这件事：2003-04季，冠军队活塞的常规赛首席得分手是汉密尔顿，季后赛首席得分手也是汉密尔顿，总决赛第一得分手也是汉密尔顿。
+
+				是的，冠军队首席得分手。只是，因为大家已经接受了“活塞是靠防守打球的”，仿佛他们首席得分手是谁，就无所谓了似的。
+
+				2015年2月退役的汉密尔顿，到退役都戴着他的铁面具。这副面具让世界记得住他，记得住他不懈的奔跑和中投，但遗忘了他面具下的面容——就像他职业生涯的许多细节似的。
+				一个专栏。
+
+				​现在世界回望2003-08那段，连续六年进东部决赛的底特律活塞，会相信最初的根基是拉里-布朗教练打下的。他老人家无论走到哪里，都要复印他的体系。在活塞，他将步行者和76人的格式又套了一遍：一个古朴稳定的后卫，冷血坚韧的昌西-比卢普斯），一个不知疲倦的得分后卫（联盟第一无球走位中投手汉密尔顿）；一个高大擅防守的小前锋（普林斯），一个全能的大前锋（拉希德-华莱士），以及一个篮板王、盖帽王级别的内线怪物（本-华莱士）。你无法说出这五个人哪个更重要。
+
+				就形象上而言，本-华莱士，握着四座年度防守球员冠冕的铁汉，是这个军团的形象代表：世界谈论科比、艾佛森、纳什这1996年黄金一代时，很少注意到，他也是1996年入行的。一个选秀大会上无人问津的蓝领，一个号称206公分，靠扫帚头发支撑形象的钢铁男人。拉希德则是球队的氛围之王。他负责高傲的蔑视对手、带领球队在暂停间隙唱歌、去盯防对手的王牌。比卢普斯是2004年总决赛MVP。
+
+				没人会提起这件事：2003-04季，冠军队活塞的常规赛首席得分手是汉密尔顿，季后赛首席得分手也是汉密尔顿，总决赛第一得分手也是汉密尔顿。
+
+				是的，冠军队首席得分手。只是，因为大家已经接受了“活塞是靠防守打球的”，仿佛他们首席得分手是谁，就无所谓了似的。
+
+				2015年2月退役的汉密尔顿，到退役都戴着他的铁面具。这副面具让世界记得住他，记得住他不懈的奔跑和中投，但遗忘了他面具下的面容——就像他职业生涯的许多细节似的。
+				</p>
+			</article>
+		</section>
+	</section>
+	<script>
+		(function () {
+			function $ (selector) {
+				if(/\s#\w+/.test(selector)){
+					return document.getElementById(selector);
+				}else if(/\s\.\w+/.test(selector)){
+					var queryFn=document.getElementsByClassName?document.getElementsByClassName:document.querySelectorAll;
+					return queryFn(selector);
+				}else{
+					return document.querySelectorAll(selector);
+				}
+			}
+			var btn=$(".open-aise-nav");
+			if(btn&&btn.length>0){
+				btn[0].addEventListener("click",function (e) {
+					$(".main-body")[0].classList.toggle("z-hide");
+				})
+			}
+		})();
+	</script>
+</body>
+</html>

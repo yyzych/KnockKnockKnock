@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!-- body的高度是：(640/device-width)*device-height    (640/device-width)级dpi-->
+	<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">
+	<title>练习-canvas效果</title>
+	<link rel="stylesheet" href="../../css/app-debug.css">
+	<style>
+		.app{
+			background-image: url(../../file/201502212104/img/appBg1.jpg);
+		}
+		.page:nth-child(1) .page-back-img{
+			z-index: 3;
+			background-image: url(../../file/201502212104/img/eccZzlRbReyAZ0boAAGPDg_FhrU956.jpg);
+		}
+		.z-current .page-back-img{
+			-webkit-animation: bg-scale-anim 200s linear;
+			-o-animation: bg-scale-anim 200s linear;
+			animation: bg-scale-anim 200s linear;
+		}
+		@-webkit-keyframes bg-scale-anim {
+			0%{
+				-webkit-transform: scale(1);
+			}
+			50%{
+				-webkit-transform: scale(3);
+			}
+			100%{
+				-webkit-transform: scale(1);
+			}
+		}
+		@keyframes bg-scale-anim {
+			0%{
+				transform: scale(1);
+			}
+			50%{
+				transform: scale(3);
+			}
+			100%{
+				transform: scale(1);
+			}
+		}
+		.page:nth-child(2) .page-back-img{
+			background-image: url(../../file/201502212104/img/eccZzlRbRd-Ad2kCAAGGhbjBoE8126.jpg);
+		}
+		.page:nth-child(3) .page-back-img{
+			background-image: url(../../file/201502212104/img/53a9385d0894742830117178.jpg);
+		}
+		.page:nth-child(4) .page-back-img{
+			background-image: url(../../file/201502212104/img/53a971f82ad6d42831117183.jpg);
+		}
+		.page:nth-child(5) .page-back-img{
+			background-image: url(../../file/201502212104/img/53a97da63ba9842833117184.jpg);
+		}
+		.app-mask{
+			background-color: white;
+		}
+	</style>
+</head>
+<body class="app">
+	<div class="app-mask">
+		<div id="loading">
+			<span class="wrap3"></span><span class="inner3"></span>
+		</div>
+	</div>
+	<header class="app-header">
+		<a href="javascript:void(0)" class="u-global-audio"> <i class="music-icon"></i>
+			<audio src="../../file/201502212104/info/53b503d06eea042828117176.mp3" data-src="../../file/201502212104/info/53b503d06eea042828117176.mp3"  loop="loop"></audio>
+			<span>关闭</span>
+		</a>
+	</header>
+	<section class="app-content">
+		<section class="page z-current">
+			<section class="page-content">
+				<!-- 在page-content内自定义内容 -->
+			</section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content">
+			</section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content">
+			</section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content"></section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+		<section class="page">
+			<section class="page-content"></section>
+			<div alt="" class="page-back-img"></div>
+			<div class="u-guide-box">
+				<a href="javascript:void(0)" class="u-guide-icon"></a>
+			</div>
+		</section>
+	</section>
+	<footer class="app-footer"></footer>
+	<!-- ver表示对应的该页的js文件 -->
+	<script src="../../js/init.js?ver=201502212104"></script>
+</body>
+</html>

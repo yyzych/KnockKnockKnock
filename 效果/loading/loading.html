@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		span.wrap{
+			display: block;
+			border-width: 10px;
+			border-style: solid;
+			border-radius: 50%;
+			border-color: #444 transparent;
+			height: 50px;
+			width: 50px;
+			position: relative;
+			/*-webkit-animation: anim-wrap 1.5s linear infinite;
+			-o-animation: anim-wrap 1.5s linear infinite;
+			animation: anim-wrap 1.5s linear infinite;*/
+		}
+		span.inner{
+			display: inline-block;
+			border-width: 15px;
+			border-style: solid;
+			border-radius: 50%;
+			border-color: transparent #444;
+			margin: 10px 10px;
+			-webkit-animation: anim-inner 1.5s linear infinite;
+			-o-animation: anim-inner 1.5s linear infinite;
+			animation: anim-inner 1.5s linear infinite;
+		}
+		span.inner2{
+			display: inline-block;
+			border-width: 10px;
+			border-style: solid;
+			border-radius: 50%;
+			border-color: transparent #444;
+			/* margin: 10px 10px; */
+			position: absolute;
+			top: 0;
+			left: 0;
+			margin: auto;
+			bottom: 0;
+			right: 0;
+		}
+		@-webkit-keyframes anim-wrap {
+			0% { 
+				-webkit-transform:rotateZ(0deg);
+			}
+			50%{
+				-webkit-transform:rotateZ(180deg);
+			}
+			100% { 
+				-webkit-transform:rotateZ(360deg);
+			}
+		}
+		@-webkit-keyframes anim-inner {
+			0% { 
+				-webkit-transform:rotateZ(0deg);
+			}
+			50%{
+				-webkit-transform:rotateZ(-180deg);
+			}
+			100% { 
+				-webkit-transform:rotateZ(-360deg);
+			}
+		}
+	
+		.container{
+			position: relative;
+			width: 30px;
+			margin: auto;
+			/*height: 70px;*/
+		}
+		span.wrap3{
+			display: block;
+			border-width: 5px;
+			border-style: solid;
+			border-radius: 50%;
+			border-color: #5FB336 transparent;
+			height: 20px;
+			width: 20px;
+			/* position: absolute; */
+			 -webkit-animation: anim-wrap 1.5s linear infinite; 
+			-o-animation: anim-wrap 1.5s linear infinite;
+			animation: anim-wrap 1.5s linear infinite;
+		}
+		span.inner3{
+			display: inline-block;
+			border-width: 11px;
+			border-style: solid;
+			border-radius: 50%;
+			border-color: transparent #5FB336;
+			margin: -11px -11px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			 -webkit-animation: anim-inner 1.5s linear infinite; 
+			-o-animation: anim-inner 1.5s linear infinite;
+			animation: anim-inner 1.5s linear infinite;
+		}
+	</style>
+</head>
+<body>
+	<span class="wrap">
+		<span class="inner"></span>
+	</span>
+	<br>
+	<span class="wrap">
+		<span class="inner2"></span>
+	</span>
+	<br>
+	<div class="container">
+		<span class="wrap3"></span><span class="inner3"></span>
+	</div>
+</body>
+</html>

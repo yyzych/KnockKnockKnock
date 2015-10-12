@@ -1,0 +1,9 @@
+{
+  "family": "ych",
+  "name": "gift-to-wen",
+  "version": "1.0.0",
+  "author":"yyzych <932241741@qq.com>",
+  "spm": {
+    "output": ["browser.js"]
+  }
+}

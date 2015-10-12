@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html class="index-html">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="">
+
+    <link href="./css/fancy.min.css" rel="stylesheet">
+    <link href="./css/app.css" rel="stylesheet">
+
+    <title>node的实现，高度适应</title>
+
+</head>
+<body>
+
+    <!-- 头部 -->
+    <header class="bar header fixed-top">
+        <a href="" class="back icon left"></a>
+        <div class="title">交易状态</div>
+    </header>
+    <!-- 头部 -->
+
+    <div class="wrapper">
+        <ul class="list transaction-process">
+            <li class="item  z-done">
+                <span class="node"></span>
+                <p class="title">创建订单</p>
+                <p>2014.05.03 21:57:23</p>
+            </li>
+            <!-- 如何取到最后一个z-done节点呢 ，有没别的办法-->
+            <li class="item suffix-icon z-done last-done">
+                <span class="node"></span>
+                <p class="title">付款完成</p>
+                <p>2014.05.03 21:57:23</p>
+                <i class="icon icon-status-warn"></i>
+                <div class="pay-info hide">
+                    <div>
+                        <span class="name">支付宝</span>
+                        <span class="money">2000元</span>
+                        <span class="time">2014-03-26 21:36:23</span>
+                    </div>
+                    <div>
+                        <span class="name">财付通</span>
+                        <span class="money">2000元</span>
+                        <span class="time">2014-03-26 21:36:23</span>
+                    </div>
+                    <div>
+                        <span class="name">联动优势</span>
+                        <span class="money">3000元</span>
+                        <span class="time">2014-03-26 21:36:23</span>
+                    </div>
+                </div>
+            </li>
+            <li class="item suffix-icon">
+                <span class="node"></span>
+                <p class="title">等待审核</p>
+            </li>
+            <li class="item suffix-icon">
+                <span class="node"></span>
+                <p class="title">银行处理中</p>
+            </li>
+            <li class="item suffix-icon complate-status">
+                <span class="node"></span>
+                <p class="title">完成</p>
+                <p>预计2014:06:03 24:00前完成</p>
+            </li>
+        </ul>
+        
+    </div>
+
+    <script src="./js/vendor/zepto.min.js"></script>
+    <script src="./js/fancy.min.js"></script>
+    <script src="./js/common.js"></script>
+
+    <script>
+        (function () {
+            $(".item .icon").on("click",function (e) {
+                $(this).next().toggleClass("hide");
+            })
+        })();
+    </script>
+</html>
